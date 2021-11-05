@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = User
-        fields = ('id', 'username', 'email','phone','room','hostel', 'password')
+        fields = ('id', 'username','isAdmin', 'email','phone','room','hostel', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -20,3 +20,20 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+
+class AttendanceSerializer(serializers.ModelSerializer):
+    """
+    Serializer for attendance object
+    """
+    class Meta:
+        model = Attendance
+        fields = '__all__'
+
+class MessMenuSerializer(serializers.ModelSerializer):
+    """
+    Serializer for mess menu object
+    """
+    class Meta:
+        model = Menu
+        fields = '__all__'
