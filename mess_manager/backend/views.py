@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated , IsAdminUser
 # import status
 from rest_framework import status
 from django.contrib.auth.hashers import make_password
-
+from django.contrib.auth import logout
 
 
 
@@ -22,33 +22,53 @@ def mark_attendance(request):
 
 
 
-
 @api_view(['POST'])
-
 @permission_classes([]) 
-def registerUser(request):
+def register_user(request):
     data = request.data
-    try:
+    
+    # try:
+    if User.objects.filter(email=data['email']).exists():
+        return Response({"message":"User already exists"} , status=status.HTTP_400_BAD_REQUEST)
+    else:
+        
         user = User.objects.create(
-            first_name=data['name'],
-            username=data['email'],
+            username = data['username'],
+        
             email=data['email'],
-            room_no=data['room_no'],
+            room=data['room'],
             password=make_password(data['password'])
         )
 
-        serializer = UserSerializer(user, many=False)
-        return Response(serializer.data)
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
+    # except:
+    #     message = {'detail': 'bad credential provided'}
+
+    #     return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def login_user(request):
+    """ login a user (requires an email and password )"""
+
+    data = request.data
+    try:
+        user = User.objects.get(email=data['email'])
+        if user.check_password(data['password']):
+            serializer = UserSerializer(user, many=False)
+            return Response(serializer.data)
+        else:
+            message = {'detail': 'Invalid credentials'}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
     except:
-        message = {'detail': 'User with this email already exists'}
+        message = {'detail': 'User with this email does not exist'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
-
-
+   
 
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
-def getUsers(request):
+def get_users(request):
     """ get all the users """
     users = User.objects.all()
     
@@ -56,4 +76,19 @@ def getUsers(request):
 
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user(request, user_id):
+    """ get a user """
+    user = User.objects.get(id=user_id)
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
 
+
+#   logut a user
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def logout_user(request):
+    """ logout a user """
+    logout(request)
+    return Response({"message":"Logged out successfully"})

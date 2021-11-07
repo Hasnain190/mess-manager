@@ -30,13 +30,13 @@ class Attendance(models.Model):
     """
     Attendance model
     """
-    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    student = models.ForeignKey('User', on_delete=models.CASCADE)
     date = models.DateField()
     time = models.TimeField()
     status = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.student.name + ' ' + self.date.strftime('%d/%m/%Y') + ' ' + self.time.strftime('%H:%M') + ' ' + self.status
+        return self.student.username + ' ' + self.date.strftime('%d/%m/%Y') + ' ' + self.time.strftime('%H:%M') + ' ' + str(self.status)
 
 
 # mess menu
@@ -50,6 +50,6 @@ class Menu(models.Model):
 
 
     def __str__(self):
-        return self.name
+        return self.name + ' for the time ' + self.time.strftime('%H:%M')
 
 

@@ -1,0 +1,26 @@
+/* css for home.js*/
+
+
+
+.body {
+    background-color: #313131;
+    background-image: url('./bg-hostel.jpg');
+    width: 100vw;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+
+    
+}
+.main-heading{
+    position: absolute;
+    font-size: 5rem;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    margin-top: 10%;
+    background-color: #666666cc;
+    
+}
+
