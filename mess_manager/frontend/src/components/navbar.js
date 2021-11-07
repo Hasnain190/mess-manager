@@ -1,10 +1,16 @@
 // make a react component for navbar
-
+import {  useSelector } from 'react-redux'
 import React from "react";
 import "./navbar.css";
 import { Link } from "react-router-dom";
 
 function Navbar() {
+  const { userInfo }  = useSelector(state => state.userLogin)
+   
+
+
+
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <Link className="navbar-brand" to="/">
@@ -39,7 +45,8 @@ function Navbar() {
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link disabled" to="logout">
+            
+            <Link className={ userInfo  &&  "nav-link" } to="logout">
               Logout
             </Link>
           </li>

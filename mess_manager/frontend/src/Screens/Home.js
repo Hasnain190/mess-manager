@@ -1,5 +1,5 @@
 import React from "react";
-import hostelImage from './bg-hostel.jpg'
+
 import './home.css'
 
 function Home() {

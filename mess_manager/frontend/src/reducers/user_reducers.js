@@ -36,7 +36,7 @@ import {
     USER_UPDATE_FAIL,
     USER_UPDATE_RESET,
 
-} from '../constants/userConstants'
+} from '../constants/user_constants'
 
 
 export const userLoginReducer = (state = {  }, action) => {
@@ -49,12 +49,12 @@ export const userLoginReducer = (state = {  }, action) => {
             return {
                 loading: false,
                 userInfo: action.payload,
-                
+              
             }
 
         case USER_LOGIN_FAIL:
             return { loading: false, error: action.payload }
-            
+   // needs to reconsidered
         case USER_LOGOUT:
                 return { }
 

@@ -37,11 +37,11 @@ import {
     USER_UPDATE_FAIL,
 
 
-} from '../constants/userConstants'
+} from '../constants/user_constants'
 
 
 
-export const login = (username, password) => async (dispatch) => {
+export const login = (email, password) => async (dispatch) => {
     try {
         dispatch({
             type: USER_LOGIN_REQUEST
@@ -52,11 +52,11 @@ export const login = (username, password) => async (dispatch) => {
                 'Content-type': 'application/json'
             }
         }
-        //  '/auth/jwt/create/',
+       
 
         const { data } = await axios.post(
             `/api/users/login/`,
-            { 'username': username, 'password': password },
+            { 'email': email, 'password': password },
             config
         )
 
@@ -81,7 +81,6 @@ export const logout = () => (dispatch) => {
     localStorage.removeItem('userInfo')
     dispatch({ type: USER_LOGOUT })
     dispatch({ type: USER_DETAILS_RESET })
-    dispatch({ type: ORDER_LIST_MY_RESET })
     dispatch({ type: USER_LIST_RESET })
 
 
@@ -89,45 +88,38 @@ export const logout = () => (dispatch) => {
 }
 
 
-export const register = (username, email, password, re_password) => async (dispatch) => {
+export const register = (username, email,room, password) => async (dispatch) => {
 
-    const config = {
-        headers: {
-            'Content-type': 'application/json'
-        }
-    }
-
-
-    const { data } = await axios.post(
-        '/auth/users/',
-        { 'username': username, 'email': email, 'password': password, 're_password': re_password },
-        config
-    )
-
-
-
-
+    
+    
+    
+    
+    
     try {
+        const config = {
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }
+    
+        const { data } = await axios.post(
+            '/api/users/register/',
+            { 'username': username, 'email': email, 'password': password, 'room': room },
+            config
+        )
         dispatch({
             type: USER_REGISTER_REQUEST
         })
-
-
-      
-
-
-        // const body = JSON.stringify({ username, email, password });
-
 
         dispatch({
             type: USER_REGISTER_SUCCESS,
             payload: data
         })
 //  I  commented out this  so that I can test the user log in and sign up faster ... I will uncomment this later InshaAllah
-        dispatch({
-            type: USER_LOGIN_SUCCESS,
-            payload: data
-        })
+        // dispatch({
+        //     type: USER_LOGIN_SUCCESS,
+        //     payload: data
+        // })
 
         localStorage.setItem('userInfo', JSON.stringify(data))
 
@@ -142,91 +134,8 @@ export const register = (username, email, password, re_password) => async (dispa
     }
 }
 
-export const activate = (uid, token) => async (dispatch) => {
-
-
-        const config = {
-            headers: {
-                'Content-type': 'application/json',
-               
-            }
-        }
-        const body = JSON.stringify({ uid, token });
-
-        const { data } = await axios.post(`/auth/users/activation/`, body,
-            config
-        )
-
-
-    try {
-        dispatch({
-            type: USER_ACTIVATE_REQUEST
-        })
-
-        
-        dispatch({
-            type: USER_ACTIVATE_SUCCESS,
-            payload: data
-        })
-        // dispatch(login())
-
-        localStorage.setItem('userInfo', JSON.stringify(data))
-
-
-    } catch (error) {
-        dispatch({
-            type: USER_ACTIVATE_FAIL,
-            payload:console.log(error,data , 'bt favfavfaFavfavg')
-        })
-    }
-}
 // && !localStorage.getItem('userInfo')
-
-export const googleAuthenticate = (state, code) => async dispatch => {
-    if (state && code ) {
-        const config = {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        };
-
-        const details = {
-            'state': state,
-            'code': code
-        };
-
-        const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
-
-        try {
-            const { data } = await axios.post(`http://127.0.0.1:8000/auth/o/google-oauth2/?${formBody}`, config);
-
-            dispatch({
-                type: GOOGLE_AUTH_SUCCESS,
-                payload: data
-            });
-            
-            // dispatch(getUserDetails());
-            dispatch({
-                type: USER_LOGIN_SUCCESS,
-                payload: {
-                    token: data.access,
-                    refresh: data.refresh,
-                    access: data.access,
-                    email: data.user,
-                    name: data.user
-                }
-            })
-        } catch (error) {
-            dispatch({
-                type: GOOGLE_AUTH_FAIL,
-                payload: error.response && error.response.data.detail
-                    ? error.response.data.detail
-                    : error.message,
-            });
-        }
-    }
-};
-
+// need to be fixed
 export const getUserDetails = () => async (dispatch, getState) => {
     try {
         dispatch({
@@ -246,7 +155,7 @@ export const getUserDetails = () => async (dispatch, getState) => {
             }
         }
        
-        const { data } = await axios.get('/auth/users/me/',
+        const { data } = await axios.get('/api/users/',
             config
         )
 
@@ -285,7 +194,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
         }
 
         const { data } = await axios.put(
-            `/api/users/profile/update/`,
+            `/api/user/profile/update/`,
             user,
             config
         )
@@ -437,79 +346,79 @@ export const updateUser = (user) => async (dispatch, getState) => {
 }
 
 
-export const resetUserPassword = (email) => async (dispatch) => {
-    try {
-        dispatch({
-            type: USER_PASSWORD_RESET_REQUEST
-        })
+// export const resetUserPassword = (email) => async (dispatch) => {
+//     try {
+//         dispatch({
+//             type: USER_PASSWORD_RESET_REQUEST
+//         })
 
 
-        const config = {
-            headers: {
-                'Content-type': 'application/json',
-            }
-        }
+//         const config = {
+//             headers: {
+//                 'Content-type': 'application/json',
+//             }
+//         }
 
-        const { data } = await axios.post(
-            `/auth/users/reset_password/`,
-            { 'email': email },
-            config
-        )
+//         const { data } = await axios.post(
+//             `/auth/users/reset_password/`,
+//             { 'email': email },
+//             config
+//         )
 
-        dispatch({
-            type: USER_PASSWORD_RESET_SUCCESS,
-        })
-
-
-
-    } catch (error) {
-        dispatch({
-            type: USER_PASSWORD_RESET_FAIL,
-            payload: error.response && error.response.data.detail
-                ? error.response.data.detail
-                : error.message,
-        })
-    }
-}
-
-
-export const resetUserPasswordConfirm = (uid, token, new_password, re_new_password) => async (dispatch) => {
+//         dispatch({
+//             type: USER_PASSWORD_RESET_SUCCESS,
+//         })
 
 
 
-    const body = JSON.stringify({ uid, token, new_password, re_new_password });
-    try {
-        dispatch({
-            type: USER_PASSWORD_RESET_CONFIRM_REQUEST
-        })
+//     } catch (error) {
+//         dispatch({
+//             type: USER_PASSWORD_RESET_FAIL,
+//             payload: error.response && error.response.data.detail
+//                 ? error.response.data.detail
+//                 : error.message,
+//         })
+//     }
+// }
 
 
-        const config = {
-            headers: {
-                'Content-type': 'application/json',
-            }
-        }
-
-        await axios.post(
-            `http://127.0.0.1:8000/auth/users/reset_password_confirm/`, // this is an exception that is to be changed later
-            body,
-            config
-        )
-
-        dispatch({
-            type: USER_PASSWORD_RESET_CONFIRM_SUCCESS,
-        })
+// export const resetUserPasswordConfirm = (uid, token, new_password, re_new_password) => async (dispatch) => {
 
 
 
-    } catch (error) {
-        dispatch({
-            type: USER_PASSWORD_RESET_CONFIRM_FAIL,
-            payload: error.response && error.response.data.detail
-                ? error.response.data.detail
-                : error.message,
+//     const body = JSON.stringify({ uid, token, new_password, re_new_password });
+//     try {
+//         dispatch({
+//             type: USER_PASSWORD_RESET_CONFIRM_REQUEST
+//         })
 
 
-        })
-    }
-}
+//         const config = {
+//             headers: {
+//                 'Content-type': 'application/json',
+//             }
+//         }
+
+//         await axios.post(
+//             `/auth/users/reset_password_confirm/`,
+//             body,
+//             config
+//         )
+
+//         dispatch({
+//             type: USER_PASSWORD_RESET_CONFIRM_SUCCESS,
+//         })
+
+
+
+//     } catch (error) {
+//         dispatch({
+//             type: USER_PASSWORD_RESET_CONFIRM_FAIL,
+//             payload: error.response && error.response.data.detail
+//                 ? error.response.data.detail
+//                 : error.message,
+
+
+//         })
+//     }
+// }

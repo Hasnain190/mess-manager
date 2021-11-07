@@ -28,8 +28,11 @@ def register_user(request):
     data = request.data
     
     # try:
-    if User.objects.filter(email=data['email']).exists():
-        return Response({"message":"User already exists"} , status=status.HTTP_400_BAD_REQUEST)
+    if User.objects.filter(email=data['email']).exists() :
+        return Response({"message":"User email already exists"} , status=status.HTTP_400_BAD_REQUEST)
+    elif  User.objects.filter(username=data['username']).exists():
+        return Response({"message":"Username already taken"} , status=status.HTTP_400_BAD_REQUEST)
+    
     else:
         
         user = User.objects.create(
@@ -48,6 +51,7 @@ def register_user(request):
     #     return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
+@permission_classes([])
 def login_user(request):
     """ login a user (requires an email and password )"""
 
@@ -77,7 +81,7 @@ def get_users(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAdminUser])
 def get_user(request, user_id):
     """ get a user """
     user = User.objects.get(id=user_id)
