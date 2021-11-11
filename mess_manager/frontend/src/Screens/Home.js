@@ -8,7 +8,7 @@ function Home() {
     <div className="body">
         <h1 className = 'main-heading'>welcome to Mess System</h1>
         
-    
+   You are seeing the future of Mess Management. 
 
     </div>
         

@@ -8,7 +8,7 @@ import Loader from '../components/Loader'
 import Message from '../components/Message'
 import { login } from '../actions/user_actions'
 
-import axios from 'axios'
+
 
 function Login() {
     const [email, setEmail] = useState('')
@@ -19,7 +19,7 @@ function Login() {
     const location = useLocation()
     const navigate = useNavigate()
 
-    const redirect = location.search ? location.search.split('=')[1] : '/'
+    const redirect = location.search ? location.search.split('=')[1] : '/dashboard'
 
     const userLogin = useSelector(state => state.userLogin)
     const { error, loading, userInfo } = userLogin
@@ -27,6 +27,7 @@ function Login() {
     useEffect(() => {
         if (userInfo ) {
             navigate(redirect)
+            
         }
       }, [navigate, userInfo, redirect])
 
@@ -44,7 +45,7 @@ function Login() {
                     <h3 className="text-center mb-4">
                         <i className="fas fa-user-plus"></i> Login</h3>
                         {error && <Message variant='danger'>{error}</Message>}
-                         {loading && <Loader />}
+                        {loading && <Loader />}
           
                     <form onSubmit={submitHandler}>
                         

@@ -4,7 +4,7 @@ from .serializers import *
 from rest_framework.decorators import api_view , permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated , IsAdminUser
-# import status
+
 from rest_framework import status
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import logout
@@ -96,3 +96,27 @@ def logout_user(request):
     """ logout a user """
     logout(request)
     return Response({"message":"Logged out successfully"})
+
+
+# delete a user
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def delete_user(request, user_id):
+    """ delete a user """
+    user = User.objects.get(id=user_id)
+    user.delete()
+    return Response({"message":"User deleted successfully"})
+
+
+# update a user
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def update_user(request, user_id):
+    """ update a user """
+    user = User.objects.get(id=user_id)
+    serializer = UserSerializer(user, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors)
+

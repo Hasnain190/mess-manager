@@ -1,20 +1,16 @@
 // make a react component for navbar
-import {  useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 import React from "react";
 import "./navbar.css";
 import { Link } from "react-router-dom";
 
 function Navbar() {
-  const { userInfo }  = useSelector(state => state.userLogin)
-   
-
-
-
+  const { userInfo } = useSelector((state) => state.userLogin);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <Link className="navbar-brand" to="/">
-                Mess Manager
+        Mess Manager
       </Link>
       <button
         className="navbar-toggler"
@@ -44,12 +40,70 @@ function Navbar() {
               Login
             </Link>
           </li>
-          <li className="nav-item">
-            
-            <Link className={ userInfo  &&  "nav-link" } to="logout">
-              Logout
-            </Link>
-          </li>
+          {userInfo && (
+            <>
+              <li className="nav-item">
+                <Link className="nav-link" to="logout">
+                  Logout
+                </Link>
+              </li>
+
+              <li className="nav-item">
+                <Link className="nav-link" to="/dashboard">
+                  Your Dash Board
+                </Link>
+              </li>
+            </>
+          )}
+
+          {userInfo && userInfo.isAdmin && (
+            <>
+              {/* make a drop down menu */}
+              <div class="dropdown">
+                <button
+                  class="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                 Admin
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <Link className="dropdown-item" to="/admin/add-user">
+                    Add User
+                  </Link>
+                  <Link className="dropdown-item" to="/admin/view-users">
+                    View Users
+                  </Link>
+                  <Link className="dropdown-item" to="/admin/add-mess">
+                    Add Mess
+                  </Link>
+                  <Link className="dropdown-item" to="/admin/view-mess">
+                    View Mess
+                  </Link>
+
+                  <Link className="dropdown-item" to="/admin/mark-attendance">
+                    Mark Attendance
+                  </Link>
+                  <Link
+                    className="dropdown-item"
+                    to="/admin/previous-attendance"
+                  >
+                    See Previous Attendances
+                  </Link>
+                  <Link className="dropdown-item" to="/admin/expenses/today">
+                    Today's Expenses
+                  </Link>
+                  <Link className="dropdown-item" to="/admin/bill-of-month">
+                    This Month's Bill
+                  </Link>
+                </div>
+              </div>
+              
+            </>
+          )}
         </ul>
       </div>
     </nav>
