@@ -1,7 +1,36 @@
-from rest_framework import serializers
-from .models import *
-from rest_framework_simplejwt.tokens import RefreshToken
 
+from rest_framework import serializers
+from rest_framework.fields import NullBooleanField
+from .models import *
+
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.serializers import TokenObtainSerializer
+from django.contrib.auth.hashers import make_password
+
+
+# class MyTokenObtainSerializer(TokenObtainSerializer):
+#     username_field = User.EMAIL_FIELD
+
+
+# class CustomTokenObtainPairSerializer(EmailTokenObtainSerializer):
+#     @classmethod
+#     def get_token(cls, user):
+#         return RefreshToken.for_user(user)
+
+#     @classmethod
+#     def validate(self, attrs):
+#         breakpoint()
+#         data = super().validate(self=self,attrs=attrs)
+#         refresh = RefreshToken.for_user(data["user"])
+
+#         data["refresh"] = str(refresh)
+#         data["access"] = str(refresh.access_token)
+
+#         return data
+
+   
+
+        
 
 class UserSerializer(serializers.ModelSerializer):
     """
@@ -13,10 +42,21 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username','isAdmin', 'email','phone','room','hostel')
-        extra_kwargs = {'password': {'write_only': True}}
+       
 
     def get_isAdmin(self, obj):
         return obj.is_staff
+
+    def validate_password(self, value: str) -> str:
+        """
+        Hash value passed by user.
+
+        :   param value: password of a user
+        :return: a hashed version of the password
+        """
+        return make_password(value)
+
+
 
 
 class UserSerializerWithToken(UserSerializer):
@@ -26,7 +66,7 @@ class UserSerializerWithToken(UserSerializer):
         model = User
    
 
-        fields = ('id',  'username', 'isAdmin', 'email', 'phone','room','hostel','name', 'isAdmin' ,'token')
+        fields = ('id',  'username', 'isAdmin', 'email', 'phone','room','hostel', 'isAdmin' ,'token')
 
     def get_token(self, obj):
         token = RefreshToken.for_user(obj)
