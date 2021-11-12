@@ -9,7 +9,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function ViewUsers() {
   const dispatch = useDispatch();
-  const nevigate = useNavigate();
+  const navigate = useNavigate();
 
   const { userInfo } = useSelector((state) => state.userLogin);
 
@@ -23,7 +23,7 @@ function ViewUsers() {
     } else {
       navigate("/login");
     }
-  }, [dispatch, userInfo, nevigate, successDelete]);
+  }, [dispatch, userInfo, navigate, successDelete]);
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       dispatch(deleteUser(id));

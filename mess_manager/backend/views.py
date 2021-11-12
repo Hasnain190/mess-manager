@@ -10,6 +10,48 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth import logout
 
 
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+from django.views.decorators.csrf import csrf_exempt
+
+from django.contrib.auth import get_user_model
+from django.contrib.auth.backends import ModelBackend
+
+from rest_framework_simplejwt.serializers import TokenObtainSerializer
+
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+
+
+# class EmailTokenObtainPairView(TokenObtainPairView):
+#     serializer_class = CustomTokenObtainPairSerializer
+
+
+
+# class MyTokenObtainSerializer(TokenObtainSerializer):
+#     username_field = User.EMAIL_FIELD
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+   
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        serializer = UserSerializerWithToken(self.user).data
+
+        for k,v in serializer.items():
+            data[k] = v
+
+       
+        return data
+ 
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
 
 
 @api_view(['POST'])
@@ -50,6 +92,9 @@ def register_user(request):
 
     #     return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
+
+
+@csrf_exempt
 @api_view(['POST'])
 @permission_classes([])
 def login_user(request):
@@ -71,7 +116,7 @@ def login_user(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+@permission_classes([])
 def get_users(request):
     """ get all the users """
     users = User.objects.all()
@@ -100,7 +145,7 @@ def logout_user(request):
 
 # delete a user
 @api_view(['DELETE'])
-@permission_classes([IsAdminUser])
+@permission_classes([])
 def delete_user(request, user_id):
     """ delete a user """
     user = User.objects.get(id=user_id)
@@ -114,7 +159,7 @@ def delete_user(request, user_id):
 def update_user(request, user_id):
     """ update a user """
     user = User.objects.get(id=user_id)
-    serializer = UserSerializer(user, data=request.data, partial=True)
+    serializer = UserSerializerWithToken(user, data=request.data, partial=True)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)

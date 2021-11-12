@@ -1,7 +1,11 @@
-from django.contrib import admin
+
 from django.urls import path
 import backend.views as views
 
+
+from rest_framework_simplejwt.views import TokenRefreshView , TokenObtainPairView
+
+# from backend.views import EmailTokenObtainPairView
 
 urlpatterns = [
     # admin
@@ -14,7 +18,10 @@ urlpatterns = [
     # user
     path('logout/', views.logout_user , name='logout'),	
     path('register/',views.register_user , name='register'),
-    path('login/', views.login_user , name='login'),
-
+    # path('login/', views.login_user , name='login'),
+    path('login/', views.MyTokenObtainPairView.as_view(),
+         name='token_obtain_pair'),
+    # path("login/", EmailTokenObtainPairView.as_view(), name="token_obtain_pair"),
+    # path("refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 
 ]

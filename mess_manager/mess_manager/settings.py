@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -37,10 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'backend',
     'rest_framework',
     'rest_framework_simplejwt',
-    'djoser'
+    'djoser',
+    # 'debug_toolbar',
+
     
 
 
@@ -54,10 +58,16 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    #  'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# INTERNAL_IPS = [
+   
+#     '127.0.0.1',
+   
+# ]
 ROOT_URLCONF = 'mess_manager.urls'
 
 TEMPLATES = [
@@ -80,16 +90,34 @@ TEMPLATES = [
 CORS_ALLOW_ALL_ORIGINS = True
 WSGI_APPLICATION = 'mess_manager.wsgi.application'
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    
     BASE_DIR /  'frontend/build/static'
 ]
+# static file root
+STATIC_ROOT = BASE_DIR / 'static'
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser', 'rest_framework.permissions.IsAuthenticated', ),
-
+    'DEFAULT_PERMISSION_CLASSES': [
+    'rest_framework.permissions.AllowAny',
+],
     'DEFAULT_AUTHENTICATION_CLASSES': (
 
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+       
+        
     )
+
+}
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+
+    'AUTH_HEADER_TYPES': ('JWT','Bearer'),
+
+     'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule' ,
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',
+    'rest_framework_simplejwt.authentication.JWTAuthentication'
+    ,
+    ),
 
 }
 
@@ -147,3 +175,8 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'backend.User'
+
+AUTHENTICATION_BACKENDS = (
+       'backend.backends.EmailorUsernameModelBackend',
+       
+      )

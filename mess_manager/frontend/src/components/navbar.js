@@ -3,9 +3,17 @@ import { useSelector } from "react-redux";
 import React from "react";
 import "./navbar.css";
 import { Link } from "react-router-dom";
+import  { logout } from '../actions/user_actions';
+// import dispatch
+import { useDispatch } from "react-redux";
+
 
 function Navbar() {
   const { userInfo } = useSelector((state) => state.userLogin);
+  const dispatch = useDispatch();
+  const logoutHandler = () => {
+        dispatch(logout())
+    }
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -35,17 +43,22 @@ function Navbar() {
               Register
             </Link>
           </li>
-          <li className="nav-item">
+          {!userInfo && (
+            
+            <li className="nav-item">
             <Link className="nav-link" to="/login">
               Login
             </Link>
+          
           </li>
+          ) 
+          
+          }
+          
           {userInfo && (
             <>
               <li className="nav-item">
-                <Link className="nav-link" to="logout">
-                  Logout
-                </Link>
+               <button className="btn btn-danger" onClick={logoutHandler}>Logout</button>
               </li>
 
               <li className="nav-item">
