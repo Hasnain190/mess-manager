@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "./dashboard-cards.css";
 
 function Dashboard() {
+
   const userLogin = useSelector((state) => state.userLogin);
   const { error, loading, userInfo } = userLogin;
 
@@ -20,7 +21,7 @@ function Dashboard() {
   return (
     <div>
       <h2>Welcome</h2>
-      {/* <h3>{userInfo.name}</h3> */}
+      <h3>{userInfo?.username}</h3>
       <div>
         Today's Date : <code> {dateState.toLocaleDateString()}</code>
       </div>
@@ -40,7 +41,7 @@ function Dashboard() {
       <section class="light">
         <div class="container py-2">
           <div class="h1 text-center text-dark" id="pageHeaderTitle">
-            Whats on Today
+            What's on Today
           </div>
 
           <article class="postcard light blue">
@@ -187,7 +188,7 @@ function Dashboard() {
       </section>
 
 
-      
+
     </div>
   );
 }

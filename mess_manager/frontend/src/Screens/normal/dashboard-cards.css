@@ -4,7 +4,7 @@
  body {
 	 font-family: "Baloo 2", cursive;
 	 font-size: 16px;
-	 color: #fff;
+	 color: rgb(0, 0, 0);
 	 text-rendering: optimizeLegibility;
 	 font-weight: initial;
 }
@@ -103,6 +103,7 @@
 	 margin: 0 5px 5px 0;
 	 cursor: default;
 	 user-select: none;
+	 -webkit-user-select: none;
 	 transition: background-color 0.3s;
 }
  .postcard .postcard__tagbox .tag__item:hover {

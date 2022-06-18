@@ -70,9 +70,8 @@ def register_user(request):
     data = request.data
     
     # try:
-    if User.objects.filter(email=data['email']).exists() :
-        return Response({"message":"User email already exists"} , status=status.HTTP_400_BAD_REQUEST)
-    elif  User.objects.filter(username=data['username']).exists():
+    
+    if  User.objects.filter(username=data['username']).exists():
         return Response({"message":"Username already taken"} , status=status.HTTP_400_BAD_REQUEST)
     
     else:
@@ -80,7 +79,7 @@ def register_user(request):
         user = User.objects.create(
             username = data['username'],
         
-            email=data['email'],
+            
             room=data['room'],
             password=make_password(data['password'])
         )

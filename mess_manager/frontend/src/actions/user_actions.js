@@ -41,7 +41,7 @@ import {
 
 
 
-export const login = (email, password) => async (dispatch) => {
+export const login = (username, password) => async (dispatch) => {
     try {
         dispatch({
             type: USER_LOGIN_REQUEST
@@ -52,11 +52,11 @@ export const login = (email, password) => async (dispatch) => {
                 'Content-type': 'application/json'
             }
         }
-       
+
 
         const { data } = await axios.post(
             `/api/users/login/`,
-            { 'email': email, 'password': password },
+            { 'username': username, 'password': password },
             config
         )
 
@@ -88,23 +88,23 @@ export const logout = () => (dispatch) => {
 }
 
 
-export const register = (username, email,room, password) => async (dispatch) => {
+export const register = (username, room, password, hostel, phone) => async (dispatch) => {
 
-    
-    
-    
-    
-    
+
+
+
+
+
     try {
         const config = {
             headers: {
                 'Content-type': 'application/json'
             }
         }
-    
+
         const { data } = await axios.post(
             '/api/users/register/',
-            { 'username': username, 'email': email, 'password': password, 'room': room },
+            { 'username': username, 'password': password, 'room': room, 'hostel': hostel, 'phone': phone },
             config
         )
         dispatch({
@@ -115,7 +115,7 @@ export const register = (username, email,room, password) => async (dispatch) => 
             type: USER_REGISTER_SUCCESS,
             payload: data
         })
-//  I  commented out this  so that I can test the user log in and sign up faster ... I will uncomment this later InshaAllah
+        //  I  commented out this  so that I can test the user log in and sign up faster ... I will uncomment this later InshaAllah
         // dispatch({
         //     type: USER_LOGIN_SUCCESS,
         //     payload: data
@@ -176,7 +176,7 @@ export const listUsers = () => async (dispatch, getState) => {
 
 // && !localStorage.getItem('userInfo')
 // need to be fixed
-export const getUserDetails = () => async (dispatch, getState) => {
+export const getUserDetails = (id) => async (dispatch, getState) => {
     try {
         dispatch({
             type: USER_DETAILS_REQUEST
@@ -186,7 +186,7 @@ export const getUserDetails = () => async (dispatch, getState) => {
             userLogin: { userInfo },
         } = getState()
 
-       
+
 
         const config = {
             headers: {
@@ -194,8 +194,8 @@ export const getUserDetails = () => async (dispatch, getState) => {
                 'Authorization': `JWT ${userInfo.token}`
             }
         }
-    //    FIXME:
-        const { data } = await axios.get('/api/users/2332????',
+        //    FIXME:
+        const { data } = await axios.get(`/api/users/${id}/`,
             config
         )
 
@@ -320,13 +320,15 @@ export const updateUser = (user) => async (dispatch, getState) => {
         }
 
         const { data } = await axios.put(
-            `/api/users/update/${user._id}/`,
+            `/api/users/update/${user.id}/`,
             user,
             config
         )
 
         dispatch({
             type: USER_UPDATE_SUCCESS,
+            payload: data
+
         })
 
         dispatch({

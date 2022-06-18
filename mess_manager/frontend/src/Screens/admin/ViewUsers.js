@@ -7,6 +7,7 @@ import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
+
 function ViewUsers() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -61,14 +62,14 @@ function ViewUsers() {
                 <td>{user.phone}</td>
                 <td>
                   {user.isAdmin ? (
-                    <i className="fas fa-check" style={{ color: "green" }}></i>
+                    <i className="fas fa-check" style={{ color: "green" }}>Yes</i>
                   ) : (
-                    <i className="fas fa-times" style={{ color: "red" }}></i>
+                    <i className="fas fa-times" style={{ color: "red" }}>No</i>
                   )}
                 </td>
                 <td>
                   <Link
-                    to={`/edit-user/${user.id}`}
+                    to={`/admin/user/${user.id}/edit`}
                     className="btn btn-primary"
                   >
                     Edit

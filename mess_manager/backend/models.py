@@ -7,22 +7,22 @@ class User(AbstractUser):
     """add some more field to user model"""
 
     phone = models.CharField(max_length=20, blank=True, null=True)
-    city = models.CharField(max_length=20, blank=True, null=True)
+    
     hostel = models.CharField(max_length=20, blank=True, null=True)
     room = models.CharField(max_length=20, blank=True, null=True)
-    image = models.ImageField(upload_to='profile_image', blank=True, null=True)
+   
 
 
-class Message(models.Model):
-    """
-    Message model
-    """
-    message = models.TextField()
-    date = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
+# class Message(models.Model):
+#     """
+#     Message model
+#     """
+#     message = models.TextField()
+#     date = models.DateTimeField(auto_now_add=True)
+#     user = models.ForeignKey('User', on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.message
+#     def __str__(self):
+#         return self.message
 
 
 
