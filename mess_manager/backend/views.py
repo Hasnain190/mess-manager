@@ -114,6 +114,18 @@ def login_user(request):
    
 
 
+@api_view(['POST'])
+@permission_classes([])
+def submit_attendance(request):
+    """submit attendance of all the students"""
+    date = request.data['date']
+    attendance = Attendance.objects.filter(date=date)
+    serializer = AttendanceSerializer(attendance, many=True)
+    return Response(serializer.data)
+
+    
+
+
 @api_view(['GET'])
 @permission_classes([])
 def get_users(request):

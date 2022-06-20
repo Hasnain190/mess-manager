@@ -37,6 +37,11 @@ import {
     USER_UPDATE_FAIL,
 
 
+    USERS_ATTENDANCE_REQUEST,
+    USERS_ATTENDANCE_SUCCESS,
+    USERS_ATTENDANCE_FAIL,
+    USERS_ATTENDANCE_RESET,
+
 } from '../constants/user_constants'
 
 
@@ -346,6 +351,47 @@ export const updateUser = (user) => async (dispatch, getState) => {
         })
     }
 }
+
+
+export const markAttendance = (attendance) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: USERS_ATTENDANCE_REQUEST
+        })
+
+        const {
+            userLogin: { userInfo },
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `JWT ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.post(
+            `/api/user/attendance/`,
+            attendance,
+            config
+        )
+
+        dispatch({
+            type: USERS_ATTENDANCE_SUCCESS,
+            payload: data
+
+        })
+    }
+    catch (error) {
+        dispatch({
+            type: USERS_ATTENDANCE_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}
+
 
 
 // export const resetUserPassword = (email) => async (dispatch) => {

@@ -97,7 +97,7 @@ function AddUsers({ history }) {
                                 <input
                                     type="number"
                                     className="form-control"
-                                    id="room"
+                                    id="phone"
                                     placeholder="Enter Your Phone"
                                     required
                                     value={phone}
