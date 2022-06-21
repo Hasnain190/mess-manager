@@ -82,7 +82,7 @@ class AttendanceSerializer(serializers.ModelSerializer):
         model = Attendance
         fields = '__all__'
 
-class MessMenuSerializer(serializers.ModelSerializer):
+class MenuSerializer(serializers.ModelSerializer):
     """
     Serializer for mess menu object
     """

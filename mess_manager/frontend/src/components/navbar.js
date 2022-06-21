@@ -62,6 +62,9 @@ function Navbar() {
                   Your Dash Board
                 </Link>
               </li>
+              <Link className="dropdown-item" to="/admin/view-mess">
+                View Mess
+              </Link>
             </>
           )}
 
@@ -86,9 +89,7 @@ function Navbar() {
                   <Link className="dropdown-item" to="/admin/view-users">
                     View Users
                   </Link>
-                  <Link className="dropdown-item" to="/admin/add-mess">
-                    Add Mess
-                  </Link>
+
                   <Link className="dropdown-item" to="/admin/view-mess">
                     View Mess
                   </Link>

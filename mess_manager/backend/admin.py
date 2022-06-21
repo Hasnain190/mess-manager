@@ -9,3 +9,4 @@ admin.site.register(User)
 admin.site.register(Attendance)
 admin.site.register(Menu)
 
+

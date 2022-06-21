@@ -23,5 +23,7 @@ urlpatterns = [
 #  path('__debug__/', include(debug_toolbar.urls)),
     path('django/admin/', admin.site.urls),
     path('api/users/', include('backend.urls')),
+    path('api/mess/', include('backend.mess_urls')),
+    path('api/attendance/', include('backend.attendance_urls')),
     path('', TemplateView.as_view(template_name='index.html')),
 ]

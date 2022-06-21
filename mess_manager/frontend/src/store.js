@@ -11,6 +11,8 @@ import {
   userDeleteReducer,
   userUpdateReducer,
 } from "./reducers/user_reducers";
+
+import { messMenuReducer } from "./reducers/mess_reducers";
 const reducer = combineReducers({
   // user reducers
   userLogin: userLoginReducer,
@@ -21,17 +23,27 @@ const reducer = combineReducers({
   userList: userListReducer,
   userDelete: userDeleteReducer,
   userUpdate: userUpdateReducer,
+
+
+
   // userPasswordReset:userPasswordResetReducer,
   // userPasswordResetConfirm:userPasswordResetConfirmReducer,
+
+  // mess reducers
+  messMenu: messMenuReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
 
+const messMenuFromStorage = localStorage.getItem("messMenu") ? JSON.parse(localStorage.getItem("messMenu")) : null;
+
 const initialState = {
- 
+
   userLogin: { userInfo: userInfoFromStorage },
+
+  messMenu: { messMenu: messMenuFromStorage },
 };
 
 const middleware = [thunk];

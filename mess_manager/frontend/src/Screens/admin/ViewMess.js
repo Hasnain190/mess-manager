@@ -1,20 +1,54 @@
-import React from "react";
-// this screen displays the mess details
+import React, { useEffect, useState } from "react";
+import { saveAs } from "file-saver";
+import { getMessMenu } from "../../actions/mess_actions";
+
+import Message from "../../components/Message";
+import { useSelector, useDispatch } from "react-redux";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import "./ViewMess.css";
+import Loader from "../../components/Loader";
+import { Link } from "react-router-dom";
 function ViewMess() {
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getMessMenu());
+
+
+
+  }, [dispatch, useSelector]);
+
+  const { messMenu, loading, error } = useSelector((state) => state.messMenu);
+
+
+  const [editMenu, setEditMenu] = useState(false)
+
+  function printDocument() {
+    const input = document.getElementById('divToPrint');
+    html2canvas(input)
+      .then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF();
+        pdf.addImage(imgData, 'JPEG', 0, 0);
+        // pdf.output('dataurlnewwindow');
+        pdf.save("Mess.pdf");
+      })
+      ;
+  }
+
   return (
     <section id="tabs" class="project-tab">
       <div class="container">
         <div class="row">
           <div class="col-md-12">
-              
-                <button class="btn btn-primary">Download PDF</button>
 
-                <button class="btn btn-primary">Edit</button>
-            
-           
+            <button class="btn btn-primary" onClick={printDocument}>Download as PDF</button>
 
-            </div>
+
+
+          </div>
 
           <div class="col-md-12">
             <div class="tab-content" id="nav-tabContent">
@@ -24,66 +58,37 @@ function ViewMess() {
                 role="tabpanel"
                 aria-labelledby="nav-home-tab"
               >
-                <table class="table" cellspacing="0">
-                  <thead>
-                    <tr>
-                      <th>Day</th>
-                      <th>First Time</th>
-                      <th>Second Time</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <a href="#">Sunday</a>
-                      </td>
-                      <td>Daal Chawal</td>
-                      <td>Daal chatni</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="#">Monday</a>
-                      </td>
-                      <td>Daal Chawal</td>
-                      <td>Daal chatni</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="#">Tuesday</a>
-                      </td>
-                      <td>Daal Chawal</td>
-                      <td>Daal chatni</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="#">Wednesday</a>
-                      </td>
-                      <td>Daal Chawal</td>
-                      <td>Daal chatni</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="#">Thursday</a>
-                      </td>
-                      <td>Daal Chawal</td>
-                      <td>Daal chatni</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="#">Friday</a>
-                      </td>
-                      <td>Daal Chawal</td>
-                      <td>Daal chatni</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="#">Saturday</a>
-                      </td>
-                      <td>Daal Chawal</td>
-                      <td>Daal chatni</td>
-                    </tr>
-                  </tbody>
-                </table>
+                {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message>
+                  : (
+                    <table id="divToPrint" class="table" cellspacing="0">
+                      <thead>
+                        <tr>
+                          <th>Day</th>
+                          <th>First Time</th>
+                          <th>Second Time</th>
+                          <th>Edit</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        {messMenu?.map((menu) => (
+
+                          <tr key={menu.id}>
+                            <td>
+                              <a href="#">{menu.day}</a>
+                            </td>
+                            <td>{menu.first_time}</td>
+                            <td>{menu.second_time}</td>
+                            <td><button class="btn btn-primary"><Link
+                              to={`/admin/update-mess/${menu.day}`}>Edit</Link>
+                            </button> </td>
+                          </tr>
+                        ))}
+
+
+                      </tbody>
+                    </table>
+                  )}
               </div>
             </div>
           </div>
