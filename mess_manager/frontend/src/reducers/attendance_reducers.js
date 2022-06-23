@@ -9,7 +9,7 @@ export const attendanceReducers = (state = {}, action) => {
 
     switch (action.type) {
         case POST_ATTENDANCE_REQUEST:
-            return { loading: true, attendance: [] }
+            return { loading: true }
 
         case POST_ATTENDANCE_SUCCESS:
             return {
@@ -28,3 +28,8 @@ export const attendanceReducers = (state = {}, action) => {
             return state
     }
 }
+
+
+
+
+

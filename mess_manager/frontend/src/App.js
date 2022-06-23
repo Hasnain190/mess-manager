@@ -7,7 +7,7 @@ import Dashboard from "./Screens/normal/dashboard";
 import EditUser from "./Screens/admin/EditUser";
 import MarkAttendance from "./Screens/admin/markAttendance";
 import ThisMonthBill from "./Screens/admin/ThisMonthBill";
-import TodayExpenses from "./Screens/admin/PreviousAttendance";
+import TodayExpenses from "./Screens/admin/TodayExpenses";
 import PreviousAttendance from "./Screens/admin/PreviousAttendance";
 import ViewMess from "./Screens/admin/ViewMess";
 import UpdateMess from "./Screens/admin/UpdateMess";

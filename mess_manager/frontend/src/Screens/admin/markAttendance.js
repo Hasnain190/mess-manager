@@ -1,14 +1,13 @@
 
 import Button from "../../components/Button";
 import { listUsers, deleteUser } from "../../actions/user_actions";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { markAttendance } from "../../actions/user_actions";
-
+import { postAttendance } from "../../actions/attendance_actions";
 
 
 
@@ -16,7 +15,9 @@ export default function MarkAttendance() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const myRefForId = useRef(null)
+  const myRefForFirstTime = useRef(null)
+  const myRefForSecondTime = useRef(null)
 
 
 
@@ -26,14 +27,9 @@ export default function MarkAttendance() {
   const { users, loading, error } = useSelector((state) => state.userList);
   const today = new Date().toISOString().substr(0, 10);
   const { userInfo } = useSelector((state) => state.userLogin);
-
-  const [firstTimeAtt, setFirstTimeAtt] = useState("")
-  const [secondTimeAtt, setSecondTimeAtt] = useState("")
-
-
-  // const [double ,setDouble] = useState()
-  // const [present ,setPresent] = useState()
-  // const [absent ,setAbsent] = useState()
+  const [firstTime, setFirstTime] = useState('')
+  const [secondTime, setSecondTime] = useState('')
+  const [attenandance, setAttendance] = useState({ id: null, date: today, first_time: "Present", second_time: "Present" });
 
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
@@ -50,25 +46,38 @@ export default function MarkAttendance() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log(e.target.id, firstTimeAtt, secondTimeAtt)
-    // dispatch(markAttendance(e.target.id, firstTimeAtt, secondTimeAtt));
-
-  }
 
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "firstTimeAtt") {
-      setFirstTimeAtt(value)
-    } else if (name === "secondTimeAtt") {
-      setSecondTimeAtt(value)
+
+
+    // for (let i = 0; i < users.length; i++) {
+    //   setAttendance({ id: users[i].id, date: today, first_time: firstTime, second_time: secondTime });
+
+    //   postAttendance(attenandance);
+
+
+
+    // }
+
+    const attenandance = {
+      studant: myRefForId.current.textContent,
+      date: today,
+      first_time: myRefForFirstTime.current.value,
+      second_time: myRefForSecondTime.current.value
     }
 
-    console.log(firstTimeAtt, secondTimeAtt)
-    console.log()
+    dispatch(postAttendance(attenandance))
+
+    console.log(attenandance)
+
+
   }
 
+  const testFunction = () => {
 
+
+
+  }
 
   return (
     <>
@@ -105,7 +114,7 @@ export default function MarkAttendance() {
                   <tr key={user.id}>
 
 
-                    <th scope="row">{user.id}</th>
+                    <th scope="row" name="userId" ref={myRefForId}>{user.id}</th>
                     <td className="form-group">
                       <input
 
@@ -130,17 +139,15 @@ export default function MarkAttendance() {
                     </td>
 
                     <td>
-                      <select name="firstAttendance" value={firstTimeAtt} onChange={(e) => setFirstTimeAtt(e.target.value)} className="form-control" id="table-first-time">
+                      <select name={`firstAttendance${user.id}`} ref={myRefForFirstTime} onChange={(e) => (e.target.value)} className="form-control" id="table-first-time">
                         <option value="present">Present ✓</option>
                         <option value="absent">Absent X</option>
                         <option value="double">Double 2</option>
                       </select>
 
-
-
                     </td>
                     <td>
-                      <select name="secondAttendance" value={secondTimeAtt} onChange={(e) => setSecondTimeAtt(e.target.value)} className="form-control" id="table-second-time">
+                      <select name={`secondAttendance${user.id}`} ref={myRefForSecondTime} onChange={(e) => (e.target.value)} className="form-control" id="table-second-time">
                         <option value="present">Present ✓</option>
                         <option value="absent">Absent X</option>
                         <option value="double">Double 2</option>
@@ -148,6 +155,7 @@ export default function MarkAttendance() {
 
                     </td>
                   </tr>
+
                 ))}
               </tbody>
 
