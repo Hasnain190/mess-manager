@@ -6,7 +6,7 @@ function PreviousAttendance() {
     return (
         <div>
             <div class="h1 text-center text-dark" id="pageHeaderTitle">
-                Previous Attendance  from  <code>MM-YYYY</code>  to <code>MM-YYYY</code>
+                Previous Attendance From  <code>MM-YYYY</code>  to <code>MM-YYYY</code>
             </div>
 
 

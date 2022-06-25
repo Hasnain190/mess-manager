@@ -15,12 +15,14 @@ export const attendanceReducers = (state = {}, action) => {
             return {
                 loading: false,
                 attendance: action.payload,
+                success: true
 
             }
         case POST_ATTENDANCE_FAIL:
             return {
                 loading: false,
-                error: action.payload
+                error: action.payload,
+                success: false
             }
 
 

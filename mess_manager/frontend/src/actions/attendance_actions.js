@@ -21,7 +21,7 @@ export const postAttendance = (attenandance) => async (dispatch, getState) => {
             }
         }
 
-        const { data } = await axios.post(`/api/attendance/post`,
+        const { data } = await axios.post(`/api/attendance/post/`,
             attenandance,
             config)
         dispatch({ type: POST_ATTENDANCE_SUCCESS, payload: data })

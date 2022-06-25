@@ -54,15 +54,6 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 
 
-@api_view(['POST'])
-def mark_attendance(request):
-    serializer = AttendanceSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors)
-
-
 
 @api_view(['POST'])
 @permission_classes([]) 
@@ -81,7 +72,10 @@ def register_user(request):
         
             
             room=data['room'],
-            password=make_password(data['password'])
+            password=make_password(data['password']),
+            hostel = data['hostel'],
+            phone = data['phone']
+
         )
 
     serializer = UserSerializer(user, many=False)

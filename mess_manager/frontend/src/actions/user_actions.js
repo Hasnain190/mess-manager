@@ -96,10 +96,6 @@ export const logout = () => (dispatch) => {
 export const register = (username, room, password, hostel, phone) => async (dispatch) => {
 
 
-
-
-
-
     try {
         const config = {
             headers: {
@@ -120,21 +116,16 @@ export const register = (username, room, password, hostel, phone) => async (disp
             type: USER_REGISTER_SUCCESS,
             payload: data
         })
-        //  I  commented out this  so that I can test the user log in and sign up faster ... I will uncomment this later InshaAllah
-        // dispatch({
-        //     type: USER_LOGIN_SUCCESS,
-        //     payload: data
-        // })
 
-        localStorage.setItem('userInfo', JSON.stringify(data))
 
     } catch (error) {
         dispatch({
             type: USER_REGISTER_FAIL,
             payload:
-                error.response && error.response.data.detail
-                    ? error.response.data.detail
-                    : error.message,
+                error.response && error.response.data.message
+                    ? error.response.data.message
+
+                    : error.response,
         })
     }
 }

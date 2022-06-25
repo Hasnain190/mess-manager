@@ -28,7 +28,7 @@ function AddUsers({ history }) {
     const redirect = location.search ? location.search.split("=")[1] : "/";
 
     const userRegister = useSelector((state) => state.userRegister);
-    const { error, loading, userInfo } = userRegister;
+    const { error, loading, userInfo, success } = userRegister;
 
 
     const submitHandler = (e) => {
@@ -38,9 +38,16 @@ function AddUsers({ history }) {
             setMessage("Passwords do not match");
         } else {
             dispatch(register(name, room, password, hostel, phone));
-            setMessage(error);
+
+
         }
     };
+
+    useEffect(() => {
+        if (success) {
+            setMessage("The user added successfully")
+        }
+    }, [error, success])
 
     return (
         // sign up form
@@ -68,7 +75,7 @@ function AddUsers({ history }) {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="room"> Your Room no.</label>
+                                <label htmlFor="room">Your Room no.</label>
                                 <input
                                     type="text"
                                     className="form-control"

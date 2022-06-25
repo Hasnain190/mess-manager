@@ -27,14 +27,14 @@ export default function MarkAttendance() {
   const { users, loading, error } = useSelector((state) => state.userList);
   const today = new Date().toISOString().substr(0, 10);
   const { userInfo } = useSelector((state) => state.userLogin);
-  const [firstTime, setFirstTime] = useState('')
-  const [secondTime, setSecondTime] = useState('')
-  const [attenandance, setAttendance] = useState({ id: null, date: today, first_time: "Present", second_time: "Present" });
+
+
+  const { success: attendanceSuccess, error: attendanceError } = useSelector((state) => state.attendance)
+
 
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
       dispatch(listUsers());
-
 
 
     } else {
@@ -73,17 +73,10 @@ export default function MarkAttendance() {
 
   }
 
-  const testFunction = () => {
-
-
-
-  }
 
   return (
     <>
       <section>
-        {/* table for all the users */}
-        {/* heading for attendance */}
         <div className="row">
           <div className="col-md-12 text-dark">
             <h3>Mark Attendance</h3> for <h4>{today}</h4>'s meal
@@ -93,21 +86,24 @@ export default function MarkAttendance() {
           <Loader />
         ) : error ? (
           <Message variant="danger">{error}</Message>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <table className="table table-bordered">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Room no.</th>
-                  <th scope="col">First Time</th>
-                  <th scope="col">Second Time</th>
-                </tr>
-              </thead>
-              <tbody>
+        ) :
+          (<table className="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Room no.</th>
+                <th scope="col">First Time</th>
+                <th scope="col">Second Time</th>
+              </tr>
+            </thead>
 
-                {users.map((user) => (
+            <form onSubmit={handleSubmit}>
+              {users.map((user) => (
+
+
+                <tbody>
+
 
 
 
@@ -154,30 +150,28 @@ export default function MarkAttendance() {
                       </select>
 
                     </td>
+                    <td>
+
+                      <button type="submit" className="btn btn-primary">
+                        Submit
+                      </button>
+                    </td>
                   </tr>
 
-                ))}
-              </tbody>
+                </tbody>
+              ))
+              }
+            </form>
+
+          </table>
+          )
 
 
-            </table>
-
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
+        }
 
 
-          </form>
-
-        )}
-
-
-
-
-
-      </section >
+      </section>
       <section>
-        {/* bootstrap table which shows total attenandance , absentees doubles and total members  */}
         <div className="row">
           <div className="col-md-12 text-dark">
             <h3>{today}'s totals </h3>

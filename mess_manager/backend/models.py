@@ -32,11 +32,6 @@ class Attendance(models.Model):
     Attendance model
     """
 
-    # time_choices = (
-    #     ('first_time', 'first_time'),
-    #     ('second_time', 'second_time'),
-        
-    # )
 
     status_choices = (
         ('present', 'present'), 
@@ -45,14 +40,12 @@ class Attendance(models.Model):
     )
 
 
-    student = models.ForeignKey('User', on_delete=models.CASCADE)
-    date = models.DateField(unique=True)
-    # time = models.CharField(max_length=20, choices=time_choices, unique=True)
-    first_time = models.CharField(max_length=20, choices=status_choices ,unique=True, default='present')
-    second_time = models.CharField(max_length=20, choices=status_choices ,unique=True, default='present')
-
+    studant = models.ForeignKey('User', on_delete=models.CASCADE)
+    date = models.DateField()
+    first_time = models.CharField(max_length=20, choices=status_choices )
+    second_time = models.CharField(max_length=20, choices=status_choices )
     def __str__(self):
-        return self.student.username + ' ' + self.date.strftime('%d/%m/%Y') 
+        return self.studant.username + ' ' + self.date.strftime('%d/%m/%Y') 
 
 
 # mess menu
