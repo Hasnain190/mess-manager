@@ -18,13 +18,11 @@ urlpatterns = [
     # user
     path('logout/', views.logout_user , name='logout'),	
     path('register/',views.register_user , name='register'),
-    # path('login/', views.login_user , name='login'),
+   
     path('login/', views.MyTokenObtainPairView.as_view(),
          name='token_obtain_pair'),
 
-    path('<int:user_id>/attendance/', views.mark_attendance , name='mark_attendance'),
+   
     path('attendance/', views.submit_attendance , name='submit_attendance')
-    # path("login/", EmailTokenObtainPairView.as_view(), name="token_obtain_pair"),
-    # path("refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-
+    
 ]
