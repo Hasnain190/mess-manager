@@ -8,7 +8,8 @@ import EditUser from "./Screens/admin/EditUser";
 import MarkAttendance from "./Screens/admin/markAttendance";
 import ThisMonthBill from "./Screens/admin/ThisMonthBill";
 import TodayExpenses from "./Screens/admin/TodayExpenses";
-import PreviousAttendance from "./Screens/admin/PreviousAttendance";
+
+import MonthlyAttendance from "./Screens/admin/MonthlyAttendance";
 import ViewMess from "./Screens/admin/ViewMess";
 import UpdateMess from "./Screens/admin/UpdateMess";
 import ViewUsers from "./Screens/admin/ViewUsers";
@@ -44,7 +45,8 @@ function App() {
           <Route path="/admin/mark-attendance" element={<MarkAttendance />} />
           <Route path="/admin/bill-of-month" element={<ThisMonthBill />} />
           <Route path="/admin/expenses/today" element={<TodayExpenses />} />
-          <Route path="/admin/previous-attendance" element={<PreviousAttendance />} />
+          {/* <Route path="/admin/previous-attendance" element={<PreviousAttendance />} /> */}
+          <Route path="/admin/monthly-attendance" element={<MonthlyAttendance />} />
           <Route path="/admin/view-mess" element={<ViewMess />} />
           <Route path="/admin/update-mess/:day/" element={<UpdateMess />} />
 

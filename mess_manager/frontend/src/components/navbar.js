@@ -99,9 +99,9 @@ function Navbar() {
                   </Link>
                   <Link
                     className="dropdown-item"
-                    to="/admin/previous-attendance"
+                    to="/admin/monthly-attendance"
                   >
-                    See Previous Attendances
+                    See Monthly Attendances
                   </Link>
                   <Link className="dropdown-item" to="/admin/expenses/today">
                     Today's Expenses

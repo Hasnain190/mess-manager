@@ -29,13 +29,12 @@ export default function MarkAttendance() {
   const { userInfo } = useSelector((state) => state.userLogin);
 
 
-  const { success: attendanceSuccess, error: attendanceError } = useSelector((state) => state.attendance)
+  const { success: attendanceSuccess, error: attendanceError, loading: attenandanceLoading } = useSelector((state) => state.attendance)
 
 
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
       dispatch(listUsers());
-
 
     } else {
       navigate("/login");
@@ -43,33 +42,36 @@ export default function MarkAttendance() {
 
   }, [dispatch, userInfo, navigate]);
 
+
+
+
+  const userIds = users?.map((user) => user.id)
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const attendanceExtractor = (e, id) => {
+      let first_time = e.target.elements[`first-attendance-${id}`].value;
+      let second_time = e.target.elements[`second-attendance-${id}`].value;
+      return [first_time, second_time]
 
-
-
-
-    // for (let i = 0; i < users.length; i++) {
-    //   setAttendance({ id: users[i].id, date: today, first_time: firstTime, second_time: secondTime });
-
-    //   postAttendance(attenandance);
-
-
-
-    // }
-
-    const attenandance = {
-      studant: myRefForId.current.textContent,
-      date: today,
-      first_time: myRefForFirstTime.current.value,
-      second_time: myRefForSecondTime.current.value
     }
 
-    dispatch(postAttendance(attenandance))
 
-    console.log(attenandance)
+    for (let index = 0; index < userIds.length; index++) {
+      let id = userIds[index];
 
+      const attendance = {
+        studant: id,
+        date: today,
+        first_time: attendanceExtractor(e, id)[0],
+        second_time: attendanceExtractor(e, id)[1]
+      }
+
+      dispatch(postAttendance(attendance, id))
+
+    }
+
+    alert("All the attendance is submitted successfully")
 
   }
 
@@ -78,8 +80,8 @@ export default function MarkAttendance() {
     <>
       <section>
         <div className="row">
-          <div className="col-md-12 text-dark">
-            <h3>Mark Attendance</h3> for <h4>{today}</h4>'s meal
+          <div className="col-md-12 text-dark text-center">
+            <h3 >Mark Attendance</h3> for <h4>{today}</h4>'s meal
           </div>
         </div>
         {loading ? (
@@ -87,83 +89,88 @@ export default function MarkAttendance() {
         ) : error ? (
           <Message variant="danger">{error}</Message>
         ) :
-          (<table className="table table-bordered">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Room no.</th>
-                <th scope="col">First Time</th>
-                <th scope="col">Second Time</th>
-              </tr>
-            </thead>
+          (
+            <form className="form" onSubmit={handleSubmit}>
 
-            <form onSubmit={handleSubmit}>
-              {users.map((user) => (
-
-
-                <tbody>
-
-
-
-
-                  <tr key={user.id}>
-
-
-                    <th scope="row" name="userId" ref={myRefForId}>{user.id}</th>
-                    <td className="form-group">
-                      <input
-
-                        type="text"
-                        className="form-control"
-                        id="table-name"
-                        name="username"
-                        value={user.username}
-
-                      />
-                    </td>
-                    <td className="form-group">
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="table-room"
-                        name="room"
-                        value={user.room}
-
-                      />
-
-                    </td>
-
-                    <td>
-                      <select name={`firstAttendance${user.id}`} ref={myRefForFirstTime} onChange={(e) => (e.target.value)} className="form-control" id="table-first-time">
-                        <option value="present">Present ✓</option>
-                        <option value="absent">Absent X</option>
-                        <option value="double">Double 2</option>
-                      </select>
-
-                    </td>
-                    <td>
-                      <select name={`secondAttendance${user.id}`} ref={myRefForSecondTime} onChange={(e) => (e.target.value)} className="form-control" id="table-second-time">
-                        <option value="present">Present ✓</option>
-                        <option value="absent">Absent X</option>
-                        <option value="double">Double 2</option>
-                      </select>
-
-                    </td>
-                    <td>
-
-                      <button type="submit" className="btn btn-primary">
-                        Submit
-                      </button>
-                    </td>
+              <table className="table table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Room no.</th>
+                    <th scope="col">First Time</th>
+                    <th scope="col">Second Time</th>
+                    <th scope="col">Status</th>
                   </tr>
+                </thead>
 
-                </tbody>
-              ))
-              }
+                {users.map((user) => (
+
+
+                  <tbody>
+
+
+
+
+                    <tr key={user.id}>
+
+
+                      <th scope="row" id={`user-id-${user.id}}`} ref={myRefForId}>{user.id}</th>
+                      <td className="form-group">
+                        <input
+
+                          type="text"
+                          className="form-control"
+                          id={`table-name-${user.id}`}
+                          name="username"
+                          value={user.username}
+
+                        />
+                      </td>
+                      <td className="form-group">
+                        <input
+                          type="text"
+                          className="form-control"
+                          id={`table-ropm-${user.id}`}
+                          name="room"
+                          value={user.room}
+
+                        />
+
+                      </td>
+
+                      <td>
+                        <select id={`first-attendance-${user.id}`} ref={myRefForFirstTime} onChange={(e) => (e.target.value)} className="form-control" >
+                          <option value="present">Present ✓</option>
+                          <option value="absent">Absent X</option>
+                          <option value="double">Double 2</option>
+                        </select>
+
+                      </td>
+                      <td>
+                        <select id={`second-attendance-${user.id}`} ref={myRefForSecondTime} onChange={(e) => (e.target.value)} className="form-control" >
+                          <option value="present">Present ✓</option>
+                          <option value="absent">Absent X</option>
+                          <option value="double">Double 2</option>
+                        </select>
+
+                      </td>
+                      <td>
+                        <i class="bi bi-check" ></i>
+                      </td>
+                    </tr>
+
+                  </tbody>
+                ))
+                }
+
+              </table>
+              <button type="submit" className="btn btn-primary">
+                Submit
+              </button>
+
             </form>
 
-          </table>
           )
 
 

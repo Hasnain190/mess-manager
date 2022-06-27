@@ -9,8 +9,6 @@ from rest_framework_simplejwt.views import TokenRefreshView , TokenObtainPairVie
 
 urlpatterns = [
  
-   path('post/', views.post_attendance , name='post attendance'),
-    # path('<int:user_id>/attendance/', views.mark_attendance , name='mark_attendance'),
-    # path('attendance/', views.submit_attendance , name='submit_attendance')
-   
+   path('post/<int:id>/', views.post_attendance , name='post attendance'),
+   path('get/',view=views.get_attendance, name="get all attendance")
 ]

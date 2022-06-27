@@ -13,7 +13,7 @@ import {
 } from "./reducers/user_reducers";
 
 import { messMenuReducer } from "./reducers/mess_reducers";
-import { attendanceReducers } from "./reducers/attendance_reducers";
+import { postAttendanceReducers, getAttendanceReducers } from "./reducers/attendance_reducers";
 const reducer = combineReducers({
   // user reducers
   userLogin: userLoginReducer,
@@ -34,7 +34,8 @@ const reducer = combineReducers({
   messMenu: messMenuReducer,
 
   // attendance reducers
-  attendance: attendanceReducers,
+  attendance: postAttendanceReducers,
+  getAttendance: getAttendanceReducers,
 });
 
 const userInfoFromStorage = localStorage.getItem("userInfo")

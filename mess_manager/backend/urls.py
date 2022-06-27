@@ -23,6 +23,5 @@ urlpatterns = [
          name='token_obtain_pair'),
 
    
-    path('attendance/', views.submit_attendance , name='submit_attendance')
     
 ]

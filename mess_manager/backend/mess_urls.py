@@ -1,4 +1,3 @@
-
 from django.urls import URLPattern, path
 import backend.mess_views as views
 
