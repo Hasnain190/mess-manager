@@ -16,16 +16,16 @@ function AttendanceSheet({ month, filteredAttendance }) {
 
     // const { attendance, error, loading } = useSelector(state => state.getAttendance)
     const { users } = useSelector(state => state.userList)
-    useEffect(() => {
-        if (userInfo && userInfo.isAdmin) {
-            dispatch(listUsers())
-            dispatch(getAttendance())
+    // useEffect(() => {
+    //     if (userInfo && userInfo.isAdmin) {
+    //         dispatch(listUsers())
+    //         dispatch(getAttendance())
 
 
-        } else {
-            navigate('./login')
-        }
-    }, [navigate, dispatch, userInfo])
+    //     } else {
+    //         navigate('./login')
+    //     }
+    // }, [navigate, dispatch, userInfo])
 
 
 
