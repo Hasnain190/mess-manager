@@ -11,10 +11,12 @@ from rest_framework import status
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
-def post_attendance(request):
+def post_attendance(request,id):
     """post attendance of all the students"""
     data = request.data
-    user = request.user
+
+    user = User.objects.get(id = id)
+   
 
     already_exist = Attendance.objects.filter(studant = user, date=data['date']).exists()
 
@@ -35,3 +37,15 @@ def post_attendance(request):
         return Response(serializer.data)
 
  
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_attendance(request):
+    """Get all the attendance of all the studants"""
+
+    Attendances = Attendance.objects.all()
+
+    serializer = AttendanceSerializer(Attendances,many=True)
+
+    return Response(serializer.data)
+
+
