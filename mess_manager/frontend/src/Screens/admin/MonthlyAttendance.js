@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { getAttendance } from "../../actions/attendance_actions"
 import { useNavigate } from "react-router-dom"
 import { listUsers } from "../../actions/user_actions";
-
-
+import ConvertToMonth from '../../components/ConvertToMonth';
+import DailyAttendance from './DailyAttendance'
 
 function MonthlyAttendance() {
 
@@ -24,54 +24,28 @@ function MonthlyAttendance() {
         if (userInfo && userInfo.isAdmin) {
             dispatch(listUsers())
             dispatch(getAttendance())
-            convertToMonth(6)
-
-            console.log(monthDateList)
-
-
         } else {
             navigate('./login')
         }
     }, [navigate, dispatch, userInfo])
 
-    function IdToStudant({ id }) {
-        const name = users?.find(user => user.id === id).username
-        return <div>{name}</div>
-    }
-
     const filteredAttendance = (number) => attendance.filter(item => Number((item.date).split("-")[1]) === number)
 
 
-
-    const [month, setMonth] = useState()
-    function convertToMonth(number) {
-        const monthName = Intl.DateTimeFormat('en', { month: 'long' }).format(new Date(`${number}`));
-        setMonth(monthName)
-        return monthName
-
-    }
-
-
-
-
-
     return (
-        <div className="container">
-
+        <div className='container'>
             {monthDateSet.map(item => (
                 <>
-
                     <div class="h1 text-center text-dark" id="pageHeaderTitle">
-                        Attendance Sheet of <code>{item}</code>
+                        Attendance of <code><ConvertToMonth number={(item)} /></code>
                     </div>
-                    <AttendanceSheet key={item} month={item} filteredAttendance={filteredAttendance(item)} />
-                </>
 
+                    <DailyAttendance key={item} month={item} filteredMonthlyAttendance={filteredAttendance(item)} />
+                </>
             ))
             }
         </div>
     )
 }
-
 
 export default MonthlyAttendance

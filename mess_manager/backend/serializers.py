@@ -89,3 +89,11 @@ class MenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Menu
         fields = '__all__'
+
+class ExpenseSerializer(serializers.ModelSerializer):
+    """
+    Serializer for mess menu object
+    """
+    class Meta:
+        model = Expense
+        fields = '__all__'

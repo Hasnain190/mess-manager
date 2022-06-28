@@ -4,30 +4,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { getAttendance } from "../../actions/attendance_actions"
 import { useNavigate } from "react-router-dom"
 import { listUsers } from "../../actions/user_actions";
+import Downloader from "../../components/Downloader";
+import ConvertToMonth from "../../components/ConvertToMonth";
 
 
 
-function AttendanceSheet({ month, filteredAttendance }) {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+function AttendanceSheet({ month, day, filteredAttendance }) {
     const attendance = filteredAttendance;
 
-    const { userInfo } = useSelector((state) => state.userLogin);
 
-    // const { attendance, error, loading } = useSelector(state => state.getAttendance)
     const { users } = useSelector(state => state.userList)
-    // useEffect(() => {
-    //     if (userInfo && userInfo.isAdmin) {
-    //         dispatch(listUsers())
-    //         dispatch(getAttendance())
-
-
-    //     } else {
-    //         navigate('./login')
-    //     }
-    // }, [navigate, dispatch, userInfo])
-
-
 
 
     function IdToStudant({ id }) {
@@ -35,44 +21,44 @@ function AttendanceSheet({ month, filteredAttendance }) {
         return <div>{name}</div>
     }
 
-
     return (
-        <div className="container">
+        <div  >
 
-            <div className="h5 text-start">
-                {`${month}-27`}
-            </div>
-
-
-
-            {/* boostrap table for all the users , room no , current bill added */}
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Studants</th>
-                        <th scope="col">First Time</th>
-                        <th scope="col">Second Time</th>
-                    </tr>
-                </thead>
-                {attendance?.map(item => (
+            <Downloader htmlInputId={`attendance-${day}`} name={"Attendance-Sheet"} />
+            <div id={`attendance-${day}`}>
 
 
 
 
+                <div className="h5 text-start">
+                    {/* {`${month}-${day}`} */}
+                    <ConvertToMonth number={month} /> - {day}
+                </div>
 
-                    <tbody  >
+                <table class="table table-striped">
+                    <thead>
                         <tr>
-                            <th key={item.id} scope="row">{item.id}</th>
-                            <td><IdToStudant id={(item.studant)} /></td>
-                            <td>{item.first_time}</td>
-                            <td>{item.second_time}</td>
+                            <th scope="col">#</th>
+                            <th scope="col">Studants</th>
+                            <th scope="col">First Time</th>
+                            <th scope="col">Second Time</th>
                         </tr>
-                    </tbody>
+                    </thead>
+                    {attendance?.map(item => (
+                        <tbody  >
+                            <tr>
+                                <th key={item.id} scope="row">{item.id}</th>
+                                <td><IdToStudant id={(item.studant)} /></td>
+                                <td>{item.first_time}</td>
+                                <td>{item.second_time}</td>
+                            </tr>
+                        </tbody>
 
-                ))}
-            </table>
+                    ))}
+                </table>
+            </div>
         </div >
+
     );
 }
 

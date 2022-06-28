@@ -1,4 +1,5 @@
 from distutils.command.build_scripts import first_line_re
+from operator import mod
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
@@ -13,17 +14,6 @@ class User(AbstractUser):
     room = models.CharField(max_length=20, blank=True, null=True)
    
 
-
-# class Message(models.Model):
-#     """
-#     Message model
-#     """
-#     message = models.TextField()
-#     date = models.DateTimeField(auto_now_add=True)
-#     user = models.ForeignKey('User', on_delete=models.CASCADE)
-
-#     def __str__(self):
-#         return self.message
 
 
 
@@ -65,12 +55,25 @@ class Menu(models.Model):
     )
 
     day = models.CharField(max_length=20, blank=True, null=True, choices=day_of_week_choices, unique=True)
-    first_time = models.CharField(max_length=20, blank=True, null=True)
-    second_time = models.CharField(max_length=20, blank=True, null=True)
+    first_time = models.CharField(max_length=50, blank=True, null=True)
+    second_time = models.CharField(max_length=50, blank=True, null=True)
 
 
     def __str__(self) -> str:
         return self.day + ' ' + self.first_time + ' ' + self.second_time
+
+
+
+class Expense(models.Model):
+    """For expenses for one day """
+    date = models.DateField()
+    total_attendances = models.IntegerField(max_length=20,blank=True,null=True)
+    expenenses_per_capita= models.IntegerField(max_length=100,blank=True,null=True)
+
+
+    
+    def __str__(self) -> str:
+        return "Expenses per capita for the date "+ self.date + " is "+ self.expenenses_per_capita
 
 
 

@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { postAttendance } from "../../actions/attendance_actions";
-
+import { postAttendance, getAttendance } from "../../actions/attendance_actions";
+import { counter } from "../../components/counter";
 
 
 export default function MarkAttendance() {
@@ -31,6 +31,11 @@ export default function MarkAttendance() {
 
   const { success: attendanceSuccess, error: attendanceError, loading: attenandanceLoading } = useSelector((state) => state.attendance)
 
+  const { attendance: getAttendanceObj, error: getAttendanceError, loading: getAttendanceLoading } = useSelector(state => state.getAttendance)
+
+
+
+
 
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
@@ -46,42 +51,60 @@ export default function MarkAttendance() {
 
 
   const userIds = users?.map((user) => user.id)
+
+
+  const [total, setTotal] = useState(0)
+
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    try {
+      const attendanceExtractor = (e, id) => {
+        let first_time = e.target.elements[`first-attendance-${id}`].value;
+        let second_time = e.target.elements[`second-attendance-${id}`].value;
 
-    const attendanceExtractor = (e, id) => {
-      let first_time = e.target.elements[`first-attendance-${id}`].value;
-      let second_time = e.target.elements[`second-attendance-${id}`].value;
-      return [first_time, second_time]
-
-    }
-
-
-    for (let index = 0; index < userIds.length; index++) {
-      let id = userIds[index];
-
-      const attendance = {
-        studant: id,
-        date: today,
-        first_time: attendanceExtractor(e, id)[0],
-        second_time: attendanceExtractor(e, id)[1]
+        return [first_time, second_time]
       }
 
-      dispatch(postAttendance(attendance, id))
+
+
+      for (let index = 0; index < userIds.length; index++) {
+        let id = userIds[index];
+
+        const attendance = {
+          studant: id,
+          date: date,
+          first_time: attendanceExtractor(e, id)[0],
+          second_time: attendanceExtractor(e, id)[1]
+        }
+        dispatch(postAttendance(attendance, id))
+      }
+      alert("All the attendance is submitted successfully")
+      dispatch(getAttendance());
+      let count = counter(getAttendanceObj, date);
+      setTotal(count)
+
+      console.log(count)
+    } catch (error) {
 
     }
-
-    alert("All the attendance is submitted successfully")
-
   }
 
+
+
+
+
+
+
+  const [date, setDate] = useState(today)
 
   return (
     <>
       <section>
         <div className="row">
           <div className="col-md-12 text-dark text-center">
-            <h3 >Mark Attendance</h3> for <h4>{today}</h4>'s meal
+            <h3 >Mark Attendance</h3> for <label for="date">The Date:</label><h4><input type="date" id="date" value={date} onChange={(e) => setDate(e.target.value)} max={today} /></h4>'s meal
           </div>
         </div>
         {loading ? (
@@ -198,7 +221,7 @@ export default function MarkAttendance() {
               <th scope="row">1</th>
               <td>{users?.length}</td>
               <td></td>
-              <td>2</td>
+              <td>{total}</td>
 
             </tr>
           </tbody>

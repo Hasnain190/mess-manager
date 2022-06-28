@@ -9,6 +9,8 @@ import jsPDF from 'jspdf';
 import "./ViewMess.css";
 import Loader from "../../components/Loader";
 import { Link } from "react-router-dom";
+import Downloader from "../../components/Downloader";
+
 function ViewMess() {
 
   const dispatch = useDispatch()
@@ -25,18 +27,18 @@ function ViewMess() {
 
   const [editMenu, setEditMenu] = useState(false)
 
-  function printDocument() {
-    const input = document.getElementById('divToPrint');
-    html2canvas(input)
-      .then((canvas) => {
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF();
-        pdf.addImage(imgData, 'JPEG', 0, 0);
-        // pdf.output('dataurlnewwindow');
-        pdf.save("Mess.pdf");
-      })
-      ;
-  }
+  // function printDocument() {
+  //   const input = document.getElementById('divToPrint');
+  //   html2canvas(input)
+  //     .then((canvas) => {
+  //       const imgData = canvas.toDataURL('image/png');
+  //       const pdf = new jsPDF();
+  //       pdf.addImage(imgData, 'JPEG', 0, 0);
+  //       // pdf.output('dataurlnewwindow');
+  //       pdf.save("Mess.pdf");
+  //     })
+  //     ;
+  // }
 
   return (
     <section id="tabs" class="project-tab">
@@ -44,8 +46,8 @@ function ViewMess() {
         <div class="row">
           <div class="col-md-12">
 
-            <button class="btn btn-primary" onClick={printDocument}>Download as PDF</button>
-
+            <Downloader htmlInputId={'divToPrint'} name={"Mess-Menu"} />
+            {/* <button onClick={printDocument} >Download</button> */}
 
 
           </div>
