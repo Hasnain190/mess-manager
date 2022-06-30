@@ -21,9 +21,9 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
 #  path('__debug__/', include(debug_toolbar.urls)),
+    path('api/expenses/', include('backend.urls.expenses_urls')),
     path('django/admin/', admin.site.urls),
    
-    path('api/expenses/', include('backend.urls.expenses_urls')),
     path('api/users/', include('backend.urls.user_urls')),
     path('api/mess/', include('backend.urls.mess_urls')),
     path('api/attendance/', include('backend.urls.attendance_urls')),

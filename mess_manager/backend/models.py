@@ -78,7 +78,20 @@ class Expense(models.Model):
 
 
 
+class Bill(models.Model):
+    """Mess bill for all the users in One Month"""
 
+    def __init__(self, room, hostel):
+        self.student.room = room
+        self.student.hostel = hostel
+
+            
+            
+
+        
+
+    studant = models.ForeignKey("User",on_delete=models.CASCADE,related_name="studant")
+    bill = models.IntegerField(blank=True,null= True)
     
 
 

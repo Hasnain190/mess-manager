@@ -37,10 +37,66 @@ def add_expenses_per_capita_per_day(request):
     return Response(serializer.data)
  
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_expenses_per_month(request,month):
+
+     expenses_per_month = Expense.objects.filter(date__month = month)
+
+     serializers = ExpenseSerializer(expenses_per_month, many= True)
+    
+     return Response(serializers.data)
+
+
+
+
+
+
+
+
+
+
+
+
+@api_view(['GET'])
 @permission_classes([])
 def get_monthly_expenses_per_user(request,month, user_id):
     user = User.objects.get(id = user_id)
-    total_monthly_attendances_from_that_user = Attendance.objects.filter(studant = user, date__month = month)
-    total_expenses_in_that_month = Expense.objects.filter(date__month= month).expenses_per_capita
-    serializers = AttendanceSerializer(total_monthly_attendances_from_that_user , many = True)
-    return Response(serializers.data)
+    total_expenses_in_that_month_set = Expense.objects.filter(date__month= month)
+
+    total_attendances_in_that_month =0
+    for i in Attendance.objects.filter(date__month = month):
+        if i["first_time"] =="present":
+            total_attendances_in_that_month+=1
+        elif i["second_time"] =="present":
+            total_attendances_in_that_month+=1
+        return total_attendances_in_that_month
+
+
+
+    total_expenses = 0
+    for i in total_expenses_in_that_month_set:
+        expenses = i["expenses"]
+        total_expenses += expenses
+        return total_expenses
+    
+
+    serializers = []
+    for i in  User.objects.all():
+        user = i
+        total_monthly_attendances_from_that_user = Attendance.objects.filter(studant = user, date__month = month)
+
+        bill_for_that_user = total_expenses/ total_attendances_in_that_month * total_monthly_attendances_from_that_user
+
+
+        bill = Bill.objects.create(
+            studant = user,
+            bill = bill_for_that_user
+        )
+        serializer = BillSerializer(bill)
+        serializers.append(serializer.data)
+   
+    return Response(serializers)
+
+
+
+

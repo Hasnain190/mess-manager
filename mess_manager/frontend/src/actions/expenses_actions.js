@@ -1,7 +1,11 @@
 import {
     ADD_EXPENSES_REQUEST,
     ADD_EXPENSES_SUCCESS,
-    ADD_EXPENSES_FAIL
+    ADD_EXPENSES_FAIL,
+
+    GET_BILL_FAIL,
+    GET_BILL_REQUEST,
+    GET_BILL_sUCCESS,
 } from '../constants/expenses_constants'
 
 import axios from 'axios'
@@ -24,7 +28,7 @@ export const addExpenses = (expenses) => async (getState, dispatch) => {
 
         const { data } = await axios.post(
             '/api/expenses/post/',
-            expenses,
+            expenses
             config
         )
         dispatch({
@@ -49,3 +53,41 @@ export const addExpenses = (expenses) => async (getState, dispatch) => {
     }
 }
 
+export const getbill = (month) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: GET_BILL_REQUEST
+        })
+
+        const {
+            userLogin: { userInfo },
+        } = getState()
+
+
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `JWT ${userInfo.token}`
+            }
+        }
+        //    FIXME:
+        const { data } = await axios.get(`/api/expenses/${id}/`,
+            config
+        )
+
+        dispatch({
+            type: GET_BILL_sUCCESS,
+            payload: data
+        })
+
+
+    } catch (error) {
+        dispatch({
+            type: GET_BILL_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}
