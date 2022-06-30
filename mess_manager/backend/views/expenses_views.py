@@ -1,4 +1,5 @@
 
+from math import fabs
 from django.shortcuts import render
 
 from backend.models import *
@@ -28,14 +29,15 @@ def add_expenses_per_capita_per_day(request):
         
         Expenses_per_day = Expense.objects.create(
             date = data['date'],
-            expenenses_per_day =data['expenenses_per_day'],
+            expenses_per_day =data['expenses_per_day'],
             total_attendances=data['total_attendances'],
-            expenenses_per_capita=data['expenenses_per_capita'],
+            expenses_per_attendance=data['expenses_per_attendance'],
         )
 
-    serializer = ExpenseSerializer(Expenses_per_day, many=True)
+    serializer = ExpenseSerializer(Expenses_per_day, many=False)
     return Response(serializer.data)
  
+
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def get_expenses_per_month(request,month):
