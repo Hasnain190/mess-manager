@@ -67,8 +67,9 @@ class Menu(models.Model):
 class Expense(models.Model):
     """For expenses for one day """
     date = models.DateField()
-    total_attendances = models.IntegerField(max_length=20,blank=True,null=True)
-    expenenses_per_capita= models.IntegerField(max_length=100,blank=True,null=True)
+    total_attendances = models.IntegerField(blank=True,null=True, unique=True)
+    expenenses_per_day = models.IntegerField(blank=True,null=True)
+    expenenses_per_capita= models.IntegerField(blank=True,null=True)
 
 
     

@@ -1,10 +1,10 @@
 // this screen displays the list of users
-import { listUsers, deleteUser } from "../../actions/user_actions";
+import { listUsers, deleteUser } from "../../../actions/user_actions";
 import React, { useState, useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import Loader from "../../components/Loader";
-import Message from "../../components/Message";
+import Loader from "../../../components/Loader";
+import Message from "../../../components/Message";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 

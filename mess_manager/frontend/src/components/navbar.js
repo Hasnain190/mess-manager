@@ -106,6 +106,10 @@ function Navbar() {
                   <Link className="dropdown-item" to="/admin/expenses/today">
                     Today's Expenses
                   </Link>
+
+                  <Link className="dropdown-item" to="/admin/expenses/monthly">
+                    Expenses By Month
+                  </Link>
                   <Link className="dropdown-item" to="/admin/bill-of-month">
                     This Month's Bill
                   </Link>

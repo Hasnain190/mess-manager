@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 
-import { getMessMenu, updateMessMenu } from "../../actions/mess_actions";
+import { getMessMenu, updateMessMenu } from "../../../actions/mess_actions";
 
-import Message from "../../components/Message";
+import Message from "../../../components/Message";
 import { useSelector, useDispatch } from "react-redux";
 
 import "./ViewMess.css";
-import Loader from "../../components/Loader";
+import Loader from "../../../components/Loader";
 
 
 

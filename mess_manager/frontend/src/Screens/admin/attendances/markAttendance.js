@@ -1,14 +1,14 @@
 
-import Button from "../../components/Button";
-import { listUsers, deleteUser } from "../../actions/user_actions";
+import Button from "../../../components/Button";
+import { listUsers, deleteUser } from "../../../actions/user_actions";
 import React, { useState, useEffect, useRef } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import Loader from "../../components/Loader";
-import Message from "../../components/Message";
+import Loader from "../../../components/Loader";
+import Message from "../../../components/Message";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { postAttendance, getAttendance } from "../../actions/attendance_actions";
-import { counter } from "../../components/counter";
+import { postAttendance, getAttendance } from "../../../actions/attendance_actions";
+import { counter } from "../../../components/counter";
 
 
 export default function MarkAttendance() {

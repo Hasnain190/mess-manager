@@ -4,16 +4,19 @@ import Login from "./Screens/login";
 
 import Dashboard from "./Screens/normal/dashboard";
 
-import EditUser from "./Screens/admin/EditUser";
-import MarkAttendance from "./Screens/admin/markAttendance";
-import ThisMonthBill from "./Screens/admin/ThisMonthBill";
-import TodayExpenses from "./Screens/admin/TodayExpenses";
+import EditUser from "./Screens/admin/users/EditUser";
+import AddUsers from "./Screens/admin/users/AddUsers";
+import ViewUsers from "./Screens/admin/users/ViewUsers";
 
-import MonthlyAttendance from "./Screens/admin/MonthlyAttendance";
-import ViewMess from "./Screens/admin/ViewMess";
-import UpdateMess from "./Screens/admin/UpdateMess";
-import ViewUsers from "./Screens/admin/ViewUsers";
-import AddUsers from "./Screens/admin/AddUsers";
+import ThisMonthBill from "./Screens/admin/expenses/ThisMonthBill";
+import TodayExpenses from "./Screens/admin/expenses/TodayExpenses";
+import MonthlyExpenses from "./Screens/admin/expenses/MonthlyExpenses";
+
+import MarkAttendance from "./Screens/admin/attendances/markAttendance";
+import MonthlyAttendance from "./Screens/admin/attendances/MonthlyAttendance";
+
+import ViewMess from "./Screens/admin/mess/ViewMess";
+import UpdateMess from "./Screens/admin/mess/UpdateMess";
 
 
 
@@ -45,6 +48,8 @@ function App() {
           <Route path="/admin/mark-attendance" element={<MarkAttendance />} />
           <Route path="/admin/bill-of-month" element={<ThisMonthBill />} />
           <Route path="/admin/expenses/today" element={<TodayExpenses />} />
+          <Route path="/admin/expenses/monthly" element={<MonthlyExpenses />} />
+
           {/* <Route path="/admin/previous-attendance" element={<PreviousAttendance />} /> */}
           <Route path="/admin/monthly-attendance" element={<MonthlyAttendance />} />
           <Route path="/admin/view-mess" element={<ViewMess />} />

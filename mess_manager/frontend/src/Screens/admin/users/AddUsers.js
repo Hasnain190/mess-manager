@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Loader from "../../components/Loader";
-import Message from "../../components/Message";
-import { register } from "../../actions/user_actions";
+import Loader from "../../../components/Loader";
+import Message from "../../../components/Message";
+import { register } from "../../../actions/user_actions";
 
 function AddUsers({ history }) {
 

@@ -1,5 +1,5 @@
 from django.urls import URLPattern, path
-import backend.mess_views as views
+import backend.views.mess_views as views
 
 
 from rest_framework_simplejwt.views import TokenRefreshView , TokenObtainPairView

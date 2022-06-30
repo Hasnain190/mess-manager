@@ -1,6 +1,6 @@
 
 from django.urls import path
-import backend.attendance_view as views
+import backend.views.attendance_view as views
 
 
 from rest_framework_simplejwt.views import TokenRefreshView , TokenObtainPairView

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
-import Loader from '../../components/Loader'
-import Message from '../../components/Message'
-import { getUserDetails, updateUser } from '../../actions/user_actions'
-import { USER_UPDATE_RESET } from '../../constants/user_constants'
+import Loader from '../../../components/Loader'
+import Message from '../../../components/Message'
+import { getUserDetails, updateUser } from '../../../actions/user_actions'
+import { USER_UPDATE_RESET } from '../../../constants/user_constants'
 
 
 

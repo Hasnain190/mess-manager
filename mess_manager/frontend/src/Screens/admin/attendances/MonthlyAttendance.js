@@ -1,10 +1,10 @@
 import AttendanceSheet from './AttendanceSheet'
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getAttendance } from "../../actions/attendance_actions"
+import { getAttendance } from "../../../actions/attendance_actions"
 import { useNavigate } from "react-router-dom"
-import { listUsers } from "../../actions/user_actions";
-import ConvertToMonth from '../../components/ConvertToMonth';
+import { listUsers } from "../../../actions/user_actions";
+import ConvertToMonth from '../../../components/ConvertToMonth';
 import DailyAttendance from './DailyAttendance'
 
 function MonthlyAttendance() {

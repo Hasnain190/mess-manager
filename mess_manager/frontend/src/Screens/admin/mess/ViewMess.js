@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { saveAs } from "file-saver";
-import { getMessMenu } from "../../actions/mess_actions";
+import { getMessMenu } from "../../../actions/mess_actions";
 
-import Message from "../../components/Message";
+import Message from "../../../components/Message";
 import { useSelector, useDispatch } from "react-redux";
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import "./ViewMess.css";
-import Loader from "../../components/Loader";
+import Loader from "../../../components/Loader";
 import { Link } from "react-router-dom";
-import Downloader from "../../components/Downloader";
+import Downloader from "../../../components/Downloader";
 
 function ViewMess() {
 

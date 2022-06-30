@@ -1,7 +1,7 @@
-from .models import *
+from ..models import *
 from rest_framework.decorators import api_view , permission_classes
 from rest_framework.response import Response
-from .serializers import *
+from ..serializers import *
 
 
 @api_view(['GET'])
