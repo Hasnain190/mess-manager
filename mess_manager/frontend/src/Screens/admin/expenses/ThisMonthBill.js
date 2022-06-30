@@ -1,11 +1,19 @@
-// for this month bill
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 function ThisMonthBill() {
+
+
+
+
+
+
+
+
+
   return (
     <div>
       <div class="h1 text-center text-dark" id="pageHeaderTitle">
-        This Month's Bill from   -- to --
+        Bill July
       </div>
 
       <div class="text-end">
