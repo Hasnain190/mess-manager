@@ -14,7 +14,7 @@ export const addExpensesReducer = (state = {}, action) => {
             return { loading: true }
 
         case ADD_EXPENSES_SUCCESS:
-            return { loading: false, success: true, expenses: action.payload }
+            return { ...state, loading: false, success: true, expenses: action.payload }
 
         case ADD_EXPENSES_FAIL:
             return { loading: false, error: action.payload }

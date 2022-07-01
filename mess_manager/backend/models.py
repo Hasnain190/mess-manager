@@ -30,12 +30,12 @@ class Attendance(models.Model):
     )
 
 
-    studant = models.ForeignKey('User', on_delete=models.CASCADE)
+    student = models.ForeignKey('User', on_delete=models.CASCADE)
     date = models.DateField()
     first_time = models.CharField(max_length=20, choices=status_choices )
     second_time = models.CharField(max_length=20, choices=status_choices )
     def __str__(self):
-        return self.studant.username + ' ' + self.date.strftime('%d/%m/%Y') 
+        return self.student.username + ' ' + self.date.strftime('%d/%m/%Y') 
 
 
 # mess menu
@@ -68,30 +68,32 @@ class Expense(models.Model):
     """For expenses for one day """
     date = models.DateField()
     total_attendances = models.IntegerField(blank=True,null=True, unique=True)
-    expenenses_per_day = models.IntegerField(blank=True,null=True)
-    expenenses_per_capita= models.IntegerField(blank=True,null=True)
+    expenses_per_day = models.FloatField(blank=True,null=True)
+    expenses_per_attendance= models.FloatField(blank=True,null=True)
+
+    def save(self,*args,**kwargs):
+        if self.expenses_per_attendance is None:
+            self.expenses_per_attendance = self.expenses_per_day / float(self.total_attendances)
+        super(Expense, self).save(*args, **kwargs)
+
 
 
     
     def __str__(self) -> str:
-        return "Expenses per capita for the date "+ self.date + " is "+ self.expenenses_per_capita
+        return "Expenses per attendance for the date "+ str(self.date) + " is "+ str(self.expenses_per_capita)
 
 
 
 class Bill(models.Model):
     """Mess bill for all the users in One Month"""
 
-    def __init__(self, room, hostel):
-        self.student.room = room
-        self.student.hostel = hostel
-
-            
+           
             
 
         
 
-    studant = models.ForeignKey("User",on_delete=models.CASCADE,related_name="studant")
-    bill = models.IntegerField(blank=True,null= True)
+    student = models.ForeignKey("User",on_delete=models.CASCADE,related_name="student",default="")
+    bill = models.FloatField(blank=True,null= True)
     
 
 

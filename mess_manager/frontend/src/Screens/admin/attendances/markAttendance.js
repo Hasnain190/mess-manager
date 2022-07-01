@@ -73,7 +73,7 @@ export default function MarkAttendance() {
         let id = userIds[index];
 
         const attendance = {
-          studant: id,
+          student: id,
           date: date,
           first_time: attendanceExtractor(e, id)[0],
           second_time: attendanceExtractor(e, id)[1]

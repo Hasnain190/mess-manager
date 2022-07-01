@@ -33,11 +33,6 @@ function Navbar() {
       </button>
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav">
-          <li className="nav-item active">
-            <Link className="nav-link" to="/">
-              Home <span className="sr-only">(current)</span>
-            </Link>
-          </li>
 
           {!userInfo && (
 
@@ -90,6 +85,8 @@ function Navbar() {
                     View Users
                   </Link>
 
+                  <div className="dropdown-divider"></div>
+
                   <Link className="dropdown-item" to="/admin/view-mess">
                     View Mess
                   </Link>
@@ -103,6 +100,8 @@ function Navbar() {
                   >
                     See Monthly Attendances
                   </Link>
+                  <div className="dropdown-divider"></div>
+
                   <Link className="dropdown-item" to="/admin/expenses/today">
                     Today's Expenses
                   </Link>

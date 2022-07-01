@@ -48,7 +48,7 @@ function AttendanceSheet({ month, day, filteredAttendance }) {
                         <tbody  >
                             <tr>
                                 <th key={item.id} scope="row">{item.id}</th>
-                                <td><IdToStudant id={(item.studant)} /></td>
+                                <td><IdToStudant id={(item.student)} /></td>
                                 <td>{item.first_time}</td>
                                 <td>{item.second_time}</td>
                             </tr>

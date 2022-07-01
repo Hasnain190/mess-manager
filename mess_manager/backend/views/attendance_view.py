@@ -18,7 +18,7 @@ def post_attendance(request,id):
     user = User.objects.get(id = id)
    
 
-    already_exist = Attendance.objects.filter(studant = user, date=data['date']).exists()
+    already_exist = Attendance.objects.filter(student = user, date=data['date']).exists()
 
     if already_exist:
         return Response( { "message" : "The user "+user.username+"'s attendance is already marked for the day "+data["date"]}, status=status.HTTP_409_CONFLICT)
@@ -28,7 +28,7 @@ def post_attendance(request,id):
             date = data['date'],
             first_time =data['first_time'],
             second_time = data['second_time'],
-            studant = user
+            student = user
 
         )
 
@@ -40,7 +40,7 @@ def post_attendance(request,id):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def get_attendance(request):
-    """Get all the attendance of all the studants"""
+    """Get all the attendance of all the students"""
 
     Attendances = Attendance.objects.all()
 

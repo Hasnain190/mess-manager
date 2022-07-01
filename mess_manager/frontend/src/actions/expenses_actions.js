@@ -15,6 +15,9 @@ export const addExpenses = (expenses) => async (getState, dispatch) => {
 
 
     try {
+        dispatch({
+            type: ADD_EXPENSES_REQUEST
+        })
         const {
             userLogin: { userInfo },
         } = getState()
@@ -28,12 +31,9 @@ export const addExpenses = (expenses) => async (getState, dispatch) => {
 
         const { data } = await axios.post(
             '/api/expenses/post/',
-            expenses
+            expenses,
             config
         )
-        dispatch({
-            type: ADD_EXPENSES_REQUEST
-        })
 
         dispatch({
             type: ADD_EXPENSES_SUCCESS,
@@ -72,7 +72,7 @@ export const getbill = (month) => async (dispatch, getState) => {
             }
         }
         //    FIXME:
-        const { data } = await axios.get(`/api/expenses/${id}/`,
+        const { data } = await axios.get(`/api/expenses/${month}/`,
             config
         )
 

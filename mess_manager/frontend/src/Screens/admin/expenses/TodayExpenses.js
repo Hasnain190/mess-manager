@@ -13,11 +13,9 @@ function TodayExpenses() {
 
     useEffect(() => {
         dispatch(getAttendance());
-        if (success) {
-            navigate('admin/expenses/monthly')
-        }
 
-    }, [date, getAttendanceObj, dispatch])
+
+    }, [date, getAttendanceObj, dispatch, addExpenses])
 
     const [todayExpenses, setTodayExpenses] = useState(0)
     const { attendance: getAttendanceObj, error: getAttendanceError, loading: getAttendanceLoading } = useSelector(state => state.getAttendance)
@@ -35,21 +33,17 @@ function TodayExpenses() {
 
 
         // }
-        try {
-
-            dispatch(addExpenses({
-
-                date: date,
-                total_attendances: count,
-                expenses_per_day: todayExpenses,
-                expenses_per_capita: expensePerCapita,
 
 
-            }))
-            console.log(todayExpenses)
-        } catch (error) {
-            console.log(error)
+        let expenses = {
+            date: date,
+            total_attendances: count,
+            expenses_per_day: todayExpenses,
+            expenses_per_attendance: expensePerAttendance,
         }
+        dispatch(addExpenses(expenses))
+            .then(() => console.log("promise resolved"))
+        console.log(todayExpenses)
 
 
     }
@@ -61,7 +55,7 @@ function TodayExpenses() {
     const count = counter(getAttendanceObj, date)
 
 
-    const expensePerCapita = (todayExpenses / count).toFixed(2);
+    const expensePerAttendance = (todayExpenses / count).toFixed(2);
     return (
         <div className="container">
             <div class="h1 text-center text-dark" id="pageHeaderTitle">
@@ -88,8 +82,8 @@ function TodayExpenses() {
                                 <label class="list-group-item  card-header">Total Attendances</label>
                                 <li class="list-group-item">{count}</li>
 
-                                <label class="list-group-item  card-header">Expense Per Capita</label>
-                                <li class="list-group-item">{expensePerCapita}</li>
+                                <label class="list-group-item  card-header">Expense Per Attendance</label>
+                                <li class="list-group-item">{expensePerAttendance}</li>
                             </ul>
 
                             <button type="submit" className="btn btn-primary">
