@@ -6,6 +6,9 @@ import { counter } from "../../../components/counter"
 import { useDispatch, useSelector } from "react-redux";
 import { getAttendance } from '../../../actions/attendance_actions'
 import { addExpenses } from '../../../actions/expenses_actions'
+import Message from "../../../components/Message";
+import Loader from "../../../components/Loader";
+
 
 function TodayExpenses() {
     const dispatch = useDispatch()
@@ -14,26 +17,21 @@ function TodayExpenses() {
     useEffect(() => {
         dispatch(getAttendance());
 
+        if (errorExpenses) {
+            setMessage(errorExpenses)
+        }
+        if (successExpenses) {
+            setMessage("The expense is added successfully")
+        }
 
-    }, [date, getAttendanceObj, dispatch, addExpenses])
+    }, [date, getAttendanceObj, errorExpenses, successExpenses])
 
     const [todayExpenses, setTodayExpenses] = useState(0)
     const { attendance: getAttendanceObj, error: getAttendanceError, loading: getAttendanceLoading } = useSelector(state => state.getAttendance)
 
-    const { success } = useSelector(state => state.addExpenses)
+    const { success: successExpenses, error: errorExpenses } = useSelector(state => state.addExpenses)
     const submitHandler = (e) => {
         e.preventDefault();
-
-        // let expenses = {
-
-        //     date: date,
-        //     total_attendances: count,
-        //     expenses_per_day: todayExpenses,
-        //     expenses_per_capita: expensePerCapita,
-
-
-        // }
-
 
         let expenses = {
             date: date,
@@ -42,10 +40,8 @@ function TodayExpenses() {
             expenses_per_attendance: expensePerAttendance,
         }
         dispatch(addExpenses(expenses))
-            .then(() => console.log("promise resolved"))
+
         console.log(todayExpenses)
-
-
     }
 
 
@@ -53,11 +49,15 @@ function TodayExpenses() {
     const today = new Date().toISOString().substr(0, 10);
     const [date, setDate] = useState(today)
     const count = counter(getAttendanceObj, date)
+    const [message, setMessage] = useState()
+
 
 
     const expensePerAttendance = (todayExpenses / count).toFixed(2);
     return (
         <div className="container">
+            {message ? (<Message >{message}</Message>) : null}
+
             <div class="h1 text-center text-dark" id="pageHeaderTitle">
                 Enter <input type="date" id="date" value={date} onChange={(e) => setDate(e.target.value)} max={today} />'s Expenses
             </div>

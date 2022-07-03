@@ -16,7 +16,7 @@ function AttendanceSheet({ month, day, filteredAttendance }) {
     const { users } = useSelector(state => state.userList)
 
 
-    function IdToStudant({ id }) {
+    function IdToStudent({ id }) {
         const name = users?.find(user => user.id === id).username
         return <div>{name}</div>
     }
@@ -39,7 +39,7 @@ function AttendanceSheet({ month, day, filteredAttendance }) {
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Studants</th>
+                            <th scope="col">Students</th>
                             <th scope="col">First Time</th>
                             <th scope="col">Second Time</th>
                         </tr>
@@ -48,7 +48,7 @@ function AttendanceSheet({ month, day, filteredAttendance }) {
                         <tbody  >
                             <tr>
                                 <th key={item.id} scope="row">{item.id}</th>
-                                <td><IdToStudant id={(item.student)} /></td>
+                                <td><IdToStudent id={(item.student)} /></td>
                                 <td>{item.first_time}</td>
                                 <td>{item.second_time}</td>
                             </tr>
