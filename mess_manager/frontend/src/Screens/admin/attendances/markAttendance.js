@@ -15,10 +15,6 @@ export default function MarkAttendance() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const myRefForId = useRef(null)
-  const myRefForFirstTime = useRef(null)
-  const myRefForSecondTime = useRef(null)
-
 
 
 
@@ -29,7 +25,7 @@ export default function MarkAttendance() {
   const { userInfo } = useSelector((state) => state.userLogin);
 
 
-  const { success: attendanceSuccess, error: attendanceError, loading: attenandanceLoading } = useSelector((state) => state.attendance)
+  const { success: attendanceSuccess, error: attendanceError, loading: attendanceLoading } = useSelector((state) => state.attendance)
 
   const { attendance: getAttendanceObj, error: getAttendanceError, loading: getAttendanceLoading } = useSelector(state => state.getAttendance)
 
@@ -138,7 +134,7 @@ export default function MarkAttendance() {
                     <tr key={user.id}>
 
 
-                      <th scope="row" id={`user-id-${user.id}}`} ref={myRefForId}>{user.id}</th>
+                      <th scope="row" id={`user-id-${user.id}}`}>{user.id}</th>
                       <td className="form-group">
                         <input
 
@@ -163,7 +159,7 @@ export default function MarkAttendance() {
                       </td>
 
                       <td>
-                        <select id={`first-attendance-${user.id}`} ref={myRefForFirstTime} onChange={(e) => (e.target.value)} className="form-control" >
+                        <select id={`first-attendance-${user.id}`} onChange={(e) => (e.target.value)} className="form-control" >
                           <option value="present">Present ✓</option>
                           <option value="absent">Absent X</option>
                           <option value="double">Double 2</option>
@@ -171,7 +167,7 @@ export default function MarkAttendance() {
 
                       </td>
                       <td>
-                        <select id={`second-attendance-${user.id}`} ref={myRefForSecondTime} onChange={(e) => (e.target.value)} className="form-control" >
+                        <select id={`second-attendance-${user.id}`} onChange={(e) => (e.target.value)} className="form-control" >
                           <option value="present">Present ✓</option>
                           <option value="absent">Absent X</option>
                           <option value="double">Double 2</option>

@@ -91,13 +91,15 @@ class MenuSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ExpenseSerializer(serializers.ModelSerializer):
+    
     """
     Serializer for mess menu object
     """
     class Meta:
         model = Expense
-        fields = '__all__'
-
+        fields = ('date', 'total_attendances', 'expenses_per_day','expenses_per_attendance')
+   
+        
 
 class BillSerializer(serializers.ModelSerializer):
     """

@@ -63,6 +63,8 @@ export const getAttendance = () => async (dispatch, getState) => {
             type: GET_ATTENDANCE_SUCCESS,
             payload: data
         })
+
+        localStorage.setItem("getAttendance", JSON.stringify(data))
     } catch (error) {
         dispatch({
             type: GET_ATTENDANCE_FAIL,

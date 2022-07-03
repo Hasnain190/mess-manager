@@ -42,7 +42,7 @@ def post_attendance(request,id):
 def get_attendance(request):
     """Get all the attendance of all the students"""
 
-    Attendances = Attendance.objects.all()
+    Attendances = Attendance.objects.all().order_by("date")
 
     serializer = AttendanceSerializer(Attendances,many=True)
 

@@ -1,5 +1,6 @@
 from distutils.command.build_scripts import first_line_re
 from operator import mod
+from pyexpat import model
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
@@ -67,33 +68,24 @@ class Menu(models.Model):
 class Expense(models.Model):
     """For expenses for one day """
     date = models.DateField()
-    total_attendances = models.IntegerField(blank=True,null=True, unique=True)
+    total_attendances = models.IntegerField(blank=True,null=True)
     expenses_per_day = models.FloatField(blank=True,null=True)
     expenses_per_attendance= models.FloatField(blank=True,null=True)
 
-    def save(self,*args,**kwargs):
-        if self.expenses_per_attendance is None:
-            self.expenses_per_attendance = self.expenses_per_day / float(self.total_attendances)
-        super(Expense, self).save(*args, **kwargs)
+  
 
 
 
-    
-    def __str__(self) -> str:
-        return "Expenses per attendance for the date "+ str(self.date) + " is "+ str(self.expenses_per_capita)
 
 
 
 class Bill(models.Model):
     """Mess bill for all the users in One Month"""
 
-           
-            
-
-        
-
     student = models.ForeignKey("User",on_delete=models.CASCADE,related_name="student",default="")
+    room = models.CharField(max_length=20, blank=True, null=True)
+    month  = models.TextField(max_length=20,null=True, blank=True)
     bill = models.FloatField(blank=True,null= True)
-    
 
+  
 

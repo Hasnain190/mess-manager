@@ -3,12 +3,16 @@ import {
     ADD_EXPENSES_SUCCESS,
     ADD_EXPENSES_FAIL,
 
+    GET_EXPENSES_PER_MONTH_REQUEST,
+    GET_EXPENSES_PER_MONTH_SUCCESS,
+    GET_EXPENSES_PER_MONTH_FAIL,
+
     GET_BILL_FAIL,
     GET_BILL_REQUEST,
     GET_BILL_sUCCESS,
 } from '../constants/expenses_constants'
 
-export const addExpensesReducer = (state = {}, action) => {
+export const addExpensesReducer = (state = { expenses: {} }, action) => {
     switch (action.type) {
         case ADD_EXPENSES_REQUEST:
             return { loading: true }
@@ -24,14 +28,29 @@ export const addExpensesReducer = (state = {}, action) => {
             return state
     }
 }
+export const getExpensesPerMonthReducers = (state = { expensesPerMonth: [] }, action) => {
+    switch (action.type) {
+        case GET_EXPENSES_PER_MONTH_REQUEST:
+            return { loading: true }
 
-export const getBillReducer = (state = {}, action) => {
+        case GET_EXPENSES_PER_MONTH_SUCCESS:
+            return { ...state, loading: false, success: true, expensesPerMonth: action.payload }
+
+        case GET_EXPENSES_PER_MONTH_FAIL:
+            return { loading: false, error: action.payload }
+
+
+        default:
+            return state
+    }
+}
+export const getBillReducer = (state = { bill: [] }, action) => {
     switch (action.type) {
         case GET_BILL_REQUEST:
             return { loading: true }
 
         case GET_BILL_sUCCESS:
-            return { loading: false, success: true, expenses: action.payload }
+            return { loading: false, success: true, bill: action.payload }
 
         case GET_BILL_FAIL:
             return { loading: false, error: action.payload }

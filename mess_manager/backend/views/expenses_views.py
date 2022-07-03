@@ -1,4 +1,5 @@
 
+from logging import root
 from math import fabs
 from django.shortcuts import render
 
@@ -14,6 +15,7 @@ from rest_framework import status
 
 from django.contrib.auth import get_user_model
 
+from functools import reduce
 
 @api_view(['POST'])
 @permission_classes([]) 
@@ -23,7 +25,8 @@ def add_expenses_per_capita_per_day(request):
     # try:
     
     if  Expense.objects.filter(date=data['date']).exists():
-        return Response({"message":"The expense for this date "+ data['date']+" already added."} , status=status.HTTP_409_CONFLICT)
+        obj = Expense.objects.get(date = data["date"])
+        return Response({"message": obj} , status=status.HTTP_409_CONFLICT)
     
     else:
         
@@ -42,13 +45,91 @@ def add_expenses_per_capita_per_day(request):
 @permission_classes([IsAdminUser])
 def get_expenses_per_month(request,month):
 
-     expenses_per_month = Expense.objects.filter(date__month = month)
-
-     serializers = ExpenseSerializer(expenses_per_month, many= True)
+    expenses_per_month = Expense.objects.filter(date__month = month).order_by("date")
     
-     return Response(serializers.data)
+    
+    serializers = ExpenseSerializer(expenses_per_month, many= True )
+    
+    return Response(serializers.data )
 
 
+@api_view(['GET'])
+def get_bill(request,month):
+
+    expenses_per_month = Expense.objects.filter(date__month = month).order_by("date")
+    total_expenses = 0
+    for i in expenses_per_month:
+        expenses_per_day = i.expenses_per_day
+        total_expenses+=expenses_per_day
+    # for the whole total attendances of all the users
+    total_attendances_all_users =  0
+    for i in Attendance.objects.filter(date__month = month):
+        total_attendances_first_time = 0
+        if i.first_time =="present":
+            total_attendances_first_time += 1
+        elif  i.first_time =="double":
+            total_attendances_first_time += 2
+        elif i.first_time =="absent":
+            total_attendances_first_time+=0
+
+        total_attendances_second_time = 0
+        if i.second_time =="present":
+            total_attendances_second_time += 1
+        elif  i.second_time =="double":
+            total_attendances_second_time += 2
+        elif i.second_time =="absent":
+            total_attendances_second_time+=0
+
+        total_attendances_all_users += (total_attendances_first_time+ total_attendances_second_time)
+
+    
+    
+    
+    bill_per_attendance = total_expenses / total_attendances_all_users
+    print(User.objects.all())
+    for i in User.objects.all():
+        user = User.objects.get(username = i.username)
+
+        room = user.room
+        
+            # for the whole total attendances of one  user
+        total_attendances_of_that_user =  0
+        for i in Attendance.objects.filter(date__month = month, student = user):
+            total_attendances_first_time = 0
+            if i.first_time =="present":
+                total_attendances_first_time += 1
+            elif  i.first_time =="double":
+                total_attendances_first_time += 2
+            elif i.first_time =="absent":
+                total_attendances_first_time+=0
+
+            total_attendances_second_time = 0
+            if i.second_time =="present":
+                total_attendances_second_time += 1
+            elif  i.second_time =="double":
+                total_attendances_second_time += 2
+            elif i.second_time =="absent":
+                total_attendances_second_time+=0
+
+            total_attendances_of_that_user += (total_attendances_first_time+ total_attendances_second_time)
+            bill = bill_per_attendance* total_attendances_of_that_user 
+           
+
+            if not Bill.objects.filter(month = month, student = user).exists():
+                Bill.objects.create(
+                        student = user,
+                        room = room,
+                        bill = bill,
+                        month = month
+                    )
+            else:
+                Bill.objects.get(month = month, student = user)
+
+    all_bill =  Bill.objects.filter(month=month).order_by("student")
+    serializers = BillSerializer(all_bill, many=True)
+    return Response(serializers.data)   
+
+                
 
 
 

@@ -6,21 +6,28 @@ import {
     GET_BILL_FAIL,
     GET_BILL_REQUEST,
     GET_BILL_sUCCESS,
+    GET_EXPENSES_PER_MONTH_FAIL,
+    GET_EXPENSES_PER_MONTH_REQUEST,
+    GET_EXPENSES_PER_MONTH_SUCCESS,
 } from '../constants/expenses_constants'
 
 import axios from 'axios'
 
 
-export const addExpenses = (expenses) => async (getState, dispatch) => {
+export const addExpenses = (expenses) => async (dispatch, getState) => {
 
 
     try {
+
         dispatch({
             type: ADD_EXPENSES_REQUEST
         })
-        const {
-            userLogin: { userInfo },
-        } = getState()
+
+        console.log("data:", dispatch({
+            type: ADD_EXPENSES_SUCCESS
+        }))
+        const { userLogin: { userInfo } } = getState();
+
 
         const config = {
             headers: {
@@ -53,7 +60,50 @@ export const addExpenses = (expenses) => async (getState, dispatch) => {
     }
 }
 
-export const getbill = (month) => async (dispatch, getState) => {
+
+
+
+export const getExpensesPerMonth = (month) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: GET_EXPENSES_PER_MONTH_REQUEST
+        })
+
+        const {
+            userLogin: { userInfo },
+        } = getState()
+
+
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `JWT ${userInfo.token}`
+            }
+        }
+        //    FIXME:
+        const { data } = await axios.get(`/api/expenses/get/${month}/`,
+            config
+        )
+
+        dispatch({
+            type: GET_EXPENSES_PER_MONTH_SUCCESS,
+            payload: data
+        })
+
+
+    } catch (error) {
+        dispatch({
+            type: GET_EXPENSES_PER_MONTH_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}
+
+
+export const getBill = (month) => async (dispatch, getState) => {
     try {
         dispatch({
             type: GET_BILL_REQUEST
@@ -72,7 +122,7 @@ export const getbill = (month) => async (dispatch, getState) => {
             }
         }
         //    FIXME:
-        const { data } = await axios.get(`/api/expenses/${month}/`,
+        const { data } = await axios.get(`/api/expenses/bill/${month}/`,
             config
         )
 

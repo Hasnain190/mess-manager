@@ -14,7 +14,7 @@ import {
 
 import { messMenuReducer } from "./reducers/mess_reducers";
 import { postAttendanceReducers, getAttendanceReducers } from "./reducers/attendance_reducers";
-import { addExpensesReducer } from "./reducers/expenses_reducers";
+import { addExpensesReducer, getBillReducer, getExpensesPerMonthReducers } from "./reducers/expenses_reducers";
 const reducer = combineReducers({
   // user reducers
   userLogin: userLoginReducer,
@@ -39,6 +39,9 @@ const reducer = combineReducers({
   getAttendance: getAttendanceReducers,
 
   addExpenses: addExpensesReducer,
+  getExpensesPerMonth: getExpensesPerMonthReducers,
+
+  getBill: getBillReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem("userInfo")
@@ -46,12 +49,16 @@ const userInfoFromStorage = localStorage.getItem("userInfo")
   : null;
 
 const messMenuFromStorage = localStorage.getItem("messMenu") ? JSON.parse(localStorage.getItem("messMenu")) : null;
+// const attendanceFromStorage = localStorage.getItem("getAttendance") ? JSON.parse(localStorage.getItem("getAttendance")) : null;
+
 
 const initialState = {
 
   userLogin: { userInfo: userInfoFromStorage },
 
   messMenu: { messMenu: messMenuFromStorage },
+
+  // getAttendance: attendanceFromStorage
 };
 
 const middleware = [thunk];
