@@ -62,7 +62,9 @@ function ThisMonthBill() {
               <th scope="col">#</th>
               <th scope="col">Name</th>
               <th scope="col">Room No</th>
-              <th scope="col">Current Bill</th>
+              <th scope="col">This Month's Bill</th>
+              <th scope="col">Due Bill</th>
+              <th scope="col">Total to be Paid</th>
             </tr>
           </thead>
           {bill?.map(item =>
@@ -71,7 +73,9 @@ function ThisMonthBill() {
                 <th scope="row" key={item.id} >{item.id}</th>
                 <td><IdToStudent id={(item.student)} /></td>
                 <td>{item.room}</td>
-                <td>{item.bill}</td>
+                <td>{item.bill.toFixed(2)}</td>
+                <td>{item.bill.toFixed(2)}</td>
+                <td>{item.bill.toFixed(2)}</td>
               </tr>
 
 

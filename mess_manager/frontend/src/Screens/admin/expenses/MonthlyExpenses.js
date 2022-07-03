@@ -16,7 +16,7 @@ export default function MonthlyExpenses() {
         () => {
             dispatch(getExpensesPerMonth(date.substring(5, 7)))
 
-
+            console.log(today)
         }, [date, expensesPerMonth])
 
 
