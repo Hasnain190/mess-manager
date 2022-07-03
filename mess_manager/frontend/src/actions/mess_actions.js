@@ -20,16 +20,11 @@ export const getMessMenu = () => async (dispatch) => {
             type: GET_MESS_MENU_REQUEST
         })
 
-        // const {
-        //     userLogin: { userInfo },
-        // } = getState()
-
 
 
         const config = {
             headers: {
                 'Content-type': 'application/json',
-                // 'Authorization': `JWT ${userInfo.token}`
             }
         }
 
