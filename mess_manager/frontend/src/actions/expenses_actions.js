@@ -149,7 +149,7 @@ export const getBill = (month) => async (dispatch, getState) => {
 }
 
 
-export const addBill = (month) => async (dispatch, getState) => {
+export const addBill = (month, id, payedBill) => async (dispatch, getState) => {
     try {
         dispatch({
             type: ADD_BILL_REQUEST
@@ -168,7 +168,8 @@ export const addBill = (month) => async (dispatch, getState) => {
             }
         }
         //    FIXME:
-        const { data } = await axios.post(`/api/expenses/last-bill/${month}/`,
+        const { data } = await axios.post(`/api/expenses/last-bill/${month}/${id}`,
+            payedBill,
             config
         )
 

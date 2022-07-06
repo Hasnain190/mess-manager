@@ -46,7 +46,7 @@ export default function MarkAttendance() {
 
 
 
-  const userIds = users?.map((user) => user.id)
+  const userIds = users?.map((user) => user.id)  //e.g. {145,234,3434}
 
 
   const [total, setTotal] = useState(0)
@@ -64,10 +64,7 @@ export default function MarkAttendance() {
       }
 
 
-
-      for (let index = 0; index < userIds.length; index++) {
-        let id = userIds[index];
-
+      for (let id in userIds) {
         const attendance = {
           student: id,
           date: date,
