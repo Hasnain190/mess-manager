@@ -1,5 +1,5 @@
 // for this month bill
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { counter } from "../../../components/counter"
 
@@ -13,8 +13,10 @@ import { listUsers } from "../../../actions/user_actions";
 import { addBill } from '../../../actions/expenses_actions';
 
 function BillForm() {
+
     const dispatch = useDispatch();
     const today = new Date().toISOString().substring(0, 7);
+    let myRef = useRef()
 
     useEffect(() => {
         dispatch(listUsers())
@@ -35,39 +37,34 @@ function BillForm() {
         dispatch(getBill(date.substring(5, 7)))
     }
     function IdToStudent({ id }) {
-
-
         const name = users?.find(user => user.id === id).username
-
         return (
             <div>{name}</div>
         )
     }
 
-    const handleChange = () => {
-
-
-    }
-
-
-    const buttonClick = (e, id) => {
+    const buttonClick = (e) => {
 
         e.preventDefault()
 
-        let billPayed = e.target.elements[`bill-payed-${id}`].value;
+        // let billPayed = e.target.elements[`bill-payed-${id}`].value;
 
-        dispatch(addBill(date.substring(5, 7)))
+        let month = date.substring(5, 7)
+        let id = e.target[0].id.split("-").at(-1)
+
+        let billPayed = {
+
+        }
 
 
+
+        console.log(month, id, e)
 
     }
     return (
         <div className="container">
             <div class="h1 text-center text-dark" id="mess-bill">
                 Bill Form
-
-
-
                 <form className="form form-control" onSubmit={handleSubmit} >
                     <input type="month" id="date" value={date} onChange={(e) => setDate(e.target.value)} max={today} />
 
@@ -105,12 +102,9 @@ function BillForm() {
                                 <td>{item.total.toFixed(2)}</td>
                                 <td>
 
-                                    <form className="form">
-
+                                    <form className="form" onSubmit={buttonClick}>
                                         <input className="form-control" id={`bill-payed-${item.id}`} type="number" onChange={(e) => (e.target.value)}></input>
-                                        <button className='btn btn-primary' type="submit" ocClick={(e) => buttonClick(e, item.id)}> Add Bill</button>
-
-
+                                        <button className='btn btn-primary' type="submit" name={`id-input-${item.student}`} > Add Bill</button>
                                     </form>
                                 </td>
                             </tr>
