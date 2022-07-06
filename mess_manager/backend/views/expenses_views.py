@@ -55,6 +55,7 @@ def get_expenses_per_month(request,month):
 
 @api_view(['GET'])
 def get_bill(request,month):
+    
 
     expenses_per_month = Expense.objects.filter(date__month = month).order_by("date")
     total_expenses = 0
@@ -112,7 +113,33 @@ def get_bill(request,month):
                 total_attendances_second_time+=0
 
             total_attendances_of_that_user += (total_attendances_first_time+ total_attendances_second_time)
-            bill = bill_per_attendance* total_attendances_of_that_user 
+            bill = bill_per_attendance* total_attendances_of_that_user
+
+
+            # calculate last month total bill and how much the user had payed in the last month to calculate total dues
+            # if not Bill.objects.get(month = month-1, student = user).exists():
+            #     dues = 0 
+            #     raise Exception("Sorry, no numbers below zero")
+
+
+          
+            try:
+                last_month_bill_model = (Bill.objects.get(month = month-1, student = user))
+                print(last_month_bill_model)
+                try:
+                    last_bill = LastBillPayed.objects.get(student = user,bill =last_month_bill_model.id)
+                    last_bill_payed = last_bill.last_bill_payed
+
+                    last_month_total_bill = last_bill.bill.total
+                except LastBillPayed.DoesNotExist:
+                    last_month_total_bill = 0
+                    last_bill_payed = 0
+                dues = last_month_total_bill - last_bill_payed
+            except Bill.DoesNotExist:
+                dues = 0
+
+
+            total_bill  = bill + dues 
            
 
             if not Bill.objects.filter(month = month, student = user).exists():
@@ -120,16 +147,53 @@ def get_bill(request,month):
                         student = user,
                         room = room,
                         bill = bill,
-                        month = month
+                        month = month,
+                        total= total_bill,
+                        dues = dues,
                     )
             else:
                 Bill.objects.get(month = month, student = user)
 
     all_bill =  Bill.objects.filter(month=month).order_by("student")
     serializers = BillSerializer(all_bill, many=True)
-    return Response(serializers.data)   
+    return Response(serializers.data)
+   
+
 
                 
+
+
+@api_view(['POST' , 'PUT'])
+@permission_classes([])
+def add_bill_payed(request,month, user_id):
+    data = request.data
+    user = User.objects.get(id = user_id)
+
+    bill = Bill.objects.get(month = month, student = user)
+    
+    last_bill_payed = data["last_bill_payed"]
+    last_bill_payed_date = data["last_bill_payed_date"]
+
+    if not LastBillPayed.objects.filter(student=user,last_bill_payed_date__month = month).exists():
+        last_payed =  LastBillPayed.objects.create(
+            bill = bill.id,
+            student = user,
+            last_bill_payed = last_bill_payed,
+            last_bill_payed_date = last_bill_payed_date
+        )
+    else:
+        last_payed = LastBillPayed.objects.update(
+             bill = bill.id,
+            student = user,
+            last_bill_payed = last_bill_payed,
+            last_bill_payed_date = last_bill_payed_date
+        )
+    serializers = LastBillPayedSerializer(last_payed)
+
+    return Response(serializers.data)
+
+
+
 
 
 

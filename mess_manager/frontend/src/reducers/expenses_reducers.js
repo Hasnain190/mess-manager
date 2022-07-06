@@ -10,6 +10,11 @@ import {
     GET_BILL_FAIL,
     GET_BILL_REQUEST,
     GET_BILL_sUCCESS,
+
+    ADD_BILL_FAIL,
+    ADD_BILL_success,
+    ADD_BILL_REQUEST,
+
 } from '../constants/expenses_constants'
 
 export const addExpensesReducer = (state = { expenses: {} }, action) => {
@@ -60,4 +65,24 @@ export const getBillReducer = (state = { bill: [] }, action) => {
             return state
     }
 }
+
+
+
+export const addBillReducer = (state = {}, action) => {
+    switch (action.type) {
+        case ADD_BILL_REQUEST:
+            return { loading: true }
+
+        case ADD_BILL_success:
+            return { loading: false, success: true, addBill: action.payload }
+
+        case ADD_BILL_FAIL:
+            return { loading: false, error: action.payload }
+
+
+        default:
+            return state
+    }
+}
+
 

@@ -9,6 +9,12 @@ import {
     GET_EXPENSES_PER_MONTH_FAIL,
     GET_EXPENSES_PER_MONTH_REQUEST,
     GET_EXPENSES_PER_MONTH_SUCCESS,
+
+
+    ADD_BILL_REQUEST,
+    ADD_BILL_success,
+    ADD_BILL_FAIL,
+
 } from '../constants/expenses_constants'
 
 import axios from 'axios'
@@ -135,6 +141,46 @@ export const getBill = (month) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: GET_BILL_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}
+
+
+export const addBill = (month) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: ADD_BILL_REQUEST
+        })
+
+        const {
+            userLogin: { userInfo },
+        } = getState()
+
+
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `JWT ${userInfo.token}`
+            }
+        }
+        //    FIXME:
+        const { data } = await axios.post(`/api/expenses/last-bill/${month}/`,
+            config
+        )
+
+        dispatch({
+            type: ADD_BILL_success,
+            payload: data
+        })
+
+
+    } catch (error) {
+        dispatch({
+            type: ADD_BILL_FAIL,
             payload: error.response && error.response.data.detail
                 ? error.response.data.detail
                 : error.message,

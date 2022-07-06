@@ -15,6 +15,8 @@ import {
 import { messMenuReducer } from "./reducers/mess_reducers";
 import { postAttendanceReducers, getAttendanceReducers } from "./reducers/attendance_reducers";
 import { addExpensesReducer, getBillReducer, getExpensesPerMonthReducers } from "./reducers/expenses_reducers";
+
+import { addBillReducer } from "./reducers/expenses_reducers";
 const reducer = combineReducers({
   // user reducers
   userLogin: userLoginReducer,
@@ -42,6 +44,7 @@ const reducer = combineReducers({
   getExpensesPerMonth: getExpensesPerMonthReducers,
 
   getBill: getBillReducer,
+  addBill: addBillReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem("userInfo")

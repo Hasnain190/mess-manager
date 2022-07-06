@@ -1,4 +1,5 @@
 
+from dataclasses import field
 from rest_framework import serializers
 from rest_framework.fields import NullBooleanField
 from .models import *
@@ -107,4 +108,11 @@ class BillSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Bill
+        fields = '__all__'
+
+
+class LastBillPayedSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = LastBillPayed
         fields = '__all__'

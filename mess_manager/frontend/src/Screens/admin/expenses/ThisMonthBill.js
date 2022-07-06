@@ -74,8 +74,8 @@ function ThisMonthBill() {
                 <td><IdToStudent id={(item.student)} /></td>
                 <td>{item.room}</td>
                 <td>{item.bill.toFixed(2)}</td>
-                <td>{item.bill.toFixed(2)}</td>
-                <td>{item.bill.toFixed(2)}</td>
+                <td>{item.dues.toFixed(2)}</td>
+                <td>{item.total.toFixed(2)}</td>
               </tr>
 
 

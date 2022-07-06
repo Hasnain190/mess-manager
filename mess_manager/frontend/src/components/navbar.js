@@ -94,6 +94,8 @@ function Navbar() {
                   <Link className="dropdown-item" to="/admin/mark-attendance">
                     Mark Attendance
                   </Link>
+                  <div className="dropdown-divider"></div>
+
                   <Link
                     className="dropdown-item"
                     to="/admin/monthly-attendance"
@@ -111,6 +113,11 @@ function Navbar() {
                   </Link>
                   <Link className="dropdown-item" to="/admin/bill-of-month">
                     This Month's Bill
+                  </Link>
+                  <div className="dropdown-divider"></div>
+
+                  <Link className="dropdown-item" to="/admin/expenses/bill-form/">
+                    Bill Form
                   </Link>
                 </div>
               </div>

@@ -11,6 +11,7 @@ import ViewUsers from "./Screens/admin/users/ViewUsers";
 import ThisMonthBill from "./Screens/admin/expenses/ThisMonthBill";
 import TodayExpenses from "./Screens/admin/expenses/TodayExpenses";
 import MonthlyExpenses from "./Screens/admin/expenses/MonthlyExpenses";
+import BillForm from "./Screens/admin/expenses/BillForm";
 
 import MarkAttendance from "./Screens/admin/attendances/markAttendance";
 import MonthlyAttendance from "./Screens/admin/attendances/MonthlyAttendance";
@@ -49,6 +50,7 @@ function App() {
           <Route path="/admin/bill-of-month" element={<ThisMonthBill />} />
           <Route path="/admin/expenses/today" element={<TodayExpenses />} />
           <Route path="/admin/expenses/monthly" element={<MonthlyExpenses />} />
+          <Route path="/admin/expenses/bill-form" element={<BillForm />} />
 
           {/* <Route path="/admin/previous-attendance" element={<PreviousAttendance />} /> */}
           <Route path="/admin/monthly-attendance" element={<MonthlyAttendance />} />

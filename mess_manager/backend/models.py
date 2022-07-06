@@ -82,10 +82,33 @@ class Expense(models.Model):
 class Bill(models.Model):
     """Mess bill for all the users in One Month"""
 
-    student = models.ForeignKey("User",on_delete=models.CASCADE,related_name="student",default="")
+    student = models.ForeignKey("User",on_delete=models.CASCADE,related_name="student",default="Student")
     room = models.CharField(max_length=20, blank=True, null=True)
-    month  = models.TextField(max_length=20,null=True, blank=True)
+    month  = models.TextField(max_length=20,null=True, blank=True) #it should be DateField
     bill = models.FloatField(blank=True,null= True)
+    dues = models.FloatField(blank=True, null=True, default=0)
+    total = models.FloatField(blank=True, null=True, default=0)
 
-  
+    class Meta:
+        ordering = ["student"]
+
+    def __str__(self) -> str:
+        return "bill of "+ self.student.username + " for month "+ self.month
+    
+
+
+
+class  LastBillPayed(models.Model):
+
+    """ To have a record  latest bill payed history"""
+
+
+    bill = models.OneToOneField("Bill",on_delete=models.CASCADE,related_name='last_bill_payed')
+    student = models.ForeignKey("User", on_delete=models.CASCADE, default="Student")
+    last_bill_payed = models.FloatField(max_length=20, blank=True, null=True , default= 0),
+    last_bill_payed_date = models.DateField()
+
+
+    
+
 
