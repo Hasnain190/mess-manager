@@ -1,1 +1,1 @@
-web: gunicorn mess_manager.wsgi --log-file
+web: gunicorn mess_manager.wsgi 
