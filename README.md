@@ -16,6 +16,6 @@ Here is how you can do that:
 
 1.  `pip install -r requirements.txt`
 
-    Boom
+    
 
 1.  `python manage.py runserver`
