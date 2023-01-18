@@ -16,6 +16,7 @@ from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# django setting environment variable
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -24,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-4-rsvh+s&z*l$x%x)hwlu6rd5n=eg=r9b4q_^t+_cf-i+esp)l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -38,14 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     'backend',
     'rest_framework',
     'rest_framework_simplejwt',
     'djoser',
- 
 
-    
+
+
 
 
 
@@ -64,17 +65,18 @@ MIDDLEWARE = [
 ]
 
 # INTERNAL_IPS = [
-   
+
 #     '127.0.0.1',
-   
+
 # ]
 ROOT_URLCONF = 'mess_manager.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-      'DIRS': [
-            os.path.join(BASE_DIR,'frontend/build')
+        # DIRS is a list of filesystem directories to check when loading Django templates; it’s a search path.
+        'DIRS': [
+            os.path.join(BASE_DIR, 'frontend/build')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -89,22 +91,15 @@ TEMPLATES = [
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 WSGI_APPLICATION = 'mess_manager.wsgi.application'
-STATICFILES_DIRS = [
-     BASE_DIR / 'static',
-    BASE_DIR /  'frontend/build/static'
-]
-# static file root
-MEDIA_ROOT = BASE_DIR / 'static/images'
-STATIC_ROOT = BASE_DIR / 'static'
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-    'rest_framework.permissions.AllowAny',
-],
+        'rest_framework.permissions.AllowAny',
+    ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
 
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-       
-        
+
+
     )
 
 }
@@ -112,13 +107,12 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 
-    'AUTH_HEADER_TYPES': ('JWT','Bearer'),
+    'AUTH_HEADER_TYPES': ('JWT', 'Bearer'),
 
-     'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule' ,
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',
-    'rest_framework_simplejwt.authentication.JWTAuthentication'
-    ,
-    ),
+                           'rest_framework_simplejwt.authentication.JWTAuthentication',
+                           ),
 
 }
 
@@ -127,13 +121,13 @@ SIMPLE_JWT = {
 
 DATABASES = {
     'default': {
-       'ENGINE': 'django.db.backends.postgresql',
-       'NAME': 'postgres' ,
-       'USER': 'postgres',
-       'PASSWORD': "root",
-       'HOST': os.environ.get("HOST"),
-       'PORT': '5432'
-   }
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': "Asd890ml",
+        'HOST': os.environ.get("HOST"),
+        'PORT': '5432'
+    }
 }
 
 
@@ -161,7 +155,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Karachi'
 
 USE_I18N = True
 
@@ -172,8 +166,25 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
-
+# URL to use when referring to static files located in STATIC_ROOT.
+# It must end in a slash if set to a non-empty value.
 STATIC_URL = '/static/'
+
+# This setting defines the additional locations the staticfiles app will traverse if the FileSystemFinder finder is enabled, e.g. if you use the collectstatic or findstatic management command or use the static file serving view.This should be set to a list of strings that contain full paths to your additional files directory(ies)
+STATICFILES_DIRS = [
+
+    BASE_DIR / 'frontend/build/static',
+    # os.path.join(BASE_DIR, 'frontend/build/static')
+]
+# static file root
+MEDIA_ROOT = BASE_DIR / 'static/images'
+
+# django-admin collectstatic
+# Collects the static files into STATIC_ROOT.
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+
+# when `python manage.py collectstatics` is run , it will look through all static directories in the INSTALLED_APPS and also through directories provided in STATICFILES_DIRS then it will collect them in STATIC_ROOT ,which we can use through STATIC_URL in the html file `static` tag
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -182,6 +193,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'backend.User'
 
 AUTHENTICATION_BACKENDS = (
-       'backend.backends.EmailorUsernameModelBackend',
-       
-      )
+    'backend.backends.EmailorUsernameModelBackend',
+
+)
