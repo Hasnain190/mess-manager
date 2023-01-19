@@ -24,8 +24,7 @@ function Downloader({
     }
 
     return (
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        <button class="btn btn-primary" data-html2canvas-ignore onClick={printDocument}>Download as PDF  <i className="fas fa-download" /></button>
+        <button className="btn btn-primary" data-html2canvas-ignore onClick={printDocument}>Download as PDF  <i className="fas fa-download" /></button>
 
     )
 }
