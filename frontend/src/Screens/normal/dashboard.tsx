@@ -23,7 +23,7 @@ function Dashboard() {
   const [date, setDate] = useState(today)
 
 
-  // TODO
+  // FIXME:
   // @ts-expect-error TS(2339): Property 'userLogin' does not exist on type 'Defau... Remove this comment to see the full error message
   const userLogin = useSelector((state) => state.userLogin);
   const { error, loading, userInfo } = userLogin;
@@ -37,23 +37,17 @@ function Dashboard() {
 
 
   return (
-    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <div>
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <h2>Welcome</h2>
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <h3>{userInfo?.username}</h3>
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <div>
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         Today's Date : <code> {dateState.toLocaleDateString()}</code>
       </div>
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <div>
         Today's time :{" "}
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <code>
           {dateState.toLocaleTimeString({
+
             // @ts-expect-error TS(2345): Argument of type '{ hour: string; minute: string; ... Remove this comment to see the full error message
             hour: "numeric",
             minute: "numeric",
@@ -63,91 +57,61 @@ function Dashboard() {
       </div>
 
       {/* today's menu  */}
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
       {loadingMessMenu ? <Loader></Loader> : errorMessMenu ? <Message >{error}</Message> :
 
         // { messMenu?.map(item =>
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        <section class="light">
-          // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-          <div class="container py-2">
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-            <div class="h1 text-center text-dark" id="pageHeaderTitle">
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+        <section className="light">
+          <div className="container py-2">
+            <div className="h1 text-center text-dark" id="pageHeaderTitle">
               What's on <ConvertToWeekDay number={today} />
             </div>
 
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-            <article class="postcard light blue">
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-              <a class="postcard__img_link" href="#">
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+            <article className="postcard light blue">
+              <a className="postcard__img_link" href="#">
                 <img
-                  // @ts-expect-error TS(2322): Type '{ class: string; src: string; alt: string; }... Remove this comment to see the full error message
-                  class="postcard__img"
+                  className="postcard__img"
                   src="https://picsum.photos/1000/1000"
                   alt="Image Title"
                 />
               </a>
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-              <div class="postcard__text t-dark">
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                <h1 class="postcard__title blue">Lunch</h1>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                <div class="postcard__subtitle small">
-                  // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                  <time datetime={new Date().toLocaleDateString()}>
-                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                    <i class="fas fa-calendar-alt mr-2"></i>
+              <div className="postcard__text t-dark">
+                <h1 className="postcard__title blue">Lunch</h1>
+                <div className="postcard__subtitle small">
+                  <time dateTime={new Date().toLocaleDateString()}>
+                    <i className="fas fa-calendar-alt mr-2"></i>
                     {new Date().toLocaleDateString()}
                   </time>
                 </div>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                <div class="postcard__bar"></div>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                <div class="postcard__preview-txt">
-                  // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                  <ul class="list-group">
-                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                    <li class="list-group-item">{todaysMess.first_time}</li>
+                <div className="postcard__bar"></div>
+                <div className="postcard__preview-txt">
+                  <ul className="list-group">
+                    <li className="list-group-item">{todaysMess.first_time}</li>
 
                   </ul>
                 </div>
               </div>
             </article>
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-            <article class="postcard light blue">
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-              <a class="postcard__img_link" href="#">
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+            <article className="postcard light blue">
+              <a className="postcard__img_link" href="#">
                 <img
-                  // @ts-expect-error TS(2322): Type '{ class: string; src: string; alt: string; }... Remove this comment to see the full error message
-                  class="postcard__img"
+                  className="postcard__img"
                   src="https://picsum.photos/1000/1000"
                   alt="Image Title"
                 />
               </a>
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-              <div class="postcard__text t-dark">
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                <h1 class="postcard__title blue">Dinner</h1>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                <div class="postcard__subtitle small">
-                  // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                  <time datetime={new Date().toLocaleDateString()}>
-                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                    <i class="fas fa-calendar-alt mr-2"></i>
+              <div className="postcard__text t-dark">
+                <h1 className="postcard__title blue">Dinner</h1>
+                <div className="postcard__subtitle small">
+                  <time dateTime={new Date().toLocaleDateString()}>
+                    <i className="fas fa-calendar-alt mr-2"></i>
                     {new Date().toLocaleDateString()}
                   </time>
                 </div>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                <div class="postcard__bar"></div>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                <div class="postcard__preview-txt">
-                  // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                  <ul class="list-group">
-                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                    <li class="list-group-item">{todaysMess.second_time}</li>
+                <div className="postcard__bar"></div>
+                <div className="postcard__preview-txt">
+                  <ul className="list-group">
+                    <li className="list-group-item">{todaysMess.second_time}</li>
 
                   </ul>
                 </div>
@@ -160,86 +124,83 @@ function Dashboard() {
         // )}
       }
       {/* table for this month's bill */}
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-      <section class="light">
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        <div class="container py-2">
-          // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-          <div class="h1 text-center text-dark" id="pageHeaderTitle">
+      <section className="light">
+        <div className="container py-2">
+          <div className="h1 text-center text-dark" id="pageHeaderTitle">
             Your Bill
           </div>
           {/* download pdf button */}
-          // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-          <div class="text-end">
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-            <button class="btn btn-primary">Download PDF</button>
+
+          <div className="text-end">
+
+            <button className="btn btn-primary">Download PDF</button>
           </div>
-          // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-          <table class="table table-striped">
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
+          <table className="table table-striped">
+
             <thead>
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
               <tr>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <th scope="col">#</th>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <th scope="col">Month</th>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <th scope="col">Total</th>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <th scope="col">Paid</th>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <th scope="col">Due</th>
               </tr>
             </thead>
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
             <tbody>
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
               <tr className="table-primary">
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <th scope="row">0</th>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <td scope="row">March</td>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <td>4000</td>
               </tr>
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
               <tr>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <th scope="row">1</th>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <td>Fabruary</td>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <td>4000</td>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <td>0</td>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <td>4000</td>
               </tr>
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
               <tr>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <th scope="row">2</th>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <td>May</td>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <td>3600</td>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <td>400</td>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <td>3400</td>
               </tr>
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
               <tr>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <th scope="row">3</th>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <td>June</td>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <td>4400</td>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <td>0</td>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <td>4400</td>
               </tr>
             </tbody>
@@ -248,21 +209,21 @@ function Dashboard() {
       </section>
 
       {/* section for feedback to the admin */}
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-      <section class="light">
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        <div class="container py-2">
-          // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-          <div class="h1 text-center text-dark" id="pageHeaderTitle">
+
+      <section className="light">
+
+        <div className="container py-2">
+
+          <div className="h1 text-center text-dark" id="pageHeaderTitle">
             Give Feedback
           </div>
-          // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
           <form>
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-            <div class="form-group">
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-              <label for="feedBackForm">Feedback</label>
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
+            <div className="form-group">
+
+              <label htmlFor="feedBackForm">Feedback</label>
+
               <textarea
                 class="form-control"
                 id="feedBackForm"
@@ -270,10 +231,10 @@ function Dashboard() {
                 rows="3"
               ></textarea>
 
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-              <div class="text-center">
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                <button class="btn btn-primary" type="submit">
+
+              <div className="text-center">
+
+                <button className="btn btn-primary" type="submit">
                   Submit
                 </button>
               </div>

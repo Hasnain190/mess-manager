@@ -3,12 +3,10 @@ import { useParams, useNavigate } from "react-router";
 
 import { getMessMenu, updateMessMenu } from "../../../actions/mess_actions";
 
-// @ts-expect-error TS(6142): Module '../../../components/Message' was resolved ... Remove this comment to see the full error message
 import Message from "../../../components/Message";
 import { useSelector, useDispatch } from "react-redux";
 
 import "./ViewMess.css";
-// @ts-expect-error TS(6142): Module '../../../components/Loader' was resolved t... Remove this comment to see the full error message
 import Loader from "../../../components/Loader";
 
 
@@ -57,20 +55,20 @@ function UpdateMess() {
     }
 
     return (
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        <section id="tabs" class="project-tab">
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-            <div class="container">
+
+        <section id="tabs" className="project-tab">
+
+            <div className="container">
 
 
 
 
 
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                <div class="col-md-12">
-                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                    <div class="tab-content" id="nav-tabContent">
-                        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
+                <div className="col-md-12">
+
+                    <div className="tab-content" id="nav-tabContent">
+
                         <div
                             // @ts-expect-error TS(2322): Type '{ children: Element; class: string; id: stri... Remove this comment to see the full error message
                             class="tab-pane fade show active"
@@ -78,45 +76,45 @@ function UpdateMess() {
                             role="tabpanel"
                             aria-labelledby="nav-home-tab"
                         >
-                            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                             {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message>
                                 : (
-                                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                                     <form onSubmit={(e) => submitHandler(e)}>
 
-                                        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                                        <table class="table" cellspacing="0">
-                                            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
+                                        <table className="table" cellSpacing="0">
+
                                             <thead>
-                                                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                                                 <tr>
-                                                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                                                     <th>Day</th>
-                                                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                                                     <th>First Time</th>
-                                                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                                                     <th>Second Time</th>
                                                 </tr>
                                             </thead>
 
-                                            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                                             <tbody>
-                                                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                                                 {menu.map((menu: any) => <tr key={menu.id}>
-                                                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                                                     <td >
-                                                        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                                                         <a href="#">{menu.day}</a>
                                                     </td>
-                                                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                                                     <td className="form-group">
-                                                        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                                                         <input type="text" name="firstTime" className="form-control" placeholder={menu.first_time} value={menuFirst} onChange={(e) => handleChange(e)} />
 
                                                     </td>
-                                                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                                                     <td className="form-group">
-                                                        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                                                         <input type="text" name="secondTime" className="form-control" placeholder={menu.second_time} value={menuSecond} onChange={(e) => handleChange(e)} />
 
                                                     </td>
@@ -125,12 +123,12 @@ function UpdateMess() {
 
                                             </tbody>
                                         </table>
-                                        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                                        <div class="row">
-                                            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                                            <div class="col-md-12">
-                                                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                                                <button class="btn btn-primary" type="submit">Save</button>
+
+                                        <div className="row">
+
+                                            <div className="col-md-12">
+
+                                                <button className="btn btn-primary" type="submit">Save</button>
                                             </div>
                                         </div>
                                     </form>

@@ -1,13 +1,10 @@
-// @ts-expect-error TS(6142): Module './AttendanceSheet' was resolved to 'F:/mes... Remove this comment to see the full error message
 import AttendanceSheet from './AttendanceSheet'
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getAttendance } from "../../../actions/attendance_actions"
 import { useNavigate } from "react-router-dom"
 import { listUsers } from "../../../actions/user_actions";
-// @ts-expect-error TS(6142): Module '../../../components/ConvertToMonth' was re... Remove this comment to see the full error message
 import ConvertToMonth from '../../../components/ConvertToMonth';
-// @ts-expect-error TS(6142): Module './DailyAttendance' was resolved to 'F:/mes... Remove this comment to see the full error message
 import DailyAttendance from './DailyAttendance'
 
 function MonthlyAttendance() {
@@ -39,18 +36,18 @@ function MonthlyAttendance() {
 
 
     return (
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
         <div className='container'>
             {monthDateSet.map(item => (
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                 <>
-                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                    <div class="h1 text-center text-dark" id="pageHeaderTitle">
-                        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
+                    <div className="h1 text-center text-dark" id="pageHeaderTitle">
+
                         Attendance of <code><ConvertToMonth number={(item)} /></code>
                     </div>
 
-                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+
                     <DailyAttendance key={item} month={item} filteredMonthlyAttendance={filteredAttendance(item)} />
                 </>
             ))
