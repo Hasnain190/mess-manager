@@ -20,7 +20,7 @@ import {
 import axios from 'axios'
 
 
-export const addExpenses = (expenses) => async (dispatch, getState) => {
+export const addExpenses = (expenses: any) => async (dispatch: any, getState: any) => {
 
 
     try {
@@ -58,9 +58,12 @@ export const addExpenses = (expenses) => async (dispatch, getState) => {
         dispatch({
             type: ADD_EXPENSES_FAIL,
             payload:
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 error.response && error.response.data.message
+                    // @ts-expect-error TS(2571): Object is of type 'unknown'.
                     ? error.response.data.message
 
+                    // @ts-expect-error TS(2571): Object is of type 'unknown'.
                     : error.response,
         })
     }
@@ -69,7 +72,7 @@ export const addExpenses = (expenses) => async (dispatch, getState) => {
 
 
 
-export const getExpensesPerMonth = (month) => async (dispatch, getState) => {
+export const getExpensesPerMonth = (month: any) => async (dispatch: any, getState: any) => {
     try {
         dispatch({
             type: GET_EXPENSES_PER_MONTH_REQUEST
@@ -101,15 +104,18 @@ export const getExpensesPerMonth = (month) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: GET_EXPENSES_PER_MONTH_FAIL,
+            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             payload: error.response && error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 ? error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 : error.message,
         })
     }
 }
 
 
-export const getBill = (month) => async (dispatch, getState) => {
+export const getBill = (month: any) => async (dispatch: any, getState: any) => {
     try {
         dispatch({
             type: GET_BILL_REQUEST
@@ -141,15 +147,18 @@ export const getBill = (month) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: GET_BILL_FAIL,
+            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             payload: error.response && error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 ? error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 : error.message,
         })
     }
 }
 
 
-export const addBill = (month) => async (dispatch, getState) => {
+export const addBill = (month: any) => async (dispatch: any, getState: any) => {
     try {
         dispatch({
             type: ADD_BILL_REQUEST
@@ -181,8 +190,11 @@ export const addBill = (month) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: ADD_BILL_FAIL,
+            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             payload: error.response && error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 ? error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 : error.message,
         })
     }

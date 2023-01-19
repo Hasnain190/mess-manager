@@ -4,7 +4,7 @@ import React, { useState, useEffect, useReducer } from 'react'
 //set mark the button as clicked
 
 
-function Button(userId) {
+function Button(userId: any) {
 
     const [count, setCount] = useState(0)
 
@@ -46,8 +46,10 @@ function Button(userId) {
     }, [count])
 
     return (
+        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <div>
 
+            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             <button className="btn" style={{ backgroundColor, "color": "white" }} onClick={() => handleClick()}>
 
 

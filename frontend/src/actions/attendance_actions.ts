@@ -11,7 +11,7 @@ import {
 import axios from 'axios'
 
 
-export const postAttendance = (attenandance, id) => async (dispatch, getState) => {
+export const postAttendance = (attenandance: any, id: any) => async (dispatch: any, getState: any) => {
     try {
         dispatch({ type: POST_ATTENDANCE_REQUEST })
 
@@ -32,14 +32,17 @@ export const postAttendance = (attenandance, id) => async (dispatch, getState) =
     } catch (error) {
         dispatch({
             type: POST_ATTENDANCE_FAIL,
+            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             payload: error.response && error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 ? error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 : error.message,
         })
     }
 }
 
-export const getAttendance = () => async (dispatch, getState) => {
+export const getAttendance = () => async (dispatch: any, getState: any) => {
     try {
         dispatch({
             type: GET_ATTENDANCE_REQUEST
@@ -68,8 +71,11 @@ export const getAttendance = () => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: GET_ATTENDANCE_FAIL,
+            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             payload: error.response && error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 ? error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 : error.message,
         })
     }

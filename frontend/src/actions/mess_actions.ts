@@ -14,7 +14,7 @@ import {
 
 import axios from 'axios'
 
-export const getMessMenu = () => async (dispatch) => {
+export const getMessMenu = () => async (dispatch: any) => {
     try {
         dispatch({
             type: GET_MESS_MENU_REQUEST
@@ -41,15 +41,18 @@ export const getMessMenu = () => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: GET_MESS_MENU_FAIL,
+            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             payload: error.response && error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 ? error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 : error.message,
         })
     }
 
 }
 
-export const updateMessMenu = (day, messMenu) => async (dispatch) => {
+export const updateMessMenu = (day: any, messMenu: any) => async (dispatch: any) => {
     try {
         dispatch({
             type: UPDATE_MESS_MENU_REQUEST
@@ -77,8 +80,11 @@ export const updateMessMenu = (day, messMenu) => async (dispatch) => {
     catch (error) {
         dispatch({
             type: UPDATE_MESS_MENU_FAIL,
+            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             payload: error.response && error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 ? error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 : error.message,
         })
     }

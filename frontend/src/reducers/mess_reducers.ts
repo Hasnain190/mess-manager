@@ -13,7 +13,7 @@ import {
 
 
 
-export const messMenuReducer = (state = {}, action) => {
+export const messMenuReducer = (state = {}, action: any) => {
 
     switch (action.type) {
         case GET_MESS_MENU_REQUEST:
@@ -37,7 +37,7 @@ export const messMenuReducer = (state = {}, action) => {
     }
 }
 
-export const updateMessMenuReducer = (state = {}, action) => {
+export const updateMessMenuReducer = (state = {}, action: any) => {
 
     switch (action.type) {
         case UPDATE_MESS_MENU_REQUEST:

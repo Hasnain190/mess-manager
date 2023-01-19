@@ -46,7 +46,7 @@ import {
 
 
 
-export const login = (username, password) => async (dispatch) => {
+export const login = (username: any, password: any) => async (dispatch: any) => {
     try {
         dispatch({
             type: USER_LOGIN_REQUEST
@@ -75,14 +75,17 @@ export const login = (username, password) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: USER_LOGIN_FAIL,
+            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             payload: error.response && error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 ? error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 : error.message,
         })
     }
 }
 
-export const logout = () => (dispatch) => {
+export const logout = () => (dispatch: any) => {
     localStorage.removeItem('userInfo')
     dispatch({ type: USER_LOGOUT })
     dispatch({ type: USER_DETAILS_RESET })
@@ -93,7 +96,7 @@ export const logout = () => (dispatch) => {
 }
 
 
-export const register = (username, room, password, hostel, phone) => async (dispatch) => {
+export const register = (username: any, room: any, password: any, hostel: any, phone: any) => async (dispatch: any) => {
 
 
     try {
@@ -122,16 +125,19 @@ export const register = (username, room, password, hostel, phone) => async (disp
         dispatch({
             type: USER_REGISTER_FAIL,
             payload:
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 error.response && error.response.data.message
+                    // @ts-expect-error TS(2571): Object is of type 'unknown'.
                     ? error.response.data.message
 
+                    // @ts-expect-error TS(2571): Object is of type 'unknown'.
                     : error.response,
         })
     }
 }
 
 
-export const listUsers = () => async (dispatch, getState) => {
+export const listUsers = () => async (dispatch: any, getState: any) => {
     try {
         dispatch({
             type: USER_LIST_REQUEST
@@ -163,8 +169,11 @@ export const listUsers = () => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: USER_LIST_FAIL,
+            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             payload: error.response && error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 ? error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 : error.message,
         })
     }
@@ -172,7 +181,7 @@ export const listUsers = () => async (dispatch, getState) => {
 
 // && !localStorage.getItem('userInfo')
 // need to be fixed
-export const getUserDetails = (id) => async (dispatch, getState) => {
+export const getUserDetails = (id: any) => async (dispatch: any, getState: any) => {
     try {
         dispatch({
             type: USER_DETAILS_REQUEST
@@ -204,15 +213,18 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: USER_DETAILS_FAIL,
+            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             payload: error.response && error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 ? error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 : error.message,
         })
     }
 }
 
 
-export const updateUserProfile = (user) => async (dispatch, getState) => {
+export const updateUserProfile = (user: any) => async (dispatch: any, getState: any) => {
     try {
         dispatch({
             type: USER_UPDATE_PROFILE_REQUEST
@@ -250,15 +262,18 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: USER_UPDATE_PROFILE_FAIL,
+            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             payload: error.response && error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 ? error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 : error.message,
         })
     }
 }
 
 
-export const deleteUser = (id) => async (dispatch, getState) => {
+export const deleteUser = (id: any) => async (dispatch: any, getState: any) => {
     try {
         dispatch({
             type: USER_DELETE_REQUEST
@@ -290,15 +305,18 @@ export const deleteUser = (id) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: USER_DELETE_FAIL,
+            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             payload: error.response && error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 ? error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 : error.message,
         })
     }
 }
 
 
-export const updateUser = (user) => async (dispatch, getState) => {
+export const updateUser = (user: any) => async (dispatch: any, getState: any) => {
     try {
         dispatch({
             type: USER_UPDATE_REQUEST
@@ -336,15 +354,18 @@ export const updateUser = (user) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: USER_UPDATE_FAIL,
+            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             payload: error.response && error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 ? error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 : error.message,
         })
     }
 }
 
 
-export const markAttendance = (attendance) => async (dispatch, getState) => {
+export const markAttendance = (attendance: any) => async (dispatch: any, getState: any) => {
     try {
         dispatch({
             type: USERS_ATTENDANCE_REQUEST
@@ -376,8 +397,11 @@ export const markAttendance = (attendance) => async (dispatch, getState) => {
     catch (error) {
         dispatch({
             type: USERS_ATTENDANCE_FAIL,
+            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             payload: error.response && error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 ? error.response.data.detail
+                // @ts-expect-error TS(2571): Object is of type 'unknown'.
                 : error.message,
         })
     }

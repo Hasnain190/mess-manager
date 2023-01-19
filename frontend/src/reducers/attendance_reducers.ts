@@ -9,7 +9,7 @@ import {
 } from '../constants/attendance_constants'
 
 
-export const postAttendanceReducers = (state = {}, action) => {
+export const postAttendanceReducers = (state = {}, action: any) => {
 
     switch (action.type) {
         case POST_ATTENDANCE_REQUEST:
@@ -36,7 +36,7 @@ export const postAttendanceReducers = (state = {}, action) => {
 }
 
 
-export const getAttendanceReducers = (state = {}, action) => {
+export const getAttendanceReducers = (state = {}, action: any) => {
 
     switch (action.type) {
         case GET_ATTENDANCE_REQUEST:

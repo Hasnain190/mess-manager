@@ -17,7 +17,7 @@ import {
 
 } from '../constants/expenses_constants'
 
-export const addExpensesReducer = (state = { expenses: {} }, action) => {
+export const addExpensesReducer = (state = { expenses: {} }, action: any) => {
     switch (action.type) {
         case ADD_EXPENSES_REQUEST:
             return { loading: true }
@@ -33,7 +33,7 @@ export const addExpensesReducer = (state = { expenses: {} }, action) => {
             return state
     }
 }
-export const getExpensesPerMonthReducers = (state = { expensesPerMonth: [] }, action) => {
+export const getExpensesPerMonthReducers = (state = { expensesPerMonth: [] }, action: any) => {
     switch (action.type) {
         case GET_EXPENSES_PER_MONTH_REQUEST:
             return { loading: true }
@@ -49,7 +49,7 @@ export const getExpensesPerMonthReducers = (state = { expensesPerMonth: [] }, ac
             return state
     }
 }
-export const getBillReducer = (state = { bill: [] }, action) => {
+export const getBillReducer = (state = { bill: [] }, action: any) => {
     switch (action.type) {
         case GET_BILL_REQUEST:
             return { loading: true }
@@ -68,7 +68,7 @@ export const getBillReducer = (state = { bill: [] }, action) => {
 
 
 
-export const addBillReducer = (state = {}, action) => {
+export const addBillReducer = (state = {}, action: any) => {
     switch (action.type) {
         case ADD_BILL_REQUEST:
             return { loading: true }
