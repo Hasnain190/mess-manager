@@ -6,11 +6,8 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./dashboard-cards.css";
 import { getMessMenu } from '../../actions/mess_actions'
-// @ts-expect-error TS(6142): Module '../../components/Loader' was resolved to '... Remove this comment to see the full error message
 import Loader from "../../components/Loader";
-// @ts-expect-error TS(6142): Module '../../components/Message' was resolved to ... Remove this comment to see the full error message
 import Message from "../../components/Message";
-// @ts-expect-error TS(6142): Module '../../components/ConvertToWeekDay' was res... Remove this comment to see the full error message
 import ConvertToWeekDay from "../../components/ConvertToWeekDay"
 
 function Dashboard() {
@@ -21,13 +18,12 @@ function Dashboard() {
     dispatch(getMessMenu())
     console.log(today)
   }, [])
-  // @ts-expect-error TS(2339): Property 'messMenu' does not exist on type 'Defaul... Remove this comment to see the full error message
   const { messMenu, loading: loadingMessMenu, error: errorMessMenu } = useSelector((state) => state.messMenu);
 
   const [date, setDate] = useState(today)
 
 
-
+  // TODO
   // @ts-expect-error TS(2339): Property 'userLogin' does not exist on type 'Defau... Remove this comment to see the full error message
   const userLogin = useSelector((state) => state.userLogin);
   const { error, loading, userInfo } = userLogin;
