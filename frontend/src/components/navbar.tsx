@@ -3,15 +3,16 @@ import { useSelector } from "react-redux";
 import React from "react";
 import "./navbar.css";
 import { Link } from "react-router-dom";
-import { logout } from '../actions/user_actions';
+// import { logout } from '../actions/user_actions';
 // import dispatch
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from '../app/hooks'
 
 
+import { logout } from "../features/user/user_actions_creators";
 function Navbar() {
-  // @ts-expect-error TS(2339): Property 'userLogin' does not exist on type 'Defau... Remove this comment to see the full error message
-  const { userInfo } = useSelector((state) => state.userLogin);
-  const dispatch = useDispatch();
+  const { userInfo } = useAppSelector((state) => state.userLogin);
+  const dispatch = useAppDispatch();
   const logoutHandler = () => {
     dispatch(logout())
   }
@@ -86,8 +87,7 @@ function Navbar() {
               <div className="dropdown">
 
                 <button
-                  // @ts-expect-error TS(2322): Type '{ children: string; class: string; type: "bu... Remove this comment to see the full error message
-                  class="btn btn-secondary dropdown-toggle"
+                  className="btn btn-secondary dropdown-toggle"
                   type="button"
                   id="dropdownMenuButton"
                   data-toggle="dropdown"

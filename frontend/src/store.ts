@@ -47,13 +47,11 @@ const reducer = combineReducers({
   addBill: addBillReducer,
 });
 
-const userInfoFromStorage = localStorage.getItem("userInfo")
-  // @ts-expect-error TS(2345): Argument of type 'string | null' is not assignable... Remove this comment to see the full error message
-  ? JSON.parse(localStorage.getItem("userInfo"))
+const userInfoFromStorage :  JSON | null= localStorage.getItem("userInfo")!== null
+  ? JSON.parse(localStorage.getItem("userInfo")!)
   : null;
 
-// @ts-expect-error TS(2345): Argument of type 'string | null' is not assignable... Remove this comment to see the full error message
-const messMenuFromStorage = localStorage.getItem("messMenu") ? JSON.parse(localStorage.getItem("messMenu")) : null;
+const messMenuFromStorage = localStorage.getItem("messMenu")!== null ? JSON.parse(localStorage.getItem("messMenu")!) : null;
 // const attendanceFromStorage = localStorage.getItem("getAttendance") ? JSON.parse(localStorage.getItem("getAttendance")) : null;
 
 

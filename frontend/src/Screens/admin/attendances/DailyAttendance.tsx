@@ -22,12 +22,9 @@ function DailyAttendance({
 
 
     return (
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <div>
             {dailyDateSet.map(item => (
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 <>
-                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     <AttendanceSheet month={month} day={item} filteredAttendance={filteredAttendance(item)} />
                 </>
             ))

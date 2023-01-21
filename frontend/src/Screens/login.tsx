@@ -6,22 +6,24 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import { login } from '../actions/user_actions'
+// import { login } from '../actions/user_actions'
+import { login } from "../features/user/user_slice";
 
 
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 
 function Login() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const location = useLocation()
     const navigate = useNavigate()
 
     const redirect = location.search ? location.search.split('=')[1] : '/dashboard'
 
-    const userLogin = useSelector(state => state.userLogin)
+    const userLogin = useAppSelector(state => state.userLogin)
     const { error, loading, userInfo } = userLogin
 
     useEffect(() => {
@@ -46,7 +48,7 @@ function Login() {
                     <div className="card card-body">
                         <h3 className="text-center mb-4">
                             <i className="fas fa-user-plus"></i> Login</h3>
-                        {error && <Message variant='danger'>{error}</Message>}
+                        {error! && <Message variant='danger'>There is some error here</Message>}
                         {loading && <Loader />}
 
                         <form onSubmit={submitHandler}>
