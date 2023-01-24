@@ -66,6 +66,7 @@ export const { loginRequest, loginFail, loginSuccess, logoutAction } = userLogin
 
 
 
+
 export const userRegisterSlice = createSlice({
 
   name: 'user-register',
@@ -126,7 +127,7 @@ export const userDetailsSlice = createSlice({
 
   }
 })
-export const { detailsRequest, detailsFail, detailsSuccess } = userDetailsSlice.actions
+export const { detailsRequest, detailsFail, detailsSuccess, detailsReset } = userDetailsSlice.actions
 
 
 // update user profile
