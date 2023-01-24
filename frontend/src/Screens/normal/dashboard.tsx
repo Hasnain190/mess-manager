@@ -47,13 +47,8 @@ function Dashboard() {
       <div>
         Today's time :{" "}
         <code>
-          {dateState.toLocaleTimeString({
-
-            // @ts-expect-error TS(2345): Argument of type '{ hour: string; minute: string; ... Remove this comment to see the full error message
-            hour: "numeric",
-            minute: "numeric",
-            hour12: true,
-          })}
+          {dateState.toLocaleTimeString('en-US')}
+          {/*  Expected output: "1:15:30 AM" */}
         </code>
       </div>
 
@@ -226,10 +221,9 @@ function Dashboard() {
               <label htmlFor="feedBackForm">Feedback</label>
 
               <textarea
-                class="form-control"
+                className="form-control"
                 id="feedBackForm"
-                // @ts-expect-error TS(2322): Type 'string' is not assignable to type 'number'.
-                rows="3"
+                rows={3}
               ></textarea>
 
 

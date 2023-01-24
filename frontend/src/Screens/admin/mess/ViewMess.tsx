@@ -63,8 +63,7 @@ function ViewMess() {
             <div className="tab-content" id="nav-tabContent">
 
               <div
-                // @ts-expect-error TS(2322): Type '{ children: Element; class: string; id: stri... Remove this comment to see the full error message
-                class="tab-pane fade show active"
+                className="tab-pane fade show active"
                 id="nav-home"
                 role="tabpanel"
                 aria-labelledby="nav-home-tab"
