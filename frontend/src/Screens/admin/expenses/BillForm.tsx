@@ -3,32 +3,29 @@ import React, { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { counter } from "../../../components/counter"
 
-import { useDispatch, useSelector } from "react-redux";
-import { getBill } from '../../../actions/expenses_actions'
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { getMessBill } from '../../../features/expenses/expenses_actions_creators'
 import Message from "../../../components/Message";
 import Loader from "../../../components/Loader";
 import Downloader from '../../../components/Downloader';
-import { listUsers } from "../../../actions/user_actions";
-
-import { addBill } from '../../../actions/expenses_actions';
+import { listUsers } from "../../../features/user/user_actions_creators";
+import IdToStudent from "../../../components/IdToStudent";
+import { addBill } from '../../../features/expenses/expenses_actions_creators';
 
 function BillForm() {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const today = new Date().toISOString().substring(0, 7);
+    const [date, setDate] = useState(today)
+    const { messBill, loading } = useAppSelector(state => state.getMessBill)
     let myRef = useRef()
 
     useEffect(() => {
         dispatch(listUsers())
-        dispatch(getBill(date.substring(5, 7)))
-        // @ts-expect-error TS(2448): Block-scoped variable 'date' used before its decla... Remove this comment to see the full error message
-    }, [date, bill])
+        dispatch(getMessBill(date.substring(5, 7)))
+    }, [date, messBill])
 
-    // @ts-expect-error TS(2339): Property 'userList' does not exist on type 'Defaul... Remove this comment to see the full error message
-    const { users } = useSelector(state => state.userList)
-    // @ts-expect-error TS(2339): Property 'getBill' does not exist on type 'Default... Remove this comment to see the full error message
-    const { bill, loading } = useSelector(state => state.getBill)
-    const [date, setDate] = useState(today)
+    const { users } = useAppSelector(state => state.userList)
 
 
     const [billPayed, setBillPayed] = useState(0)
@@ -37,16 +34,7 @@ function BillForm() {
 
     const handleSubmit = (e: any) => {
         e.preventDefault()
-        dispatch(getBill(date.substring(5, 7)))
-    }
-    function IdToStudent({
-        id
-    }: any) {
-        const name = users?.find((user: any) => user.id === id).username
-        return (
-
-            <div>{name}</div>
-        )
+        dispatch(getMessBill(date.substring(5, 7)))
     }
 
     const buttonClick = (e: any) => {
@@ -115,7 +103,7 @@ function BillForm() {
                         </tr>
                     </thead>
 
-                    {bill?.map((item: any) => <tbody>
+                    {messBill?.map((item: any) => <tbody>
 
                         <tr>
 

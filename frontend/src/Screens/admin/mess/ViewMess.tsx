@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { saveAs } from "file-saver";
-import { getMessMenu } from "../../../actions/mess_actions";
+import { getMessMenu } from "../../../features/mess/mess_actions_creators";
 
 import Message from "../../../components/Message";
-import { useSelector, useDispatch } from "react-redux";
+import { useAppSelector, useAppDispatch } from "../../../app/hooks";
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import "./ViewMess.css";
@@ -13,17 +13,16 @@ import Downloader from "../../../components/Downloader";
 
 function ViewMess() {
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     dispatch(getMessMenu());
 
 
 
-  }, [dispatch, useSelector]);
+  }, [dispatch, useAppSelector]);
 
-  // @ts-expect-error TS(2339): Property 'messMenu' does not exist on type 'Defaul... Remove this comment to see the full error message
-  const { messMenu, loading, error } = useSelector((state) => state.messMenu);
+  const { messMenu, loading, error } = useAppSelector((state) => state.messMenu);
 
 
   const [editMenu, setEditMenu] = useState(false)

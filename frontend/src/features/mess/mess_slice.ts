@@ -51,9 +51,10 @@ type menuPerDay = {
     first_time: string,
     second_time: string
 }
-interface messMenu {
-    messMenu: menuPerDay[]
-}
+// interface messMenu {
+//     messMenu: menuPerDay[]
+// }
+type messMenu = menuPerDay[]
 
 const messMenuFromStorage: messMenu | [] = localStorage.getItem("messMenu") !== null
     ? JSON.parse(localStorage.getItem("messMenu")!)
@@ -74,7 +75,6 @@ export const messMenuSlice = createSlice({
         getMessMenuSuccess(state, action) { state.loading = false; state.messMenu = action.payload },
         getMessMenuFail(state, action) { state.error = action.payload }
     }
-
 })
 
 export const { getMessMenuRequest, getMessMenuSuccess, getMessMenuFail } = messMenuSlice.actions
@@ -101,7 +101,6 @@ export const messMenuUpdateSlice = createSlice({
         }
 
     }
-
 })
 
 export const { updateMessMenuRequest, updateMessMenuSuccess, updateMessMenuFail } = messMenuUpdateSlice.actions

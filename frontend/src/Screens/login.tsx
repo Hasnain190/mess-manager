@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import './login.css'
-
-import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-// import { login } from '../actions/user_actions'
-import { login } from "../features/user/user_slice";
+import { login } from "../features/user/user_actions_creators";
 
 
 import { useAppDispatch, useAppSelector } from "../app/hooks";

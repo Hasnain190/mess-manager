@@ -7,6 +7,12 @@ from .models import *
 admin.site.register(User)
 # admin.site.register(Message)
 admin.site.register(Attendance)
+# admin.site.register(Expense)
 admin.site.register(Menu)
-admin.site.register(Expense)
 
+
+class expensesAdmin(admin.ModelAdmin):
+    list_filter = ['date']
+
+
+admin.site.register(Expense, expensesAdmin)

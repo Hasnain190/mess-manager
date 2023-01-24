@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import Loader from "../../../components/Loader";
 import Message from "../../../components/Message";
-import { register } from "../../../actions/user_actions";
+import { register } from "../../../features/user/user_actions_creators";
+
+
 
 function AddUsers({
     history
 }: any) {
 
     const [message, setMessage] = useState("");
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -18,19 +20,20 @@ function AddUsers({
 
 
 
-    // credentiasls
+    // credentials
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
-    const [room, setRoom] = useState("");
-    const [hostel, setHostel] = useState("");
+    const [room, setRoom] = useState(Number);
+    const [hostel, setHostel] = useState('');
     const [phone, setPhone] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
 
+
+
     const redirect = location.search ? location.search.split("=")[1] : "/";
 
-    // @ts-expect-error TS(2339): Property 'userRegister' does not exist on type 'De... Remove this comment to see the full error message
-    const userRegister = useSelector((state) => state.userRegister);
+    const userRegister = useAppSelector((state) => state.userRegister);
     const { error, loading, userInfo, success } = userRegister;
 
 
@@ -87,6 +90,7 @@ function AddUsers({
                                     placeholder="Enter Name"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
+
                                 />
                             </div>
 
@@ -102,7 +106,7 @@ function AddUsers({
                                     placeholder="Enter room"
                                     required
                                     value={room}
-                                    onChange={(e) => setRoom(e.target.value)}
+                                    onChange={(e) => setRoom(Number(e.target.value))}
                                 />
                             </div>
 

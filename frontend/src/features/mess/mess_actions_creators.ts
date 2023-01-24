@@ -1,17 +1,4 @@
 import {
-    GET_MESS_MENU_REQUEST,
-    GET_MESS_MENU_SUCCESS,
-    GET_MESS_MENU_FAIL,
-
-    UPDATE_MESS_MENU_REQUEST,
-    UPDATE_MESS_MENU_SUCCESS,
-    UPDATE_MESS_MENU_FAIL,
-    UPDATE_MESS_MENU_RESET,
-
-
-} from '../../constants/mess_constants'
-
-import {
     getMessMenuRequest,
     getMessMenuSuccess,
     getMessMenuFail,
@@ -60,11 +47,9 @@ type menuPerDay = {
     first_time: string,
     second_time: string
 }
-interface messMenu {
-    messMenu: menuPerDay[]
-}
 
-export const updateMessMenu = (day: number, messMenu: messMenu) => async (dispatch: any) => {
+
+export const updateMessMenu = (day: string, menuPerDay: menuPerDay) => async (dispatch: any) => {
     try {
         dispatch(updateMessMenuRequest())
 
@@ -76,7 +61,7 @@ export const updateMessMenu = (day: number, messMenu: messMenu) => async (dispat
         }
 
         const { data } = await axios.put(`/api/mess/update/${day}/`,
-            messMenu,
+            menuPerDay,
             config
         )
 

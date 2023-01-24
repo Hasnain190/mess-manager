@@ -3,29 +3,29 @@
 //  - this screen displays the current user's name, the current date, and the current time
 //  - this screen also displays the current user's current meal plan's meals' items ingredients
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import "./dashboard-cards.css";
-import { getMessMenu } from '../../actions/mess_actions'
+
+import { getMessMenu } from '../../features/mess/mess_actions_creators'
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import ConvertToWeekDay from "../../components/ConvertToWeekDay"
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+
 
 function Dashboard() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const today = new Date().getDay();
 
   useEffect(() => {
     dispatch(getMessMenu())
     console.log(today)
   }, [])
-  const { messMenu, loading: loadingMessMenu, error: errorMessMenu } = useSelector((state) => state.messMenu);
+  const { messMenu, loading: loadingMessMenu, error: errorMessMenu } = useAppSelector((state) => state.messMenu);
 
   const [date, setDate] = useState(today)
 
 
-  // FIXME:
-  // @ts-expect-error TS(2339): Property 'userLogin' does not exist on type 'Defau... Remove this comment to see the full error message
-  const userLogin = useSelector((state) => state.userLogin);
+  const userLogin = useAppSelector((state) => state.userLogin);
   const { error, loading, userInfo } = userLogin;
 
   const [dateState, setDateState] = useState(new Date());
@@ -33,7 +33,8 @@ function Dashboard() {
   useEffect(() => {
     setInterval(() => setDateState(new Date()), 1000);
   }, []);
-  const [todaysMess] = messMenu?.filter((item: any) => item.day === Intl.DateTimeFormat('en', { weekday: 'long' }).format(new Date(`${today}`)))
+
+  const [todaysMess] = messMenu.filter((item: any) => item.day === Intl.DateTimeFormat('en', { weekday: 'long' }).format(new Date(`${today}`)))
 
 
   return (

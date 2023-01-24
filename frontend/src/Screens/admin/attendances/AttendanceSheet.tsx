@@ -1,12 +1,13 @@
 // for this month bill
 import React, { useState, useEffect, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getAttendance } from "../../../actions/attendance_actions"
+import { useAppSelector, useAppDispatch } from "../../../app/hooks";
+
+import { getAttendance } from "../../../features/attendance/attendance_actions_creators"
 import { useNavigate } from "react-router-dom"
-import { listUsers } from "../../../actions/user_actions";
+import { listUsers } from "../../../features/user/user_actions_creators";
 import Downloader from "../../../components/Downloader";
 import ConvertToMonth from "../../../components/ConvertToMonth";
-
+import IdToStudent from "../../../components/IdToStudent";
 
 
 function AttendanceSheet({
@@ -15,18 +16,6 @@ function AttendanceSheet({
     filteredAttendance
 }: any) {
     const attendance = filteredAttendance;
-
-
-    // @ts-expect-error TS(2339): Property 'userList' does not exist on type 'Defaul... Remove this comment to see the full error message
-    const { users } = useSelector(state => state.userList)
-
-
-    function IdToStudent({
-        id
-    }: any) {
-        const name = users?.find((user: any) => user.id === id).username
-        return <div>{name}</div>
-    }
 
     return (
 

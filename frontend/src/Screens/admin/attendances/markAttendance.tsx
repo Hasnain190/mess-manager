@@ -1,37 +1,37 @@
 
 import Button from "../../../components/Button";
-import { listUsers, deleteUser } from "../../../actions/user_actions";
+import { listUsers, deleteUser } from "../../../features/user/user_actions_creators";
 import React, { useState, useEffect, useRef } from "react";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import Loader from "../../../components/Loader";
 import Message from "../../../components/Message";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { postAttendance, getAttendance } from "../../../actions/attendance_actions";
+import { postAttendance, getAttendance } from "../../../features/attendance/attendance_actions_creators";
 import { counter } from "../../../components/counter";
 
 
 export default function MarkAttendance() {
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
 
 
 
 
-  // @ts-expect-error TS(2339): Property 'userList' does not exist on type 'Defaul... Remove this comment to see the full error message
-  const { users, loading, error } = useSelector((state) => state.userList);
+
+  const { users, loading, error } = useAppSelector((state) => state.userList);
   const today = new Date().toISOString().substr(0, 10);
-  // @ts-expect-error TS(2339): Property 'userLogin' does not exist on type 'Defau... Remove this comment to see the full error message
-  const { userInfo } = useSelector((state) => state.userLogin);
+
+  const { userInfo } = useAppSelector((state) => state.userLogin);
 
 
-  // @ts-expect-error TS(2339): Property 'attendance' does not exist on type 'Defa... Remove this comment to see the full error message
-  const { success: attendanceSuccess, error: attendanceError, loading: attendanceLoading } = useSelector((state) => state.attendance)
 
-  // @ts-expect-error TS(2339): Property 'getAttendance' does not exist on type 'D... Remove this comment to see the full error message
-  const { attendance: getAttendanceObj, error: getAttendanceError, loading: getAttendanceLoading } = useSelector(state => state.getAttendance)
+  const { success: attendanceSuccess, error: attendanceError, loading: attendanceLoading } = useAppSelector((state) => state.attendance)
+
+
+  const { attendance: getAttendanceObj, error: getAttendanceError, loading: getAttendanceLoading } = useAppSelector(state => state.getAttendance)
 
 
 
@@ -79,8 +79,8 @@ export default function MarkAttendance() {
           second_time: attendanceExtractor(e, id)[1]
         }
         dispatch(postAttendance(attendance, id))
+        alert("All the attendance is submitted successfully")
       }
-      alert("All the attendance is submitted successfully")
       dispatch(getAttendance());
       let count = counter(getAttendanceObj, date);
       setTotal(count)
@@ -174,7 +174,7 @@ export default function MarkAttendance() {
                     <input
                       type="text"
                       className="form-control"
-                      id={`table-ropm-${user.id}`}
+                      id={`table-room-${user.id}`}
                       name="room"
                       value={user.room}
 
@@ -256,7 +256,7 @@ export default function MarkAttendance() {
 
             <th scope="col">Total Absentees</th>
 
-            <th scope="col">Total Attendences</th>
+            <th scope="col">Total Attendances</th>
           </tr>
         </thead>
 

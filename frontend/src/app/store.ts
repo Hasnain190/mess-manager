@@ -5,10 +5,10 @@ import { userLoginSlice, userRegisterSlice, userDetailsSlice, userListSlice, use
 import { messMenuSlice, messMenuUpdateSlice } from "../features/mess/mess_slice";
 
 
-import { postAttendanceReducers, getAttendanceReducers } from "./reducers/attendance_reducers";
-import { addExpensesReducer, getBillReducer, getExpensesPerMonthReducers } from "./reducers/expenses_reducers";
+import { postAttendanceSlice, getAttendanceSlice } from "../features/attendance/attendance_slice";
+import { addExpensesSlice, getExpensesPerMonthSlice, getMessBillSlice, postPayingBillSlice } from "../features/expenses/expenses_slice";
 
-import { addBillReducer } from "./reducers/expenses_reducers";
+
 
 export const store = configureStore({
     reducer: {
@@ -32,14 +32,14 @@ export const store = configureStore({
         updateMessMenu: messMenuUpdateSlice.reducer,
 
         // attendance reducers
-        attendance: postAttendanceReducers,
-        getAttendance: getAttendanceReducers,
+        attendance: postAttendanceSlice.reducer,
+        getAttendance: getAttendanceSlice.reducer,
 
-        addExpenses: addExpensesReducer,
-        getExpensesPerMonth: getExpensesPerMonthReducers,
+        addExpenses: addExpensesSlice.reducer,
+        getExpensesPerMonth: getExpensesPerMonthSlice.reducer,
 
-        getBill: getBillReducer,
-        addBill: addBillReducer,
+        getMessBill: getMessBillSlice.reducer,
+        addBill: postAttendanceSlice.reducer,
     }
 
 })

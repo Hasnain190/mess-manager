@@ -1,10 +1,11 @@
-// @ts-expect-error TS(6142): Module './AttendanceSheet' was resolved to 'F:/mes... Remove this comment to see the full error message
 import AttendanceSheet from './AttendanceSheet'
 import React, { useState, useEffect, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getAttendance } from "../../../actions/attendance_actions"
+import { useAppSelector, useAppDispatch } from "../../../app/hooks";
+
+import { getAttendance } from "../../../features/attendance/attendance_actions_creators"
 import { useNavigate } from "react-router-dom"
-import { listUsers } from "../../../actions/user_actions";
+import { listUsers } from "../../../features/user/user_actions_creators";
+
 
 
 

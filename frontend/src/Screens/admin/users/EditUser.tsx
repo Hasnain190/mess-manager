@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import Loader from '../../../components/Loader'
 import Message from '../../../components/Message'
-import { getUserDetails, updateUser } from '../../../actions/user_actions'
-import { USER_UPDATE_RESET } from '../../../constants/user_constants'
-
+import { getUserDetails, updateUser } from '../../../features/user/user_actions_creators'
+import { detailsReset } from '../../../features/user/user_slice'
 
 
 export default function EditUser() {
@@ -20,43 +19,41 @@ export default function EditUser() {
     const [hostel, setHostel] = useState('')
     const [isAdmin, setIsAdmin] = useState(false)
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
-    // @ts-expect-error TS(2339): Property 'userDetails' does not exist on type 'Def... Remove this comment to see the full error message
-    const userDetails = useSelector(state => state.userDetails)
+    const userDetails = useAppSelector(state => state.userDetails)
     const { error, loading, user } = userDetails
 
-    // @ts-expect-error TS(2339): Property 'userUpdate' does not exist on type 'Defa... Remove this comment to see the full error message
-    const userUpdate = useSelector(state => state.userUpdate)
+    const userUpdate = useAppSelector(state => state.userUpdate)
     const { error: errorUpdate, loading: loadingUpdate, success: successUpdate } = userUpdate
 
     useEffect(() => {
 
         if (successUpdate) {
-            dispatch({ type: USER_UPDATE_RESET })
+            dispatch(detailsReset())
             navigate('/admin/view-users')
-        } else {
-
-            if (!user.username || user.id !== Number(id)) {
-                dispatch(getUserDetails(id))
-            } else {
-                setUsername(user.username)
-                setEmail(user.email)
-                setIsAdmin(user.isAdmin)
-                setRoom(user.room)
-                setPhone(user.phone)
-                setHostel(user.hostel)
-
-
-            }
         }
 
+        //  else {if (!user.username || user.id !== Number(id)) {
+        //     dispatch(getUserDetails(id))
+        // } else {
+        //     setUsername(user.username)
+        //     setEmail(user.email)
+        //     setIsAdmin(user.isAdmin)
+        //     setRoom(user.room)
+        //     setPhone(user.phone)
+        //     setHostel(user.hostel)
 
-    }, [successUpdate, user, id, dispatch, navigate])
+
+        // }}
+
+
+
+    }, [successUpdate, dispatch, navigate])
 
     const submitHandler = (e: any) => {
         e.preventDefault()
-        dispatch(updateUser({ id: user.id, username, email, hostel, room, phone, isAdmin }))
+        dispatch(updateUser({ id: id, username, email, hostel, room, phone, isAdmin }))
     }
 
 
@@ -70,7 +67,7 @@ export default function EditUser() {
             </Link>
 
 
-            <div className='contianer'>
+            <div className='container'>
 
                 <div className="row justify-content-md-center">
 
@@ -91,7 +88,7 @@ export default function EditUser() {
                                 <form onSubmit={submitHandler}>
 
 
-                                    < div className='form-group' controlId='name'>
+                                    < div className='form-group' >
 
                                         <label htmlFor='username'>Name</label>
 
@@ -108,7 +105,7 @@ export default function EditUser() {
                                     </div>
 
 
-                                    <div className='form-group' controlId='email'>
+                                    <div className='form-group'>
 
                                         <label htmlFor='email'>Email Address</label>
 
@@ -123,15 +120,14 @@ export default function EditUser() {
                                     </div>
 
 
-                                    <div className='form-group' controlId='isadmin'>
+                                    <div className='form-group'>
 
-                                        <label htmlFor='isadmin'>Is Admin</label>
+                                        <label htmlFor='isAdmin'>Is Admin</label>
 
                                         <input
 
                                             type='checkbox'
-                                            // @ts-expect-error TS(2322): Type '{ children: never[]; type: "checkbox"; label... Remove this comment to see the full error message
-                                            label='Is Admin'
+
                                             checked={isAdmin}
                                             onChange={(e) => setIsAdmin(e.target.checked)}
                                         >
@@ -143,7 +139,7 @@ export default function EditUser() {
 
                                     {/* for phone */}
 
-                                    <div className='form-group' controlId='phone'>
+                                    <div className='form-group' >
 
                                         <label htmlFor='phone'>Phone</label>
 
@@ -159,7 +155,7 @@ export default function EditUser() {
                                     </div>
                                     {/* for hostel */}
 
-                                    <div className='form-group' controlId='hostel'>
+                                    <div className='form-group'>
 
                                         <label htmlFor='hostel'>Hostel</label>
 
@@ -174,7 +170,7 @@ export default function EditUser() {
                                     </div>
                                     {/* for room */}
 
-                                    <div className='form-group' controlId='room'>
+                                    <div className='form-group' >
 
                                         <label htmlFor='room'>Room</label>
 
@@ -189,7 +185,7 @@ export default function EditUser() {
                                     </div>
 
 
-                                    <button type='submit' variant='primary'>
+                                    <button type='submit' >
                                         Update
                                     </button>
 

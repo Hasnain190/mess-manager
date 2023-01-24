@@ -1,25 +1,22 @@
 // this screen displays the list of users
-import { listUsers, deleteUser } from "../../../actions/user_actions";
+import { listUsers, deleteUser } from "../../../features/user/user_actions_creators";
 import React, { useState, useEffect } from "react";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import Loader from "../../../components/Loader";
 import Message from "../../../components/Message";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 
 function ViewUsers() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  // @ts-expect-error TS(2339): Property 'userLogin' does not exist on type 'Defau... Remove this comment to see the full error message
-  const { userInfo } = useSelector((state) => state.userLogin);
+  const { userInfo } = useAppSelector((state) => state.userLogin);
 
-  // @ts-expect-error TS(2339): Property 'userList' does not exist on type 'Defaul... Remove this comment to see the full error message
-  const { users, loading, error } = useSelector((state) => state.userList);
+  const { users, loading, error } = useAppSelector((state) => state.userList);
 
-  // @ts-expect-error TS(2339): Property 'userDelete' does not exist on type 'Defa... Remove this comment to see the full error message
-  const { success: successDelete } = useSelector((state) => state.userDelete);
+  const { success: successDelete } = useAppSelector((state) => state.userDelete);
 
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {

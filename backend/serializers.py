@@ -29,9 +29,6 @@ from django.contrib.auth.hashers import make_password
 
 #         return data
 
-   
-
-        
 
 class UserSerializer(serializers.ModelSerializer):
     """
@@ -39,11 +36,10 @@ class UserSerializer(serializers.ModelSerializer):
     """
     isAdmin = serializers.SerializerMethodField(read_only=True)
 
-
     class Meta:
         model = User
-        fields = ('id', 'username','isAdmin', 'email','phone','room','hostel')
-       
+        fields = ('id', 'username', 'isAdmin',
+                  'email', 'phone', 'room', 'hostel')
 
     def get_isAdmin(self, obj):
         return obj.is_staff
@@ -58,21 +54,18 @@ class UserSerializer(serializers.ModelSerializer):
         return make_password(value)
 
 
-
-
 class UserSerializerWithToken(UserSerializer):
     token = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
-   
 
-        fields = ('id',  'username', 'isAdmin', 'email', 'phone','room','hostel', 'isAdmin' ,'token')
+        fields = ('id',  'username', 'isAdmin', 'email',
+                  'phone', 'room', 'hostel', 'isAdmin', 'token')
 
     def get_token(self, obj):
         token = RefreshToken.for_user(obj)
         return str(token.access_token)
-   
 
 
 class AttendanceSerializer(serializers.ModelSerializer):
@@ -83,6 +76,7 @@ class AttendanceSerializer(serializers.ModelSerializer):
         model = Attendance
         fields = '__all__'
 
+
 class MenuSerializer(serializers.ModelSerializer):
     """
     Serializer for mess menu object
@@ -91,16 +85,17 @@ class MenuSerializer(serializers.ModelSerializer):
         model = Menu
         fields = '__all__'
 
+
 class ExpenseSerializer(serializers.ModelSerializer):
-    
+
     """
     Serializer for mess menu object
     """
     class Meta:
         model = Expense
-        fields = ('date', 'total_attendances', 'expenses_per_day','expenses_per_attendance')
-   
-        
+        fields = ('date', 'total_attendances',
+                  'expenses_per_day', 'expenses_per_attendance')
+
 
 class BillSerializer(serializers.ModelSerializer):
     """
@@ -111,8 +106,19 @@ class BillSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class LastBillPayedSerializer(serializers.ModelSerializer):
-
+class MessBillSerializer(serializers.ModelSerializer):
+    """
+    Serializer for mess menu object
+    """
     class Meta:
-        model = LastBillPayed
+        model = MessBill
+        fields = '__all__'
+
+
+class PayingBillSerializer(serializers.ModelSerializer):
+    """
+    Serializer for mess menu object
+    """
+    class Meta:
+        model = PayingBill
         fields = '__all__'

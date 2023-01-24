@@ -1,19 +1,19 @@
-import {
-    POST_ATTENDANCE_REQUEST,
-    POST_ATTENDANCE_SUCCESS,
-    POST_ATTENDANCE_FAIL,
 
-    GET_ATTENDANCE_REQUEST,
-    GET_ATTENDANCE_SUCCESS,
-    GET_ATTENDANCE_FAIL,
-
-} from '../../constants/attendance_constants'
 import axios from 'axios'
+import {
+    getAttendanceRequest,
+    getAttendanceSuccess,
+    getAttendanceFail,
 
+    postAttendanceRequest,
+    postAttendanceSuccess,
+    postAttendanceFail,
+
+} from './attendance_slice'
 
 export const postAttendance = (attendance: any, id: any) => async (dispatch: any, getState: any) => {
     try {
-        dispatch({ type: POST_ATTENDANCE_REQUEST })
+        dispatch(postAttendanceRequest())
 
         const {
             userLogin: { userInfo },
@@ -28,23 +28,19 @@ export const postAttendance = (attendance: any, id: any) => async (dispatch: any
         const { data } = await axios.post(`/api/attendance/post/${id}/`,
             attendance,
             config)
-        dispatch({ type: POST_ATTENDANCE_SUCCESS, payload: data })
+        dispatch(postAttendanceSuccess(data))
     } catch (error: any) {
-        dispatch({
-            type: POST_ATTENDANCE_FAIL,
-            payload: error.response && error.response.data.detail
+        dispatch(
+            postAttendanceFail(error.response && error.response.data.detail
                 ? error.response.data.detail
                 : error.message,
-        })
+            ))
     }
 }
 
 export const getAttendance = () => async (dispatch: any, getState: any) => {
     try {
-        dispatch({
-            type: GET_ATTENDANCE_REQUEST
-
-        })
+        dispatch(getAttendanceRequest())
 
         const {
             userLogin: { userInfo },
@@ -59,18 +55,13 @@ export const getAttendance = () => async (dispatch: any, getState: any) => {
 
         const { data } = await axios.get(`/api/attendance/get/`,
             config)
-        dispatch({
-            type: GET_ATTENDANCE_SUCCESS,
-            payload: data
-        })
+        dispatch(getAttendanceSuccess(data))
 
         localStorage.setItem("getAttendance", JSON.stringify(data))
     } catch (error: any) {
-        dispatch({
-            type: GET_ATTENDANCE_FAIL,
-            payload: error.response && error.response.data.detail
-                ? error.response.data.detail
-                : error.message,
-        })
+        dispatch(getAttendanceFail(error.response && error.response.data.detail
+            ? error.response.data.detail
+            : error.message,
+        ))
     }
 }

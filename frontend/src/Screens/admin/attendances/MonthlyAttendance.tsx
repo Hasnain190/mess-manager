@@ -1,25 +1,22 @@
 import AttendanceSheet from './AttendanceSheet'
 import React, { useState, useEffect, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getAttendance } from "../../../actions/attendance_actions"
+import { useAppSelector, useAppDispatch } from "../../../app/hooks";
+import { getAttendance } from "../../../features/attendance/attendance_actions_creators"
 import { useNavigate } from "react-router-dom"
-import { listUsers } from "../../../actions/user_actions";
+import { listUsers } from "../../../features/user/user_actions_creators";
 import ConvertToMonth from '../../../components/ConvertToMonth';
 import DailyAttendance from './DailyAttendance'
 
 function MonthlyAttendance() {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
 
-    // @ts-expect-error TS(2339): Property 'userLogin' does not exist on type 'Defau... Remove this comment to see the full error message
-    const { userInfo } = useSelector((state) => state.userLogin);
+    const { userInfo } = useAppSelector((state) => state.userLogin);
 
-    // @ts-expect-error TS(2339): Property 'getAttendance' does not exist on type 'D... Remove this comment to see the full error message
-    const { attendance, error, loading } = useSelector(state => state.getAttendance)
-    // @ts-expect-error TS(2339): Property 'userList' does not exist on type 'Defaul... Remove this comment to see the full error message
-    const { users } = useSelector(state => state.userList)
+    const { attendance, error, loading } = useAppSelector(state => state.getAttendance)
+    const { users } = useAppSelector(state => state.userList)
     const monthDateList = attendance?.map((item: any) => Number((item.date).split("-")[1])) //[06,06,06]
     const monthDateSet = [...new Set(monthDateList)]
 

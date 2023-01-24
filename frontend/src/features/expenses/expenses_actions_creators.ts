@@ -1,23 +1,23 @@
-import {
-    ADD_EXPENSES_REQUEST,
-    ADD_EXPENSES_SUCCESS,
-    ADD_EXPENSES_FAIL,
-
-    GET_BILL_FAIL,
-    GET_BILL_REQUEST,
-    GET_BILL_sUCCESS,
-    GET_EXPENSES_PER_MONTH_FAIL,
-    GET_EXPENSES_PER_MONTH_REQUEST,
-    GET_EXPENSES_PER_MONTH_SUCCESS,
-
-
-    ADD_BILL_REQUEST,
-    ADD_BILL_success,
-    ADD_BILL_FAIL,
-
-} from '../../constants/expenses_constants'
 
 import axios from 'axios'
+import {
+    addExpensesRequest, addExpensesSuccess, addExpensesFail,
+
+    getExpensesPerMonthRequest,
+    getExpensesPerMonthSuccess,
+    getExpensesPerMonthFail,
+
+    getMessBillRequest,
+    getMessBillSuccess,
+    getMessBillFailure,
+
+    postPayingBillRequest,
+    postPayingBillSuccess,
+    postPayingBillFail,
+
+
+} from './expenses_slice'
+
 
 
 export const addExpenses = (expenses: any) => async (dispatch: any, getState: any) => {
@@ -25,13 +25,9 @@ export const addExpenses = (expenses: any) => async (dispatch: any, getState: an
 
     try {
 
-        dispatch({
-            type: ADD_EXPENSES_REQUEST
-        })
+        dispatch(addExpensesRequest())
 
-        console.log("data:", dispatch({
-            type: ADD_EXPENSES_SUCCESS
-        }))
+
         const { userLogin: { userInfo } } = getState();
 
 
@@ -48,21 +44,17 @@ export const addExpenses = (expenses: any) => async (dispatch: any, getState: an
             config
         )
 
-        dispatch({
-            type: ADD_EXPENSES_SUCCESS,
-            payload: data
-        })
+        dispatch(addExpensesSuccess(data))
 
 
     } catch (error: any) {
-        dispatch({
-            type: ADD_EXPENSES_FAIL,
-            payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
+        dispatch(
+            addExpensesFail(error.response && error.response.data.message
+                ? error.response.data.message
+                : error.response)
 
-                    : error.response,
-        })
+
+        )
     }
 }
 
@@ -71,9 +63,7 @@ export const addExpenses = (expenses: any) => async (dispatch: any, getState: an
 
 export const getExpensesPerMonth = (month: any) => async (dispatch: any, getState: any) => {
     try {
-        dispatch({
-            type: GET_EXPENSES_PER_MONTH_REQUEST
-        })
+        dispatch(getExpensesPerMonthRequest())
 
         const {
             userLogin: { userInfo },
@@ -92,28 +82,21 @@ export const getExpensesPerMonth = (month: any) => async (dispatch: any, getStat
             config
         )
 
-        dispatch({
-            type: GET_EXPENSES_PER_MONTH_SUCCESS,
-            payload: data
-        })
+        dispatch(getExpensesPerMonthSuccess(data))
 
 
     } catch (error: any) {
-        dispatch({
-            type: GET_EXPENSES_PER_MONTH_FAIL,
-            payload: error.response && error.response.data.detail
-                ? error.response.data.detail
-                : error.message,
-        })
+        dispatch(getExpensesPerMonthFail(error.response && error.response.data.detail
+            ? error.response.data.detail
+            : error.message,
+        ))
     }
 }
 
 
-export const getBill = (month: any) => async (dispatch: any, getState: any) => {
+export const getMessBill = (month: number | string) => async (dispatch: any, getState: any) => {
     try {
-        dispatch({
-            type: GET_BILL_REQUEST
-        })
+        dispatch(getMessBillRequest())
 
         const {
             userLogin: { userInfo },
@@ -132,28 +115,21 @@ export const getBill = (month: any) => async (dispatch: any, getState: any) => {
             config
         )
 
-        dispatch({
-            type: GET_BILL_sUCCESS,
-            payload: data
-        })
+        dispatch(getMessBillSuccess(data))
 
 
     } catch (error: any) {
-        dispatch({
-            type: GET_BILL_FAIL,
-            payload: error.response && error.response.data.detail
-                ? error.response.data.detail
-                : error.message,
-        })
+        dispatch(getMessBillFailure(error.response && error.response.data.detail
+            ? error.response.data.detail
+            : error.message,
+        ))
     }
 }
 
 
 export const addBill = (month: any) => async (dispatch: any, getState: any) => {
     try {
-        dispatch({
-            type: ADD_BILL_REQUEST
-        })
+        dispatch(postPayingBillRequest())
 
         const {
             userLogin: { userInfo },
@@ -172,18 +148,13 @@ export const addBill = (month: any) => async (dispatch: any, getState: any) => {
             config
         )
 
-        dispatch({
-            type: ADD_BILL_success,
-            payload: data
-        })
+        dispatch(postPayingBillSuccess(data))
 
 
     } catch (error: any) {
-        dispatch({
-            type: ADD_BILL_FAIL,
-            payload: error.response && error.response.data.detail
-                ? error.response.data.detail
-                : error.message,
-        })
+        dispatch(postPayingBillFail(error.response && error.response.data.detail
+            ? error.response.data.detail
+            : error.message,
+        ))
     }
 }
