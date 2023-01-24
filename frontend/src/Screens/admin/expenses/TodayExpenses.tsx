@@ -3,37 +3,22 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { counter } from "../../../components/counter"
 
-import { useDispatch, useSelector } from "react-redux";
-import { getAttendance } from '../../../actions/attendance_actions'
-import { addExpenses } from '../../../actions/expenses_actions'
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { getAttendance } from '../../../features/attendance/attendance_actions_creators'
+import { addExpenses } from '../../../features/expenses/expenses_actions_creators'
 import Message from "../../../components/Message";
 import Loader from "../../../components/Loader";
 
 
 function TodayExpenses() {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
-    useEffect(() => {
-        dispatch(getAttendance());
-
-        if (errorExpenses) {
-            setMessage(errorExpenses)
-        }
-        if (successExpenses) {
-            // @ts-expect-error TS(2345): Argument of type '"The expense is added successful... Remove this comment to see the full error message
-            setMessage("The expense is added successfully")
-        }
-
-        // @ts-expect-error TS(2448): Block-scoped variable 'date' used before its decla... Remove this comment to see the full error message
-    }, [date, getAttendanceObj, errorExpenses, successExpenses])
 
     const [todayExpenses, setTodayExpenses] = useState(0)
-    // @ts-expect-error TS(2339): Property 'getAttendance' does not exist on type 'D... Remove this comment to see the full error message
-    const { attendance: getAttendanceObj, error: getAttendanceError, loading: getAttendanceLoading } = useSelector(state => state.getAttendance)
+    const { attendance: getAttendanceObj, error: getAttendanceError, loading: getAttendanceLoading } = useAppSelector(state => state.getAttendance)
 
-    // @ts-expect-error TS(2339): Property 'addExpenses' does not exist on type 'Def... Remove this comment to see the full error message
-    const { success: successExpenses, error: errorExpenses } = useSelector(state => state.addExpenses)
+    const { success: successExpenses, error: errorExpenses } = useAppSelector(state => state.addExpenses)
     const submitHandler = (e: any) => {
         e.preventDefault();
 
@@ -53,11 +38,23 @@ function TodayExpenses() {
     const today = new Date().toISOString().substr(0, 10);
     const [date, setDate] = useState(today)
     const count = counter(getAttendanceObj, date)
-    const [message, setMessage] = useState()
+    const [message, setMessage] = useState('')
 
 
 
     const expensePerAttendance = (todayExpenses / count).toFixed(2);
+
+    useEffect(() => {
+        dispatch(getAttendance());
+
+        if (errorExpenses) {
+            setMessage(errorExpenses)
+        }
+        if (successExpenses) {
+            setMessage("The expense is added successfully")
+        }
+
+    }, [date, getAttendanceObj, errorExpenses, successExpenses])
     return (
 
         <div className="container">
@@ -89,8 +86,7 @@ function TodayExpenses() {
                                 id="name"
                                 placeholder="Enter value"
                                 value={todayExpenses}
-                                // @ts-expect-error TS(2345): Argument of type 'string' is not assignable to par... Remove this comment to see the full error message
-                                onChange={(e) => setTodayExpenses(e.target.value)}
+                                onChange={(e) => setTodayExpenses(Number(e.target.value))}
                             />
 
 

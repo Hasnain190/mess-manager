@@ -1,28 +1,20 @@
 import React from 'react'
-import { getExpensesPerMonth } from '../../../actions/expenses_actions'
+import { getExpensesPerMonth } from '../../../features/expenses/expenses_actions_creators'
 import Loader from "../../../components/Loader";
 import Message from "../../../components/Message";
 import ConvertToMonth from '../../../components/ConvertToMonth';
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { useEffect, useState } from 'react';
 import Downloader from '../../../components/Downloader';
 
 export default function MonthlyExpenses() {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const today = new Date().toISOString().substring(0, 7);
 
 
-    useEffect(
-        () => {
-            dispatch(getExpensesPerMonth(date.substring(5, 7)))
-
-            console.log(today)
-            // @ts-expect-error TS(2448): Block-scoped variable 'date' used before its decla... Remove this comment to see the full error message
-        }, [date, expensesPerMonth])
 
 
-    // @ts-expect-error TS(2339): Property 'getExpensesPerMonth' does not exist on t... Remove this comment to see the full error message
-    const { expensesPerMonth, loading, success } = useSelector(state => state.getExpensesPerMonth)
+    const { expensesPerMonth, loading, success } = useAppSelector(state => state.getExpensesPerMonth)
 
     const handleSubmit = (e: any) => {
         e.preventDefault()
@@ -39,6 +31,12 @@ export default function MonthlyExpenses() {
     const [date, setDate] = useState(today)
     const [totalExpenses, setTotalExpenses] = useState();
 
+    useEffect(
+        () => {
+            dispatch(getExpensesPerMonth(date.substring(5, 7)))
+
+            console.log(today)
+        }, [date, expensesPerMonth])
 
     return (
 

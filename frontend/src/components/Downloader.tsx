@@ -9,14 +9,16 @@ function Downloader({
 
     function printDocument() {
         const input = document.getElementById(htmlInputId);
-
-        // @ts-expect-error TS(2345): Argument of type 'HTMLElement | null' is not assig... Remove this comment to see the full error message
+        if (!input) {
+            console.log("error in the downloader printDocument function .Fix it now!")
+            return;
+        }
         html2canvas(input)
             .then((canvas) => {
                 const imgData = canvas.toDataURL('image/png');
                 const pdf = new jsPDF();
-                // @ts-expect-error TS(2575): No overload expects 4 arguments, but overloads do ... Remove this comment to see the full error message
-                pdf.addImage(imgData, 'JPEG', 0, 0);
+                // FIXME: the hieght and width arguments needs according to length of given and should not be hard coded like this
+                pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
                 // pdf.output('dataurlnewwindow');
                 pdf.save(`${name}.pdf`);
             })
