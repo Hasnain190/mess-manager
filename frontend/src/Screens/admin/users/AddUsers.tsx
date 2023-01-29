@@ -41,7 +41,7 @@ function AddUsers({
         e.preventDefault();
 
         if (password !== confirmPassword) {
-            setMessage("Passwords do not match");
+            setMessage("Your passwords do not match");
         } else {
             dispatch(register(name, room, password, hostel, phone));
 
@@ -52,6 +52,7 @@ function AddUsers({
     useEffect(() => {
         if (success) {
             setMessage("The user added successfully")
+            navigate(-1)
         }
     }, [error, success])
 

@@ -6,13 +6,13 @@ interface userInfo {
 
   refresh: string,
   access: string,
-  id: number | null,
+  id: number,
   username: string,
   isAdmin: boolean,
   email: string,
-  phone: string | null,
-  room: number | null,
-  hostel: string | null,
+  phone: string,
+  room: number,
+  hostel: string,
   token: string
 }
 interface userLogin {
@@ -34,7 +34,7 @@ export const userLoginSlice = createSlice({
     loading: false,
     error: null,
     userInfo: userInfoFromStorage,
-
+    success: false,
 
   },
 
@@ -48,7 +48,8 @@ export const userLoginSlice = createSlice({
     // user login success
     loginSuccess(state, action: PayloadAction<userInfo>) {
       state.loading = false;
-      state.userInfo = action.payload
+      state.userInfo = action.payload;
+      state.success = true;
     },
 
     // user login failed
@@ -71,7 +72,7 @@ export const userRegisterSlice = createSlice({
 
   name: 'user-register',
   initialState: {
-    loading: true,
+    loading: false,
     success: false,
     userInfo: {},
     error: null
@@ -100,15 +101,26 @@ export const userRegisterSlice = createSlice({
 })
 
 export const { registerRequest, registerFail, registerSuccess } = userRegisterSlice.actions
+const initialState = {
+  user: {
+    id: 0,
+    username: '',
+    email: '',
+    room: 0,
+    hostel: '',
+    phone: '',
+    isAdmin: false
+  },
+  loading: false,
+  error: null,
+  success: false
 
+}
 // get details for a particular user
 export const userDetailsSlice = createSlice({
   name: 'user-details',
-  initialState: {
-    user: {},
-    loading: true,
-    error: null
-  },
+  initialState,
+
   reducers: {
 
     detailsRequest(state) {
@@ -118,12 +130,12 @@ export const userDetailsSlice = createSlice({
     detailsSuccess(state, action: PayloadAction<userInfo>) {
 
       state.loading = false;
-      state.user = action.payload
-
+      state.user = action.payload;
+      state.success = true;
     },
-    detailsFail(state, action) { state.loading = false, state.error = action.payload },
+    detailsFail(state, action) { state.loading = false; state.error = action.payload; },
 
-    detailsReset(state) { state.user = {} }
+    detailsReset(state) { state.user = initialState.user }
 
   }
 })
@@ -135,7 +147,7 @@ export const userUpdateProfileSlice = createSlice({
   name: 'user-update-profile',
   initialState: {
     userInfo: userInfoFromStorage,
-    loading: true,
+    loading: false,
     error: null,
     success: false
   },
@@ -146,10 +158,11 @@ export const userUpdateProfileSlice = createSlice({
     },
     updateProfileSuccess(state, action: PayloadAction<userInfo>) {
       state.loading = false;
-      state.userInfo = action.payload
+      state.userInfo = action.payload;
+      state.success = true;
 
     },
-    updateProfileFail(state, action) { state.loading = false, state.error = action.payload },
+    updateProfileFail(state, action) { state.loading = false; state.error = action.payload },
 
 
 
@@ -163,14 +176,14 @@ export const userDeleteSlice = createSlice({
   name: 'user-delete',
   initialState: {
 
-    loading: true,
+    loading: false,
     error: null,
     success: false
   },
   reducers: {
     deleteRequest(state) { state.loading = true },
     deleteSuccess(state) { state.loading = false; state.success = true },
-    deleteFail(state, action) { state.loading = false, state.error = action.payload },
+    deleteFail(state, action) { state.loading = false; state.error = action.payload },
   }
 })
 export const { deleteRequest, deleteFail, deleteSuccess } = userDeleteSlice.actions
@@ -179,9 +192,9 @@ export const { deleteRequest, deleteFail, deleteSuccess } = userDeleteSlice.acti
 
 export const userUpdateSlice = createSlice({
 
-  name: 'list',
+  name: 'update',
   initialState: {
-    loading: true,
+    loading: false,
     success: false,
     user: {},
     error: null
@@ -189,18 +202,18 @@ export const userUpdateSlice = createSlice({
   },
 
   reducers: {
-    // user list pending/request
+    // user update pending/request
     updateRequest(state) {
       state.loading = true;
     },
-    // user List success
+    // user update success
     updateSuccess(state, action: PayloadAction<userInfo>) {
       state.loading = false;
-
+      state.success = true;
       state.user = action.payload
     },
 
-    // usList failed
+    // update failed
     updateFail(state, action) {
       state.loading = false;
       state.error = action.payload
@@ -218,7 +231,7 @@ export const userAttendanceSlice = createSlice({
 
   name: 'user-attendance',
   initialState: {
-    loading: true,
+    loading: false,
     success: false,
 
     error: null
@@ -234,7 +247,7 @@ export const userAttendanceSlice = createSlice({
     attendanceSuccess(state) {
       state.loading = false;
 
-
+      state.success = true;
     },
 
     //  failed
@@ -253,11 +266,24 @@ export const { attendanceRequest, attendanceFail, attendanceSuccess } = userAtte
 // get list of user 
 export const userListSlice = createSlice({
 
-  name: 'list',
+  name: 'user-list',
   initialState: {
-    loading: true,
+    loading: false,
     success: false,
-    users: [],
+    users: [
+
+
+      {
+        id: 0,
+        username: '',
+        email: '',
+        room: 0,
+        hostel: '',
+        phone: '',
+        isAdmin: false
+      },
+
+    ],
     error: null
 
   },
@@ -270,7 +296,7 @@ export const userListSlice = createSlice({
     // user List success
     listSuccess(state, action) {
       state.loading = false;
-
+      state.success = true;
       state.users = action.payload
     },
 
@@ -278,12 +304,16 @@ export const userListSlice = createSlice({
     listFail(state, action) {
       state.loading = false;
       state.error = action.payload
-    }
+    },
+    // usList failed
+    listReset(state) {
 
+      state.users = []
+    }
   }
 })
 
-export const { listRequest, listFail, listSuccess } = userListSlice.actions
+export const { listRequest, listFail, listSuccess, listReset } = userListSlice.actions
 
 
 

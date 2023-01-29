@@ -64,19 +64,20 @@ class Menu(models.Model):
 class Expense(models.Model):
     """For expenses for one day """
     date = models.DateField(unique=True)
+    attendance_first_time = models.IntegerField(blank=True, null=True)
+    attendance_second_time = models.IntegerField(blank=True, null=True)
     total_attendances = models.IntegerField(blank=True, null=True)
 
     expenses_first_time = models.DecimalField(
         decimal_places=2, max_digits=20, blank=True, null=True)
     expenses_second_time = models.DecimalField(
         decimal_places=2, max_digits=20, blank=True, null=True)
+    expenses_total = models.DecimalField(
+        decimal_places=2, max_digits=20, blank=True, null=True)
 
-    # additional bonus field
-    # expenses_per_attendance = models.DecimalField(
-    #     decimal_places=2, max_digits=20, blank=True, null=True)
 
-    def __str__(self) -> str:
-        return 'expenses for the date: '+self.date.isoformat()
+def __str__(self) -> str:
+    return 'expenses for the date: '+self.date.isoformat()
 
 
 class Bill(models.Model):
@@ -85,8 +86,8 @@ class Bill(models.Model):
     student = models.ForeignKey(
         "User", on_delete=models.CASCADE, related_name="student")
     room = models.CharField(max_length=20, blank=True, null=True)
-    month = models.TextField(max_length=20, null=True,
-                             blank=True)  # it should be DateField
+
+    dateMonth = models.DateField()
     bill = models.DecimalField(
         decimal_places=2, blank=True, max_digits=20, null=True)
     dues = models.DecimalField(max_digits=20,
@@ -102,7 +103,7 @@ class Bill(models.Model):
         self.total = (self.bill or 0) + (self.dues or 0)
 
     def __str__(self) -> str:
-        return "bill of " + self.student.username + " for month " + self.month
+        return f"bill of {self.student.username}  for month  {self.dateMonth.strftime('%d-%m-%Y')} "
 
 
 class MessBill(models.Model):
@@ -110,12 +111,9 @@ class MessBill(models.Model):
     """ A model that keeps all bills of students per month"""
     # to have many to many relationship with mess bill (total bill) . One mess bill can have many user's bill
 
-    bill = models.ManyToManyField(Bill)
-    month = models.TextField(max_length=20, null=True,
-                             blank=True)
-
-    def save(self):
-        return self.bill.month
+    bills = models.ManyToManyField(Bill)
+    # january , february , march etc
+    dateMonth = models.DateField(unique=True)
 
 
 class PayingBill(models.Model):
@@ -123,5 +121,5 @@ class PayingBill(models.Model):
     current_bill = models.OneToOneField(Bill, on_delete=models.CASCADE)
     paying_bill = models.CharField(max_length=20, blank=True, null=True)
     student = models.ForeignKey(
-        "User", on_delete=models.CASCADE, related_name="student")
+        "User", on_delete=models.CASCADE)
     paying_date = models.DateField()

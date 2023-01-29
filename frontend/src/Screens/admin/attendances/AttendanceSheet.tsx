@@ -13,10 +13,9 @@ import IdToStudent from "../../../components/IdToStudent";
 function AttendanceSheet({
     month,
     day,
-    filteredAttendance
+    attendance
 }: any) {
-    const attendance = filteredAttendance;
-
+    console.log(attendance)
     return (
 
         <div  >
@@ -31,9 +30,9 @@ function AttendanceSheet({
 
 
                 <div className="h5 text-start">
-                    {/* {`${month}-${day}`} */}
+                    {`${month}-${day}`}
 
-                    <ConvertToMonth number={month} /> - {day}
+                    {/* <ConvertToMonth number={Number(month)} /> - {day} */}
                 </div>
 
 
@@ -59,7 +58,7 @@ function AttendanceSheet({
 
                             <th key={item.id} scope="row">{item.id}</th>
 
-                            <td><IdToStudent id={(item.student)} /></td>
+                            <td><IdToStudent id={(item?.student)} /></td>
 
                             <td>{item.first_time}</td>
 

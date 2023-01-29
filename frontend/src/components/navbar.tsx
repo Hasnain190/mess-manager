@@ -1,11 +1,8 @@
 // make a react component for navbar
 import { useSelector } from "react-redux";
-import React from "react";
+import React, { useEffect } from "react";
 import "./navbar.css";
 import { Link } from "react-router-dom";
-// import { logout } from '../actions/user_actions';
-// import dispatch
-// import { useDispatch } from "react-redux";
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 
 
@@ -13,6 +10,7 @@ import { logout } from "../features/user/user_actions_creators";
 function Navbar() {
   const { userInfo } = useAppSelector((state) => state.userLogin);
   const dispatch = useAppDispatch();
+
   const logoutHandler = () => {
     dispatch(logout())
   }
@@ -56,7 +54,7 @@ function Navbar() {
 
           }
 
-          {userInfo && (
+          {userInfo && userInfo.id !== 0 && (
 
             <>
 

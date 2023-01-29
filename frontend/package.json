@@ -28,7 +28,7 @@
       "patterns": [
         "src"
       ],
-      "extensions": "js,jsx"
+      "extensions": "ts,tsx"
     }
   },
   "scripts": {

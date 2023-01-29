@@ -14,27 +14,27 @@ import IdToStudent from "../../../components/IdToStudent";
 function ThisMonthBill() {
   const dispatch = useAppDispatch();
   const today = new Date().toISOString().substring(0, 7);
+  const [date, setDate] = useState(today)
+  const month = Number(date.slice(5, 7)) //1
+  const year = Number(today.slice(0, 4)) //2023
+
 
   const { users } = useAppSelector(state => state.userList)
   const { messBill, loading } = useAppSelector(state => state.getMessBill)
-  const [date, setDate] = useState(today)
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    dispatch(getMessBill(date.substring(5, 7)))
+    dispatch(getMessBill(year, month))
   }
 
   useEffect(() => {
     dispatch(listUsers())
-    dispatch(getMessBill(date.substring(5, 7)))
+    dispatch(getMessBill(year, month))
   }, [date, messBill])
   return (
     <div className="container">
       <div className="h1 text-center text-dark" id="mess-bill">
-        Mess Bill
-
-
-
+        This Month's Bill
 
         <form className="form form-control" onSubmit={handleSubmit} >
 

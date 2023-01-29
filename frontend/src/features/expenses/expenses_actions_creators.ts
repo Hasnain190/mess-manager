@@ -51,7 +51,7 @@ export const addExpenses = (expenses: any) => async (dispatch: any, getState: an
         dispatch(
             addExpensesFail(error.response && error.response.data.message
                 ? error.response.data.message
-                : error.response)
+                : error.response),
 
 
         )
@@ -61,7 +61,7 @@ export const addExpenses = (expenses: any) => async (dispatch: any, getState: an
 
 
 
-export const getExpensesPerMonth = (month: any) => async (dispatch: any, getState: any) => {
+export const getExpensesPerMonth = (year: number, month: number) => async (dispatch: any, getState: any) => {
     try {
         dispatch(getExpensesPerMonthRequest())
 
@@ -78,7 +78,7 @@ export const getExpensesPerMonth = (month: any) => async (dispatch: any, getStat
             }
         }
         //    FIXME:
-        const { data } = await axios.get(`/api/expenses/get/${month}/`,
+        const { data } = await axios.get(`/api/expenses/get/${year}/${month}`,
             config
         )
 
@@ -94,7 +94,7 @@ export const getExpensesPerMonth = (month: any) => async (dispatch: any, getStat
 }
 
 
-export const getMessBill = (month: number | string) => async (dispatch: any, getState: any) => {
+export const getMessBill = (year: number, month: number) => async (dispatch: any, getState: any) => {
     try {
         dispatch(getMessBillRequest())
 
@@ -111,7 +111,7 @@ export const getMessBill = (month: number | string) => async (dispatch: any, get
             }
         }
         //    FIXME:
-        const { data } = await axios.get(`/api/expenses/bill/${month}/`,
+        const { data } = await axios.get(`/api/expenses/bill/${year}/${month}/`,
             config
         )
 

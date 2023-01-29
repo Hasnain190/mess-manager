@@ -15,11 +15,6 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 function Dashboard() {
   const dispatch = useAppDispatch();
   const today = new Date().getDay();
-
-  useEffect(() => {
-    dispatch(getMessMenu())
-    console.log(today)
-  }, [])
   const { messMenu, loading: loadingMessMenu, error: errorMessMenu } = useAppSelector((state) => state.messMenu);
 
   const [date, setDate] = useState(today)
@@ -29,13 +24,18 @@ function Dashboard() {
   const { error, loading, userInfo } = userLogin;
 
   const [dateState, setDateState] = useState(new Date());
+  const [todaysMess] = messMenu.filter((item: any) => item.day === Intl.DateTimeFormat('en', { weekday: 'long' }).format(new Date(`${today}`)))
+  // e.g. it item.day === "sunday" 
 
   useEffect(() => {
     setInterval(() => setDateState(new Date()), 1000);
   }, []);
 
-  const [todaysMess] = messMenu.filter((item: any) => item.day === Intl.DateTimeFormat('en', { weekday: 'long' }).format(new Date(`${today}`)))
 
+  useEffect(() => {
+    dispatch(getMessMenu())
+
+  }, [])
 
   return (
     <div>
@@ -82,7 +82,7 @@ function Dashboard() {
                 <div className="postcard__bar"></div>
                 <div className="postcard__preview-txt">
                   <ul className="list-group">
-                    <li className="list-group-item">{todaysMess.first_time}</li>
+                    <li className="list-group-item">{todaysMess?.first_time}</li>
 
                   </ul>
                 </div>
@@ -107,7 +107,7 @@ function Dashboard() {
                 <div className="postcard__bar"></div>
                 <div className="postcard__preview-txt">
                   <ul className="list-group">
-                    <li className="list-group-item">{todaysMess.second_time}</li>
+                    <li className="list-group-item">{todaysMess?.second_time}</li>
 
                   </ul>
                 </div>
@@ -165,7 +165,7 @@ function Dashboard() {
 
                 <th scope="row">1</th>
 
-                <td>Fabruary</td>
+                <td>February</td>
 
                 <td>4000</td>
 

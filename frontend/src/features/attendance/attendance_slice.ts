@@ -8,14 +8,24 @@ export const getAttendanceSlice = createSlice({
         loading: false,
         success: false,
         error: null,
-        attendance: []
+        attendance: [
+            {
+                id: 0,
+                date: '00-00-2000',
+                first_time: 'absent',
+                second_time: 'absent',
+                student: 0
+            }
+
+
+        ]
 
     },
     reducers: {
 
         getAttendanceRequest(state) { state.loading = true },
-        getAttendanceSuccess(state, action) { state.loading = false, state.attendance = action.payload },
-        getAttendanceFail(state, action) { state.error = action.payload, state.loading = false },
+        getAttendanceSuccess(state, action) { state.loading = false; state.attendance = action.payload; state.success = true; },
+        getAttendanceFail(state, action) { state.error = action.payload; state.loading = false }
 
     }
 
@@ -24,6 +34,69 @@ export const getAttendanceSlice = createSlice({
 export const { getAttendanceRequest, getAttendanceSuccess, getAttendanceFail } = getAttendanceSlice.actions
 
 
+
+export const getMonthlyAttendanceSlice = createSlice({
+    name: 'get-monthly-attendances',
+    initialState: {
+        loading: false,
+        success: false,
+        error: null,
+        attendance: [
+            {
+                id: 0,
+                date: '00-00-2000',
+                first_time: 'absent',
+                second_time: 'absent',
+                student: 0
+            }
+
+
+        ]
+
+    },
+    reducers: {
+
+        getMonthAttendanceRequest(state) { state.loading = true },
+        getMonthAttendanceSuccess(state, action) { state.loading = false; state.attendance = action.payload; state.success = true; },
+        getMonthAttendanceFail(state, action) { state.error = action.payload; state.loading = false }
+
+    }
+
+})
+
+export const { getMonthAttendanceRequest, getMonthAttendanceSuccess, getMonthAttendanceFail } = getMonthlyAttendanceSlice.actions
+
+
+export const getDailyAttendanceSlice = createSlice({
+    name: 'get-daily-attendances',
+    initialState: {
+        loading: false,
+        success: false,
+        error: null,
+        attendance: [
+            {
+                id: 0,
+                date: '00-00-2000',
+                first_time: 'absent',
+                second_time: 'absent',
+                student: 0
+            }
+
+
+        ]
+
+    },
+    reducers: {
+
+        getDailyAttendanceRequest(state) { state.loading = true },
+        getDailyAttendanceSuccess(state, action) { state.loading = false; state.attendance = action.payload; state.success = true; },
+        getDailyAttendanceFail(state, action) { state.error = action.payload; state.loading = false }
+
+    }
+
+})
+
+export const { getDailyAttendanceRequest, getDailyAttendanceSuccess, getDailyAttendanceFail } = getDailyAttendanceSlice.actions
 
 
 
@@ -44,8 +117,8 @@ export const postAttendanceSlice = createSlice({
     reducers: {
 
         postAttendanceRequest(state) { state.loading = true },
-        postAttendanceSuccess(state, action) { state.loading = false, state.attendance = action.payload },
-        postAttendanceFail(state, action) { state.error = action.payload, state.loading = false },
+        postAttendanceSuccess(state, action) { state.loading = false; state.attendance = action.payload; state.success = true; },
+        postAttendanceFail(state, action) { state.error = action.payload; state.loading = false },
 
     }
 

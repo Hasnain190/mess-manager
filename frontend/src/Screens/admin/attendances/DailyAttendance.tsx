@@ -1,13 +1,5 @@
 import AttendanceSheet from './AttendanceSheet'
-import React, { useState, useEffect, useRef } from "react";
-import { useAppSelector, useAppDispatch } from "../../../app/hooks";
-
-import { getAttendance } from "../../../features/attendance/attendance_actions_creators"
-import { useNavigate } from "react-router-dom"
-import { listUsers } from "../../../features/user/user_actions_creators";
-
-
-
+import React from "react";
 
 
 function DailyAttendance({
@@ -26,7 +18,7 @@ function DailyAttendance({
         <div>
             {dailyDateSet.map(item => (
                 <>
-                    <AttendanceSheet month={month} day={item} filteredAttendance={filteredAttendance(item)} />
+                    <AttendanceSheet month={month} day={item} attendance={filteredAttendance(item)} />
                 </>
             ))
 

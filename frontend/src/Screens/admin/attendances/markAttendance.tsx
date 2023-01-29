@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import Loader from "../../../components/Loader";
 import Message from "../../../components/Message";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { postAttendance, getAttendance } from "../../../features/attendance/attendance_actions_creators";
+import { postAttendance, getAttendance, getDailyAttendance } from "../../../features/attendance/attendance_actions_creators";
 import { counter } from "../../../components/counter";
 
 
@@ -15,62 +15,54 @@ export default function MarkAttendance() {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-
-
-
-
-
   const { users, loading, error } = useAppSelector((state) => state.userList);
-  const today = new Date().toISOString().substr(0, 10);
+  const today = new Date().toISOString().slice(0, 10);
 
   const { userInfo } = useAppSelector((state) => state.userLogin);
 
 
-
+  // postAttendance
   const { success: attendanceSuccess, error: attendanceError, loading: attendanceLoading } = useAppSelector((state) => state.attendance)
 
 
-  const { attendance: getAttendanceObj, error: getAttendanceError, loading: getAttendanceLoading } = useAppSelector(state => state.getAttendance)
+  const { attendance: getAttendanceLi, error: getAttendanceError, loading: getAttendanceLoading } = useAppSelector(state => state.getDailyAttendance)
 
 
 
 
 
-  useEffect(() => {
-    if (userInfo && userInfo.isAdmin) {
-      dispatch(listUsers());
 
-    } else {
-      navigate("/login");
-    }
-
-  }, [dispatch, userInfo, navigate]);
-
-
+  // const [firstTime, setFirstTime] = useState<'present' | 'absent' | 'double'>('present')
+  // const [secondTime, setSecondTime] = useState<'present' | 'absent' | 'double'>('present')
 
 
   const userIds = users?.map((user: any) => user.id)
 
+  // Prs = Present
+  const [totalFirstTimePrs, setTotalFirstTimePrs] = useState(0)
+  const [totalSecondTimePrs, setTotalSecondTimePrs] = useState(0)
+  const [totalGrandPrs, setTotalGrandPrs] = useState(0)
+  // Abs = Absent
+  const [totalFirstTimeAbs, setTotalFirstTimeAbs] = useState(0)
+  const [totalSecondTimeAbs, setTotalSecondTimeAbs] = useState(0)
+  const [totalGrandAbs, setTotalGrandAbs] = useState(0)
 
-  const [total, setTotal] = useState(0)
 
 
+
+
+  function attendanceExtractor(e, id: number): string[] {
+    let first_time = e.target.elements[`first-attendance-${id}`].value;
+    let second_time = e.target.elements[`second-attendance-${id}`].value;
+
+    return [first_time, second_time];
+  }
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     try {
-      const attendanceExtractor = (e: any, id: any) => {
-        let first_time = e.target.elements[`first-attendance-${id}`].value;
-        let second_time = e.target.elements[`second-attendance-${id}`].value;
-
-        return [first_time, second_time]
-      }
-
-
-
       for (let index = 0; index < userIds.length; index++) {
-        let id = userIds[index];
+        let id: number = userIds[index];
 
         const attendance = {
           student: id,
@@ -78,27 +70,65 @@ export default function MarkAttendance() {
           first_time: attendanceExtractor(e, id)[0],
           second_time: attendanceExtractor(e, id)[1]
         }
-        dispatch(postAttendance(attendance, id))
-        alert("All the attendance is submitted successfully")
-      }
-      dispatch(getAttendance());
-      let count = counter(getAttendanceObj, date);
-      setTotal(count)
 
-      console.log(count)
+        dispatch(postAttendance(attendance, id))
+
+        // attendanceLoading ? setStatus('pending') : attendanceSuccess ? setStatus('success') : attendanceError ? setStatus('error') : 
+
+        // if(firstTime==='present') {setTotalFirstTimePrs(totalFirstTimePrs++)}
+        // setTotalFirstTimePrs(countFirstTimePrs)
+        // setTotalSecondTimePrs(countSecondTimePrs)
+        // setTotalGrandPrs(countFirstTimePrs + countSecondTimePrs)
+
+        // setTotalFirstTimeAbs(countFirstTimeAbs)
+        // setTotalSecondTimeAbs(countSecondTimeAbs)
+        // setTotalGrandAbs(countSecondTimeAbs + countSecondTimeAbs)
+      }
+
+      // dispatch(getAttendance());
+
+
     } catch (error) {
+      // setStatus('error')
+      console.error(error)
 
     }
   }
 
 
+  function getAttendancePerUsr(user: any) {
+    const f_t = (getAttendanceLi && getAttendanceLi.find(att => att.student === user.id))?.first_time;
+    const s_t = (getAttendanceLi && getAttendanceLi.find(att => att.student === user.id))?.second_time;
 
 
+    return { f_t, s_t }
+  }
 
 
+  const [status, setStatus] = useState<'not-yet-submitted' | 'pending' | 'success' | 'error'>('not-yet-submitted')
 
   const [date, setDate] = useState(today)
+  useEffect(() => {
+    if (userInfo && userInfo.isAdmin) {
+      dispatch(listUsers());
+      if (attendanceSuccess) {
+        dispatch(getDailyAttendance(today))
 
+        let { countFirstTimePrs, countSecondTimePrs, } = counter(getAttendanceLi, date);
+        setTotalFirstTimePrs(countFirstTimePrs)
+        setTotalSecondTimePrs(countSecondTimePrs)
+      }
+
+    } else {
+      navigate("/login");
+    }
+
+  }, [attendanceSuccess, dispatch, userInfo, navigate]);
+
+
+  function handleSelectChange(value: string, id: number): void {
+
+  }
 
   return <>
 
@@ -114,7 +144,7 @@ export default function MarkAttendance() {
       {loading ? (
 
         <Loader />
-      ) : error ? (
+      ) : (error) ? (
 
         <Message variant="danger">{error}</Message>
       ) :
@@ -129,7 +159,7 @@ export default function MarkAttendance() {
 
                 <tr>
 
-                  <th scope="col">#</th>
+                  <th scope="col">ID</th>
 
                   <th scope="col">Name</th>
 
@@ -158,34 +188,29 @@ export default function MarkAttendance() {
 
                   <td className="form-group">
 
-                    <input
-
-                      type="text"
+                    <div
                       className="form-control"
-                      id={`table-name-${user.id}`}
-                      name="username"
-                      value={user.username}
-
-                    />
+                      id={`table-name-${user.id}`}>
+                      {user.username}
+                    </div>
                   </td>
 
                   <td className="form-group">
 
-                    <input
-                      type="text"
+                    <div
+
                       className="form-control"
-                      id={`table-room-${user.id}`}
-                      name="room"
-                      value={user.room}
+                      id={`table-room-${user.id}`}>
 
-                    />
+                      {user.room}
+                    </div>
 
                   </td>
 
 
                   <td>
 
-                    <select id={`first-attendance-${user.id}`} onChange={(e) => (e.target.value)} className="form-control" >
+                    <select id={`first-attendance-${user.id}`} onChange={(e) => handleSelectChange(e.target.value, user.id)} className="form-control"  >
 
                       <option value="present">Present ✓</option>
 
@@ -198,7 +223,7 @@ export default function MarkAttendance() {
 
                   <td>
 
-                    <select id={`second-attendance-${user.id}`} onChange={(e) => (e.target.value)} className="form-control" >
+                    <select id={`second-attendance-${user.id}`} onChange={(e) => (e.target.value)} className="form-control"  >
 
                       <option value="present">Present ✓</option>
 
@@ -211,7 +236,7 @@ export default function MarkAttendance() {
 
                   <td>
 
-                    <i className="bi bi-check" ></i>
+                    <i className="bi bi-check" >{status} {attendanceError && attendanceError}</i>
                   </td>
                 </tr>
 
@@ -254,9 +279,10 @@ export default function MarkAttendance() {
 
             <th scope="col">Total Members</th>
 
-            <th scope="col">Total Absentees</th>
 
-            <th scope="col">Total Attendances</th>
+            <th scope="col">Total Attendances First Time</th>
+            <th scope="col">Total Attendances Second Time</th>
+            <th scope="col">Total Attendances </th>
           </tr>
         </thead>
 
@@ -268,9 +294,11 @@ export default function MarkAttendance() {
 
             <td>{users?.length}</td>
 
-            <td></td>
 
-            <td>{total}</td>
+
+            <td>{totalFirstTimePrs}</td>
+            <td>{totalSecondTimePrs}</td>
+            <td>{totalGrandPrs}</td>
 
           </tr>
         </tbody>
@@ -279,6 +307,8 @@ export default function MarkAttendance() {
 
     </section>
   </>;
+
+
 }
 
 

@@ -1,4 +1,5 @@
 
+import datetime
 from logging import root
 from math import fabs
 from django.shortcuts import render
@@ -28,25 +29,31 @@ def add_expenses_per_capita_per_day(request):
     # try:
 
     if Expense.objects.filter(date=data['date']).exists():
-        # obj = Expense.objects.get(date = data["date"])
-        # Expenses_per_day = Expense.objects.U(
-        #     date=data['date'],
-        #     expenses_per_day=data['expenses_per_day'],
-        #     total_attendances=data['total_attendances'],
-        #     expenses_per_attendance=data['expenses_per_attendance'],
-        # )
-
-        return Response({"message": "Objects Already exist. Duplicate expenses are not allowed"}, status=status.HTTP_409_CONFLICT)
-
-    else:
+        obj = Expense.objects.get(date=data["date"])
+        obj.delete()
 
         Expenses_per_day = Expense.objects.create(
             date=data['date'],
-            expenses_per_day=data['expenses_per_day'],
+            attendance_first_time=data['attendance_first_time'],
+            attendance_second_time=data['attendance_second_time'],
             total_attendances=data['total_attendances'],
             expenses_first_time=data['expenses_first_time'],
             expenses_second_time=data['expenses_second_time'],
             # expenses_per_attendance=data['expenses_per_attendance'],
+        )
+
+        serializer = ExpenseSerializer(Expenses_per_day, many=False)
+        return Response(serializer.data)
+    else:
+
+        Expenses_per_day = Expense.objects.create(
+            date=data['date'],
+            attendance_first_time=data['attendance_first_time'],
+            attendance_second_time=data['attendance_second_time'],
+            total_attendances=data['total_attendances'],
+            expenses_first_time=data['expenses_first_time'],
+            expenses_second_time=data['expenses_second_time'],
+            expenses_total=data['expenses_total'],
         )
 
     serializer = ExpenseSerializer(Expenses_per_day, many=False)
@@ -55,10 +62,10 @@ def add_expenses_per_capita_per_day(request):
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
-def get_expenses_per_month(request, month):
+def get_expenses_per_month(request, month, year):
 
     expenses_per_month = Expense.objects.filter(
-        date__month=month).order_by("date")
+        date__month=month, date__year=year).order_by("-date")
 
     serializers = ExpenseSerializer(expenses_per_month, many=True)
 
@@ -66,12 +73,20 @@ def get_expenses_per_month(request, month):
 
 
 @api_view(['GET'])
-def get_bill(request, month):
+def get_bill(request, year, month):
+    date = datetime.datetime(year, month, 1)
+    try:
+        print("after try_____")
+        # mess_bill = MessBill.objects.filter(dateMonth__month=month)
 
-    if not MessBill.objects.get(month=month).exists():
+        mess_bill = MessBill.objects.get(dateMonth__month=month)
+    except:
+        print("after except____________________________")
+
+        mess_bill = MessBill.objects.create(dateMonth=date)
 
         expenses_per_month = Expense.objects.filter(
-            date__month=month).order_by("date")
+            date=date).order_by("-date")
 
         total_expenses_first_time_all_user = 0
         total_expenses_second_time_all_user = 0
@@ -81,9 +96,12 @@ def get_bill(request, month):
             total_expenses_first_time_all_user += expenses_first_time_all_user
             total_expenses_second_time_all_user += expenses_second_time_all_user
 
+# ## attendances ##
+
         # for the whole total attendances of all the users
-        for i in Attendance.objects.filter(date__month=month):
-            total_attendances_first_time_all_users = 0
+        total_attendances_first_time_all_users = 0
+        total_attendances_second_time_all_users = 0
+        for i in Attendance.objects.filter(date__month=month, date__year=year):
             if i.first_time == "present":
                 total_attendances_first_time_all_users += 1
             elif i.first_time == "double":
@@ -91,7 +109,6 @@ def get_bill(request, month):
             elif i.first_time == "absent":
                 total_attendances_first_time_all_users += 0
 
-            total_attendances_second_time_all_users = 0
             if i.second_time == "present":
                 total_attendances_second_time_all_users += 1
             elif i.second_time == "double":
@@ -112,7 +129,7 @@ def get_bill(request, month):
 
             # for the whole total attendances of one  user
             total_attendances_of_that_user = 0
-            for i in Attendance.objects.filter(date__month=month, student=user):
+            for i in Attendance.objects.filter(date__month=month, date__year=year, student=user):
                 total_attendances_first_time_per_user = 0
                 if i.first_time == "present":
                     total_attendances_first_time_per_user += 1
@@ -145,14 +162,13 @@ def get_bill(request, month):
                     student=user,
                     room=room,
                     bill=total_bill_per_user,
-                    month=month
+                    dateMonth=date
                 )
-                all_bill = MessBill.bill_set.add(bill)
 
-    else:
-        all_bill = MessBill.objects.get(month=month)
+                mess_bill = MessBill.bill.add(bill)
 
-    serializers = MessBillSerializer(all_bill, many=True)
+        mess_bill = MessBill.objects.get(dateMonth__month=month)
+    serializers = MessBillSerializer(mess_bill, many=False)
     return Response(serializers.data)
 
 

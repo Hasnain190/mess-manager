@@ -33,6 +33,8 @@ import {
     listRequest,
     listSuccess,
     listFail,
+    detailsReset,
+    listReset,
 
 
 
@@ -66,8 +68,8 @@ export const login = (username: string, password: string) => async (dispatch: an
 export const logout = () => (dispatch: any) => {
     localStorage.removeItem('userInfo')
     dispatch(logoutAction())
-    // dispatch({ type: USER_DETAILS_RESET })
-    // dispatch({ type: USER_LIST_RESET })
+    dispatch(detailsReset())
+    dispatch(listReset())
 
 
 
@@ -92,7 +94,7 @@ export const register = (username: string, room: number, password: string, hoste
         dispatch(registerRequest())
 
         dispatch(registerSuccess(data))
-        localStorage.setItem('userInfo', JSON.stringify(data))
+
 
     } catch (error: any) {
         dispatch(registerFail((error.response && error.response.data.detail

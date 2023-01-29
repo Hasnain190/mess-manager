@@ -72,6 +72,8 @@ class AttendanceSerializer(serializers.ModelSerializer):
     """
     Serializer for attendance object
     """
+    date = serializers.DateField(input_formats=['%Y-%m-%d'])
+
     class Meta:
         model = Attendance
         fields = '__all__'
@@ -88,37 +90,27 @@ class MenuSerializer(serializers.ModelSerializer):
 
 class ExpenseSerializer(serializers.ModelSerializer):
 
-    """
-    Serializer for mess menu object
-    """
     class Meta:
         model = Expense
-        fields = ('date', 'total_attendances',
-                  'expenses_per_day', 'expenses_per_attendance')
+        fields = '__all__'
 
 
 class BillSerializer(serializers.ModelSerializer):
-    """
-    Serializer for mess menu object
-    """
+
     class Meta:
         model = Bill
         fields = '__all__'
 
 
 class MessBillSerializer(serializers.ModelSerializer):
-    """
-    Serializer for mess menu object
-    """
+    dateMonth = serializers.DateField(input_formats=['%Y-%m-%d'])
+
     class Meta:
         model = MessBill
         fields = '__all__'
 
 
 class PayingBillSerializer(serializers.ModelSerializer):
-    """
-    Serializer for mess menu object
-    """
     class Meta:
         model = PayingBill
         fields = '__all__'

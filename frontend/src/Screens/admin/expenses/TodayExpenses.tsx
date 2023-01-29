@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { counter } from "../../../components/counter"
 
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { getAttendance } from '../../../features/attendance/attendance_actions_creators'
+import { getAttendance, getDailyAttendance } from '../../../features/attendance/attendance_actions_creators'
 import { addExpenses } from '../../../features/expenses/expenses_actions_creators'
 import Message from "../../../components/Message";
 import Loader from "../../../components/Loader";
@@ -12,11 +12,13 @@ import Loader from "../../../components/Loader";
 
 function TodayExpenses() {
     const dispatch = useAppDispatch()
-    const navigate = useNavigate()
 
+    const [todayExpensesFirst, setTodayExpensesFirst] = useState(0)
+    const [todayExpensesSecond, setTodayExpensesSecond] = useState(0)
 
-    const [todayExpenses, setTodayExpenses] = useState(0)
-    const { attendance: getAttendanceObj, error: getAttendanceError, loading: getAttendanceLoading } = useAppSelector(state => state.getAttendance)
+    const [todayExpenses, setTodayExpenses] = useState(todayExpensesFirst + todayExpensesSecond)
+
+    const { attendance: getAttendanceLi, error: getAttendanceError, loading: getAttendanceLoading } = useAppSelector(state => state.getDailyAttendance)
 
     const { success: successExpenses, error: errorExpenses } = useAppSelector(state => state.addExpenses)
     const submitHandler = (e: any) => {
@@ -24,96 +26,146 @@ function TodayExpenses() {
 
         let expenses = {
             date: date,
-            total_attendances: count,
-            expenses_per_day: todayExpenses,
-            expenses_per_attendance: expensePerAttendance,
+            attendance_first_time: countFirstTimePrs,
+            attendance_second_time: countSecondTimePrs,
+            total_attendances: (countFirstTimePrs + countSecondTimePrs),
+            expenses_first_time: todayExpensesFirst,
+            expenses_second_time: todayExpensesSecond,
+            expenses_total: todayExpenses
+
+
         }
         dispatch(addExpenses(expenses))
 
+        if (successExpenses) {
+            setMessage("The expense is added successfully")
+            // empty all the inputs
+            setTodayExpensesFirst(0)
+            setTodayExpensesSecond(0)
+            setTodayExpenses(0)
+        }
         console.log(todayExpenses)
     }
 
 
 
-    const today = new Date().toISOString().substr(0, 10);
+    const today = new Date().toISOString().slice(0, 10);
     const [date, setDate] = useState(today)
-    const count = counter(getAttendanceObj, date)
+    const {
+        countFirstTimePrs,
+        countSecondTimePrs,
+
+    } = counter(getAttendanceLi, date)
+    console.log({ getAttendanceLi, date })
+    console.log(counter(getAttendanceLi, date))
+
     const [message, setMessage] = useState('')
 
 
+    // const expensePerAttendance = (todayExpenses / count).toFixed(2);
+    useEffect(() => { setTodayExpenses(todayExpensesFirst + todayExpensesSecond) }, [todayExpensesFirst, todayExpensesSecond])
 
-    const expensePerAttendance = (todayExpenses / count).toFixed(2);
 
     useEffect(() => {
-        dispatch(getAttendance());
+        dispatch(getDailyAttendance(today));
 
         if (errorExpenses) {
-            setMessage(errorExpenses)
-        }
-        if (successExpenses) {
-            setMessage("The expense is added successfully")
+            setMessage(String(errorExpenses))
         }
 
-    }, [date, getAttendanceObj, errorExpenses, successExpenses])
+    }, [date, errorExpenses, successExpenses])
     return (
 
         <div className="container">
 
-            {message ? (<Message >{message}</Message>) : null}
+            {getAttendanceLoading ? (
+
+                <Loader />
+            ) : errorExpenses ? (
+
+                <Message variant="danger">{errorExpenses}</Message>
+            ) : (
+                <>
+                    <div className="h1 text-center text-dark" id="pageHeaderTitle">
+
+                        Enter <input type="date" id="date" value={date} onChange={(e) => setDate(e.target.value)} max={today} />'s Expenses
+                    </div><div className="row">
+                        {successExpenses && <Message variant="success">{Message}</Message>}
+                        <div className="col-md-6 mx-auto">
+
+                            <div className="card card-body">
+
+                                <h1>Today's Expenses</h1>
+                                <form onSubmit={submitHandler}>
 
 
-            <div className="h1 text-center text-dark" id="pageHeaderTitle">
+                                    <div className="form-group">
 
-                Enter <input type="date" id="date" value={date} onChange={(e) => setDate(e.target.value)} max={today} />'s Expenses
-            </div>
+                                        <label htmlFor="name">First Time:</label>
 
-            <div className="row">
+                                        <input
+                                            type="number"
+                                            className="form-group"
+                                            id="first_time"
+                                            placeholder="Enter value"
+                                            value={todayExpensesFirst}
+                                            onChange={(e) => setTodayExpensesFirst(Number(e.target.value))} />
+                                    </div>
+                                    <div className="form-group">
 
-                <div className="col-md-6 mx-auto">
+                                        <label htmlFor="name">Second Time Expenses:</label>
 
-                    <div className="card card-body">
+                                        <input
+                                            type="number"
+                                            className="form-group"
+                                            id="second_time"
+                                            placeholder="Enter value"
+                                            value={todayExpensesSecond}
+                                            onChange={(e) => setTodayExpensesSecond(Number(e.target.value))} />
+                                    </div>
 
+                                    <div className="form-group">
 
-                        <form onSubmit={submitHandler}>
+                                        <label htmlFor="name">Total Expenses:</label>
 
+                                        <input
 
-
-                            <label htmlFor="name">Today's Expenses:</label>
-
-                            <input
-                                type="number"
-                                className="form-group"
-                                id="name"
-                                placeholder="Enter value"
-                                value={todayExpenses}
-                                onChange={(e) => setTodayExpenses(Number(e.target.value))}
-                            />
-
-
-                            <ul className="list-group list-group-flush">
-
-                                <label className="list-group-item  card-header">Total Attendances</label>
-
-                                <li className="list-group-item">{count}</li>
-
-
-                                <label className="list-group-item  card-header">Expense Per Attendance</label>
-
-                                <li className="list-group-item">{expensePerAttendance}</li>
-                            </ul>
-
-
-                            <button type="submit" className="btn btn-primary">
-                                Submit
-                            </button>
+                                            className="form-group"
+                                            id="total"
+                                            value={todayExpenses}
+                                        />
+                                    </div>
 
 
 
-                        </form>
+                                    <ul className="list-group list-group-flush">
 
-                    </div>
-                </div>
-            </div>
+                                        <label className="list-group-item  card-header">Total Attendances For First Time</label>
+
+                                        <li className="list-group-item">{countFirstTimePrs}</li>
+
+                                        <label className="list-group-item  card-header">Total Attendances For Second Time</label>
+
+                                        <li className="list-group-item">{countSecondTimePrs}</li>
+
+
+                                    </ul>
+
+
+                                    <button type="submit" className="btn btn-primary">
+                                        Submit
+                                    </button>
+
+
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div></>
+            )}
         </div>
     );
 }

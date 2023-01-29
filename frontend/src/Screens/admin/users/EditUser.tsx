@@ -9,12 +9,21 @@ import { detailsReset } from '../../../features/user/user_slice'
 
 
 export default function EditUser() {
+    interface IUser {
+        username: string;
+        email: string;
+        room: string;
+        phone: string;
+        hostel: string;
+        isAdmin: boolean;
+    }
+
     const { id } = useParams()
     const navigate = useNavigate()
 
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
-    const [room, setRoom] = useState('')
+    const [room, setRoom] = useState(0)
     const [phone, setPhone] = useState('')
     const [hostel, setHostel] = useState('')
     const [isAdmin, setIsAdmin] = useState(false)
@@ -24,6 +33,7 @@ export default function EditUser() {
     const userDetails = useAppSelector(state => state.userDetails)
     const { error, loading, user } = userDetails
 
+
     const userUpdate = useAppSelector(state => state.userUpdate)
     const { error: errorUpdate, loading: loadingUpdate, success: successUpdate } = userUpdate
 
@@ -31,21 +41,23 @@ export default function EditUser() {
 
         if (successUpdate) {
             dispatch(detailsReset())
-            navigate('/admin/view-users')
+            navigate(-1)
         }
 
-        //  else {if (!user.username || user.id !== Number(id)) {
-        //     dispatch(getUserDetails(id))
-        // } else {
-        //     setUsername(user.username)
-        //     setEmail(user.email)
-        //     setIsAdmin(user.isAdmin)
-        //     setRoom(user.room)
-        //     setPhone(user.phone)
-        //     setHostel(user.hostel)
+        else {
+            if (!user?.username || user?.id !== Number(id)) {
+                dispatch(getUserDetails(id))
+            } else {
+                setUsername(user?.username)
+                setEmail(user?.email)
+                setIsAdmin(user?.isAdmin)
+                setRoom(user?.room)
+                setPhone(user?.phone)
+                setHostel(user?.hostel)
 
 
-        // }}
+            }
+        }
 
 
 
@@ -179,7 +191,7 @@ export default function EditUser() {
                                             type='text'
                                             placeholder='Enter room'
                                             value={room}
-                                            onChange={(e) => setRoom(e.target.value)}
+                                            onChange={(e) => setRoom(Number(e.target.value))}
                                         >
                                         </input>
                                     </div>
