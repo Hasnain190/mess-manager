@@ -39,21 +39,34 @@ interface expensesPerDay {
 }
 
 type TExpenses = expensesPerDay[]
+const ExpenseInitialState = {
+    loading: false,
+    success: false,
+    error: null,
+    expensesPerMonth: [
 
+        {
+            id: 0,
+            date: "0000-00-00",
+            attendance_first_time: 0,
+            attendance_second_time: 0,
+            total_attendances: 0,
+            expenses_first_time: "0",
+            expenses_second_time: "0",
+            expenses_total: "0"
+        }
+
+    ]
+
+}
 export const addExpensesSlice = createSlice({
     name: 'add-expenses',
-    initialState: {
-        loading: false,
-        success: false,
-        error: null,
-        expenses: {}
-
-    },
+    initialState: ExpenseInitialState,
     reducers: {
 
         addExpensesRequest(state) { state.loading = true },
-        addExpensesSuccess(state, action) { state.loading = false, state.expenses = action.payload },
-        addExpensesFail(state, action) { state.error = action.payload, state.loading = false },
+        addExpensesSuccess(state, action) { state.loading = false; state.success = true; state.expensesPerMonth = action.payload },
+        addExpensesFail(state, action) { state.error = action.payload; state.loading = false },
 
     }
 
@@ -72,18 +85,12 @@ export const { addExpensesRequest, addExpensesSuccess, addExpensesFail } = addEx
 
 export const getExpensesPerMonthSlice = createSlice({
     name: 'get-expenses-per-month',
-    initialState: {
-        loading: false,
-        success: false,
-        error: null,
-        expensesPerMonth: []
-
-    },
+    initialState: ExpenseInitialState,
     reducers: {
 
         getExpensesPerMonthRequest(state) { state.loading = true },
-        getExpensesPerMonthSuccess(state, action) { state.loading = false, state.expensesPerMonth = action.payload },
-        getExpensesPerMonthFail(state, action) { state.error = action.payload, state.loading = false },
+        getExpensesPerMonthSuccess(state, action) { state.loading = false; state.expensesPerMonth = action.payload; state.success = true; },
+        getExpensesPerMonthFail(state, action) { state.error = action.payload; state.loading = false },
 
     }
 
@@ -101,14 +108,18 @@ export const getMessBillSlice = createSlice({
 
         success: false,
         error: null,
-        messBill: []
+        messBill: [
+
+
+
+        ]
 
     },
     reducers: {
 
         getMessBillRequest(state) { state.loading = true },
-        getMessBillSuccess(state, action) { state.loading = false, state.messBill = action.payload },
-        getMessBillFailure(state, action) { state.error = action.payload, state.loading = false },
+        getMessBillSuccess(state, action) { state.loading = false; state.messBill = action.payload; state.success = true; },
+        getMessBillFailure(state, action) { state.error = action.payload; state.loading = false },
 
     }
 
@@ -128,8 +139,8 @@ export const postPayingBillSlice = createSlice({
     reducers: {
 
         postPayingBillRequest(state) { state.loading = true },
-        postPayingBillSuccess(state, action) { state.loading = false, state.addBill = action.payload },
-        postPayingBillFail(state, action) { state.error = action.payload, state.loading = false },
+        postPayingBillSuccess(state, action) { state.loading = false; state.addBill = action.payload; state.success = true; },
+        postPayingBillFail(state, action) { state.error = action.payload; state.loading = false },
 
     }
 
