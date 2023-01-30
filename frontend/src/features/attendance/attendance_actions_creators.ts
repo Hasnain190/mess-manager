@@ -92,7 +92,7 @@ export const getMonthlyAttendance = (month: number) => async (dispatch: any, get
             }
         }
 
-        const { data } = await axios.get(`/api/attendance/get/${month}`,
+        const { data } = await axios.get(`/api/attendance/get/${month}/`,
             config)
         dispatch(getMonthAttendanceSuccess(data))
 
@@ -121,7 +121,7 @@ export const getDailyAttendance = (date: string) => async (dispatch: any, getSta
             }
         }
 
-        const { data } = await axios.get(`/api/attendance/get/${date}`,
+        const { data } = await axios.get(`/api/attendance/get/${date}/`,
             config)
         dispatch(getDailyAttendanceSuccess(data))
 

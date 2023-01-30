@@ -4,7 +4,8 @@ type TAttendance = {
     date: string;
     first_time: string;
     second_time: string;
-    student: number;
+    student: string;
+    student_id: number
 }
 export function counter(attendance: TAttendance[], date: string) {
     let countFirstTimePrs = 0;

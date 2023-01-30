@@ -26,24 +26,16 @@ function TodayExpenses() {
 
         let expenses = {
             date: date,
-            attendance_first_time: countFirstTimePrs,
-            attendance_second_time: countSecondTimePrs,
+            attendance_first_time: countFirstTimePrs ? countFirstTimePrs : 1,
+            attendance_second_time: countSecondTimePrs ? countSecondTimePrs : 1,
             total_attendances: (countFirstTimePrs + countSecondTimePrs),
             expenses_first_time: todayExpensesFirst,
             expenses_second_time: todayExpensesSecond,
-            expenses_total: todayExpenses
+            expenses_total: (todayExpensesFirst + todayExpensesSecond)
 
 
         }
         dispatch(addExpenses(expenses))
-
-        if (successExpenses) {
-            setMessage("The expense is added successfully")
-            // empty all the inputs
-            setTodayExpensesFirst(0)
-            setTodayExpensesSecond(0)
-            setTodayExpenses(0)
-        }
         console.log(todayExpenses)
     }
 
@@ -68,6 +60,14 @@ function TodayExpenses() {
 
     useEffect(() => {
         dispatch(getDailyAttendance(today));
+
+        if (successExpenses) {
+            setMessage("The expense is added successfully")
+            // empty all the inputs
+            setTodayExpensesFirst(0)
+            setTodayExpensesSecond(0)
+            setTodayExpenses(0)
+        }
 
         if (errorExpenses) {
             setMessage(String(errorExpenses))

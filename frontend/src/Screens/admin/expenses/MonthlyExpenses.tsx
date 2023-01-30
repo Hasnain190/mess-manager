@@ -106,7 +106,7 @@ export default function MonthlyExpenses() {
                         </thead>
 
 
-                        {expensesPerMonth?.map((item: any) => <tbody>
+                        {expensesPerMonth?.map((item) => <tbody>
 
                             <tr key={item.id}>
 

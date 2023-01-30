@@ -78,6 +78,13 @@ class AttendanceSerializer(serializers.ModelSerializer):
         model = Attendance
         fields = '__all__'
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        id = data['student']
+        data['student'] = User.objects.get(id=id).username
+        data["student_id"] = User.objects.get(id=id).id
+        return data
+
 
 class MenuSerializer(serializers.ModelSerializer):
     """
@@ -104,13 +111,35 @@ class BillSerializer(serializers.ModelSerializer):
 
 class MessBillSerializer(serializers.ModelSerializer):
     dateMonth = serializers.DateField(input_formats=['%Y-%m-%d'])
+    bills = BillSerializer(many=True)
 
     class Meta:
         model = MessBill
-        fields = '__all__'
+        fields = ["id", "dateMonth", "bills"]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        bills = data['bills']
+        for bill in bills:
+            bill["student_id"] = User.objects.get(id=bill['student']).id
+            bill['student'] = User.objects.get(id=bill['student']).username
+        return data
 
 
 class PayingBillSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = PayingBill
         fields = '__all__'
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        current_bill = data['current_bill']
+        student = data["student"]
+
+        data['student'] = User.objects.get(id=student).username
+        data['student_id'] = student
+        data['current_bill'] = Bill.objects.get(id=current_bill).bill
+        data["dues"] = Bill.objects.get(id=current_bill).dues
+        data["total"] = Bill.objects.get(id=current_bill).total
+        return data

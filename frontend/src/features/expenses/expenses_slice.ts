@@ -108,11 +108,27 @@ export const getMessBillSlice = createSlice({
 
         success: false,
         error: null,
-        messBill: [
+        messBill: {
+            id: 0,
+            dateMonth: "0000-00-00",
+            bills: [
+
+                {
+                    id: 9,
+                    room: "0",
+                    dateMonth: "0000-00-00",
+                    bill: "0.00",
+                    dues: "0.00",
+                    total: "0.00",
+                    student: "student",
+                    student_id: 0
+                }
+
+            ]
 
 
 
-        ]
+        }
 
     },
     reducers: {

@@ -42,7 +42,7 @@ export const store = configureStore({
         getExpensesPerMonth: getExpensesPerMonthSlice.reducer,
 
         getMessBill: getMessBillSlice.reducer,
-        addBill: postAttendanceSlice.reducer,
+        addBill: postPayingBillSlice.reducer,
     }
 
 })

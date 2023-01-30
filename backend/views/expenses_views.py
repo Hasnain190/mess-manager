@@ -22,7 +22,7 @@ from decimal import Decimal
 
 
 @api_view(['POST'])
-@permission_classes([])
+@permission_classes([IsAdminUser])
 def add_expenses_per_capita_per_day(request):
     data = request.data
 
@@ -73,181 +73,162 @@ def get_expenses_per_month(request, month, year):
 
 
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
 def get_bill(request, year, month):
-    date = datetime.datetime(year, month, 1)
-    try:
-        print("after try_____")
-        # mess_bill = MessBill.objects.filter(dateMonth__month=month)
+    date = datetime.date(year, month, 28)
 
-        mess_bill = MessBill.objects.get(dateMonth__month=month)
-    except:
-        print("after except____________________________")
+    # since the user can click every day which should update the messBill and create new messBill for that month , i am gonna get all the previous instance of messBill and delete them to save memory but it increases computing power :(
 
-        mess_bill = MessBill.objects.create(dateMonth=date)
+    # mess_bill = MessBill.objects.filter(dateMonth__month=month)
+    # mess_bill.delete()
 
-        expenses_per_month = Expense.objects.filter(
-            date=date).order_by("-date")
+    mess_bill, created = MessBill.objects.get_or_create(dateMonth__month=month,
+                                                        defaults={"dateMonth": date})
+    if created:
 
-        total_expenses_first_time_all_user = 0
-        total_expenses_second_time_all_user = 0
-        for i in expenses_per_month:
-            expenses_first_time_all_user = i.expenses_first_time
-            expenses_second_time_all_user = i.expenses_second_time
-            total_expenses_first_time_all_user += expenses_first_time_all_user
-            total_expenses_second_time_all_user += expenses_second_time_all_user
-
-# ## attendances ##
+        total_expenses_first_time_all_user, total_expenses_second_time_all_user = expenses_all_users(
+            month)
 
         # for the whole total attendances of all the users
-        total_attendances_first_time_all_users = 0
-        total_attendances_second_time_all_users = 0
-        for i in Attendance.objects.filter(date__month=month, date__year=year):
-            if i.first_time == "present":
-                total_attendances_first_time_all_users += 1
-            elif i.first_time == "double":
-                total_attendances_first_time_all_users += 2
-            elif i.first_time == "absent":
-                total_attendances_first_time_all_users += 0
+        bill_first_time_all_users, bill_second_time_all_users = bill_all_users(
+            year, month, total_expenses_first_time_all_user, total_expenses_second_time_all_user)
 
-            if i.second_time == "present":
-                total_attendances_second_time_all_users += 1
-            elif i.second_time == "double":
-                total_attendances_second_time_all_users += 2
-            elif i.second_time == "absent":
-                total_attendances_second_time_all_users += 0
-
-        bill_first_time_all_users = total_attendances_first_time_all_users / \
-            total_expenses_first_time_all_user
-        bill_second_time_all_users = total_attendances_second_time_all_users / \
-            total_expenses_second_time_all_user
-
+        print("bill_first_time_all_users: ->", bill_first_time_all_users)
         # print(User.objects.all())
-        for i in User.objects.all():
-            user = User.objects.get(username=i.username)
+        calculate_bill(year, month, date, mess_bill,
+                       bill_first_time_all_users, bill_second_time_all_users)
 
-            room = user.room
-
-            # for the whole total attendances of one  user
-            total_attendances_of_that_user = 0
-            for i in Attendance.objects.filter(date__month=month, date__year=year, student=user):
-                total_attendances_first_time_per_user = 0
-                if i.first_time == "present":
-                    total_attendances_first_time_per_user += 1
-                elif i.first_time == "double":
-                    total_attendances_first_time_per_user += 2
-                elif i.first_time == "absent":
-                    total_attendances_first_time_per_user += 0
-
-                total_attendances_second_time_per_user = 0
-                if i.second_time == "present":
-                    total_attendances_second_time_per_user += 1
-                elif i.second_time == "double":
-                    total_attendances_second_time_per_user += 2
-                elif i.second_time == "absent":
-                    total_attendances_second_time_per_user += 0
-
-                total_attendances_of_that_user += (
-                    total_attendances_first_time_per_user + total_attendances_second_time_per_user)
-
-                bill_first_time = bill_first_time_all_users / \
-                    total_attendances_first_time_per_user
-                bill_second_time = bill_second_time_all_users / \
-                    total_attendances_second_time_per_user
-
-                total_bill_per_user = bill_first_time + bill_second_time
-
-                # calculate last month total bill and how much the user had payed in the last month to calculate total dues
-
-                bill = Bill.objects.create(
-                    student=user,
-                    room=room,
-                    bill=total_bill_per_user,
-                    dateMonth=date
-                )
-
-                mess_bill = MessBill.bill.add(bill)
-
-        mess_bill = MessBill.objects.get(dateMonth__month=month)
     serializers = MessBillSerializer(mess_bill, many=False)
     return Response(serializers.data)
 
 
+def calculate_bill(year, month, date, mess_bill, bill_first_time_all_users, bill_second_time_all_users):
+    for i in User.objects.all():
+        user = User.objects.get(username=i.username)
+
+        room = user.room
+
+        # for the whole total attendances of one  user
+
+        total_attendances_first_time_per_user = 0
+        total_attendances_second_time_per_user = 0
+        for i in Attendance.objects.filter(date__month=month, date__year=year, student=user):
+            if i.first_time == "present":
+                total_attendances_first_time_per_user += 1
+            elif i.first_time == "double":
+                total_attendances_first_time_per_user += 2
+            elif i.first_time == "absent":
+                total_attendances_first_time_per_user += 0
+
+            if i.second_time == "present":
+                total_attendances_second_time_per_user += 1
+            elif i.second_time == "double":
+                total_attendances_second_time_per_user += 2
+            elif i.second_time == "absent":
+                total_attendances_second_time_per_user += 0
+
+            # for live tracking ...
+            # total_attendances_per_user += (
+            #     total_attendances_first_time_per_user + total_attendances_second_time_per_user)
+        try:
+            bill_first_time = bill_first_time_all_users / \
+                total_attendances_first_time_per_user
+            bill_second_time = bill_second_time_all_users / \
+                total_attendances_second_time_per_user
+
+        except ZeroDivisionError:
+            bill_first_time = 0
+            bill_second_time = 0
+
+        total_bill_per_user = bill_first_time + bill_second_time
+
+        bill, created = Bill.objects.get_or_create(
+            student=user,
+            room=room,
+            bill=total_bill_per_user,
+            dateMonth=date
+        )
+        bill.total = float(bill.dues) + float(bill.bill)
+        bill.dues = bill.total
+        bill.save()
+
+        mess_bill.bills.add(bill)
+
+
+def expenses_all_users(month):
+    expenses_per_month = Expense.objects.filter(
+        date__month=month).order_by("-date")
+
+    total_expenses_first_time_all_user = 0
+    total_expenses_second_time_all_user = 0
+    for i in expenses_per_month:
+        expenses_first_time_all_user = i.expenses_first_time
+        expenses_second_time_all_user = i.expenses_second_time
+        total_expenses_first_time_all_user += expenses_first_time_all_user
+        total_expenses_second_time_all_user += expenses_second_time_all_user
+    print("total_expenses_first_time_all_user: ->",
+          total_expenses_first_time_all_user)
+
+    return total_expenses_first_time_all_user, total_expenses_second_time_all_user
+
+
+def bill_all_users(year, month, total_expenses_first_time_all_user, total_expenses_second_time_all_user):
+    total_attendances_first_time_all_users = 0
+    total_attendances_second_time_all_users = 0
+    for i in Attendance.objects.filter(date__month=month, date__year=year):
+        if i.first_time == "present":
+            total_attendances_first_time_all_users += 1
+        elif i.first_time == "double":
+            total_attendances_first_time_all_users += 2
+        elif i.first_time == "absent":
+            total_attendances_first_time_all_users += 0
+
+        if i.second_time == "present":
+            total_attendances_second_time_all_users += 1
+        elif i.second_time == "double":
+            total_attendances_second_time_all_users += 2
+        elif i.second_time == "absent":
+            total_attendances_second_time_all_users += 0
+    try:
+        bill_first_time_all_users = total_expenses_first_time_all_user / \
+            total_attendances_first_time_all_users
+        bill_second_time_all_users = total_expenses_second_time_all_user / \
+            total_attendances_second_time_all_users
+    except ZeroDivisionError:
+        bill_first_time_all_users = 0
+        bill_second_time_all_users = 0
+    return bill_first_time_all_users, bill_second_time_all_users
+
+
 @api_view(['POST', 'PUT'])
-@permission_classes([])
-def add_bill_payed(request, month, user_id):
+@permission_classes([IsAdminUser])
+def add_bill_payed(request, year, month, user_id):
+    date = datetime.date(year, month, 28)
     data = request.data
     user = User.objects.get(id=user_id)
+    bill = Bill.objects.get(dateMonth__month=month,
+                            dateMonth__year=year, student=user)
 
-    bill = Bill.objects.get(month=month, student=user)
+    bill_payed = data["paying_bill"]
+    print(bill_payed)
+    bill_payed_date = datetime.date.today()
 
-    last_bill_payed = data["last_bill_payed"]
-    last_bill_payed_date = data["last_bill_payed_date"]
+    last_payed, created = PayingBill.objects.update_or_create(
+        student=user,
+        paying_date__year=year,
+        paying_date__month=month,
+        defaults={
+            "current_bill": bill,
+            "paying_bill": bill_payed,
+            "paying_date": bill_payed_date
+        }
+    )
 
-    if not PayingBill.objects.filter(student=user, last_bill_payed_date__month=month).exists():
-        last_payed = PayingBill.objects.create(
-            bill=bill.bill,
-            student=user,
-            last_bill_payed=last_bill_payed,
-            last_bill_payed_date=last_bill_payed_date
-        )
-        dues = bill.bill - last_bill_payed
-        bill.dues = dues
-        bill.save()
-        last_payed.save()
-
-    else:
-        last_payed = PayingBill.objects.update(
-            bill=bill.id,
-            student=user,
-            last_bill_payed=last_bill_payed,
-            last_bill_payed_date=last_bill_payed_date
-
-        )
-        dues = bill.bill - last_bill_payed
-        bill.dues = dues
-        bill.save()
-        last_payed.save()
+    dues = float(bill.bill) - float(bill_payed)
+    bill.dues = dues
+    bill.total = dues + float(bill.bill)
+    bill.save()
 
     serializers = PayingBillSerializer(last_payed)
 
     return Response(serializers.data)
-
-
-@api_view(['GET'])
-@permission_classes([])
-def get_monthly_expenses_per_user(request, month, user_id):
-    user = User.objects.get(id=user_id)
-    total_expenses_in_that_month_set = Expense.objects.filter(
-        date__month=month)
-
-    total_attendances_in_that_month = 0
-    for i in Attendance.objects.filter(date__month=month):
-        if i["first_time"] == "present":
-            total_attendances_in_that_month += 1
-        elif i["second_time"] == "present":
-            total_attendances_in_that_month += 1
-        return total_attendances_in_that_month
-
-    total_expenses = 0
-    for i in total_expenses_in_that_month_set:
-        expenses = i["expenses"]
-        total_expenses += expenses
-        return total_expenses
-
-    serializers = []
-    for i in User.objects.all():
-        user = i
-        total_monthly_attendances_from_that_user = Attendance.objects.filter(
-            student=user, date__month=month)
-
-        bill_for_that_user = total_expenses / total_attendances_in_that_month * \
-            total_monthly_attendances_from_that_user
-
-        bill = Bill.objects.create(
-            student=user,
-            bill=bill_for_that_user
-        )
-        serializer = BillSerializer(bill)
-        serializers.append(serializer.data)
-
-    return Response(serializers)

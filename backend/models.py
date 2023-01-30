@@ -13,7 +13,7 @@ class User(AbstractUser):
     phone = models.CharField(max_length=20, blank=True, null=True)
 
     hostel = models.CharField(max_length=20, blank=True, null=True)
-    room = models.CharField(max_length=20, blank=True, null=True)
+    room = models.CharField(max_length=20, default=0)
 
 
 class Attendance(models.Model):
@@ -64,16 +64,16 @@ class Menu(models.Model):
 class Expense(models.Model):
     """For expenses for one day """
     date = models.DateField(unique=True)
-    attendance_first_time = models.IntegerField(blank=True, null=True)
-    attendance_second_time = models.IntegerField(blank=True, null=True)
-    total_attendances = models.IntegerField(blank=True, null=True)
+    attendance_first_time = models.IntegerField(default=0)
+    attendance_second_time = models.IntegerField(default=0)
+    total_attendances = models.IntegerField(default=0)
 
     expenses_first_time = models.DecimalField(
-        decimal_places=2, max_digits=20, blank=True, null=True)
+        decimal_places=2, max_digits=20, default=0)
     expenses_second_time = models.DecimalField(
-        decimal_places=2, max_digits=20, blank=True, null=True)
+        decimal_places=2, max_digits=20, default=0)
     expenses_total = models.DecimalField(
-        decimal_places=2, max_digits=20, blank=True, null=True)
+        decimal_places=2, max_digits=20, default=0)
 
 
 def __str__(self) -> str:
@@ -85,25 +85,21 @@ class Bill(models.Model):
 
     student = models.ForeignKey(
         "User", on_delete=models.CASCADE, related_name="student")
-    room = models.CharField(max_length=20, blank=True, null=True)
+    room = models.CharField(max_length=20, blank=True, default=0)
 
-    dateMonth = models.DateField()
+    dateMonth = models.DateField(unique=True)
     bill = models.DecimalField(
-        decimal_places=2, blank=True, max_digits=20, null=True)
+        decimal_places=2, max_digits=20, default=0)
     dues = models.DecimalField(max_digits=20,
-                               decimal_places=2, blank=True, null=True)
+                               decimal_places=2, default=0)
     total = models.DecimalField(max_digits=20,
-                                decimal_places=2, blank=True, null=True)
+                                decimal_places=2, default=0)
 
     class Meta:
         ordering = ["student"]
 
-    def calculate_total(self):
-        # `or` operator convert None to 0
-        self.total = (self.bill or 0) + (self.dues or 0)
-
     def __str__(self) -> str:
-        return f"bill of {self.student.username}  for month  {self.dateMonth.strftime('%d-%m-%Y')} "
+        return f"bill of {self.student.username}  for month  {self.dateMonth} "
 
 
 class MessBill(models.Model):

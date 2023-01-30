@@ -78,7 +78,7 @@ export const getExpensesPerMonth = (year: number, month: number) => async (dispa
             }
         }
         //    FIXME:
-        const { data } = await axios.get(`/api/expenses/get/${year}/${month}`,
+        const { data } = await axios.get(`/api/expenses/get/${year}/${month}/`,
             config
         )
 
@@ -127,7 +127,9 @@ export const getMessBill = (year: number, month: number) => async (dispatch: any
 }
 
 
-export const addBill = (month: any) => async (dispatch: any, getState: any) => {
+export const payBill = (year: number, month: number, userId: number, payingBill: {
+    paying_bill: number;
+}) => async (dispatch: any, getState: any) => {
     try {
         dispatch(postPayingBillRequest())
 
@@ -144,7 +146,8 @@ export const addBill = (month: any) => async (dispatch: any, getState: any) => {
             }
         }
         //    FIXME:
-        const { data } = await axios.post(`/api/expenses/last-bill/${month}/`,
+        const { data } = await axios.post(`/api/expenses/pay/bill/${year}/${month}/${userId}/`,
+            payingBill,
             config
         )
 

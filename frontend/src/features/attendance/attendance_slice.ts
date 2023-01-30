@@ -2,25 +2,24 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 
 
+const AttendanceInitialState = {
+    loading: false,
+    success: false,
+    error: null,
+    attendance: [
+        {
+            id: 0,
+            date: '00-00-2000',
+            first_time: 'absent',
+            second_time: 'absent',
+            student: "Student",
+            student_id: 0
+        }
+    ]
+};
 export const getAttendanceSlice = createSlice({
     name: 'get-attendances',
-    initialState: {
-        loading: false,
-        success: false,
-        error: null,
-        attendance: [
-            {
-                id: 0,
-                date: '00-00-2000',
-                first_time: 'absent',
-                second_time: 'absent',
-                student: 0
-            }
-
-
-        ]
-
-    },
+    initialState: AttendanceInitialState,
     reducers: {
 
         getAttendanceRequest(state) { state.loading = true },
@@ -37,23 +36,7 @@ export const { getAttendanceRequest, getAttendanceSuccess, getAttendanceFail } =
 
 export const getMonthlyAttendanceSlice = createSlice({
     name: 'get-monthly-attendances',
-    initialState: {
-        loading: false,
-        success: false,
-        error: null,
-        attendance: [
-            {
-                id: 0,
-                date: '00-00-2000',
-                first_time: 'absent',
-                second_time: 'absent',
-                student: 0
-            }
-
-
-        ]
-
-    },
+    initialState: AttendanceInitialState,
     reducers: {
 
         getMonthAttendanceRequest(state) { state.loading = true },
@@ -69,23 +52,7 @@ export const { getMonthAttendanceRequest, getMonthAttendanceSuccess, getMonthAtt
 
 export const getDailyAttendanceSlice = createSlice({
     name: 'get-daily-attendances',
-    initialState: {
-        loading: false,
-        success: false,
-        error: null,
-        attendance: [
-            {
-                id: 0,
-                date: '00-00-2000',
-                first_time: 'absent',
-                second_time: 'absent',
-                student: 0
-            }
-
-
-        ]
-
-    },
+    initialState: AttendanceInitialState,
     reducers: {
 
         getDailyAttendanceRequest(state) { state.loading = true },

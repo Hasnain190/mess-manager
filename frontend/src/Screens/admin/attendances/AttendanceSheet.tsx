@@ -52,13 +52,13 @@ function AttendanceSheet({
                         </tr>
                     </thead>
 
-                    {attendance?.map((item: any) => <tbody  >
+                    {attendance?.map((item) => <tbody  >
 
                         <tr>
 
                             <th key={item.id} scope="row">{item.id}</th>
 
-                            <td><IdToStudent id={(item?.student)} /></td>
+                            <td><IdToStudent id={item?.student} /></td>
 
                             <td>{item.first_time}</td>
 

@@ -50,7 +50,6 @@ export default function MarkAttendance() {
 
 
 
-
   function attendanceExtractor(e, id: number): string[] {
     let first_time = e.target.elements[`first-attendance-${id}`].value;
     let second_time = e.target.elements[`second-attendance-${id}`].value;
@@ -174,7 +173,7 @@ export default function MarkAttendance() {
               </thead>
 
 
-              {users.map((user: any) => <tbody>
+              {users.map((user) => <tbody>
 
 
 

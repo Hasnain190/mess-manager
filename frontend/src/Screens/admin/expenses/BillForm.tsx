@@ -10,22 +10,38 @@ import Loader from "../../../components/Loader";
 import Downloader from '../../../components/Downloader';
 import { listUsers } from "../../../features/user/user_actions_creators";
 import IdToStudent from "../../../components/IdToStudent";
-import { addBill } from '../../../features/expenses/expenses_actions_creators';
+import { payBill } from '../../../features/expenses/expenses_actions_creators';
 
 function BillForm() {
-
     const dispatch = useAppDispatch();
-    const today = new Date().toISOString().substring(0, 7);
+
+    const today = new Date().toISOString().slice(0, 7);
     const [date, setDate] = useState(today)
+    const month = Number(date.slice(5, 7)) //1
+    const year = Number(today.slice(0, 4)) //2023 
+
     const { messBill, loading } = useAppSelector(state => state.getMessBill)
-    let myRef = useRef()
+    const { loading: addBillLoading, success: addBillSuccess } = useAppSelector(state => state.addBill)
+
+    const [message, setMessage] = useState<string>('')
+
 
     useEffect(() => {
         dispatch(listUsers())
-        dispatch(getMessBill(date.substring(5, 7)))
-    }, [date, messBill])
+        dispatch(getMessBill(year, month))
 
-    const { users } = useAppSelector(state => state.userList)
+
+    }, [date, addBillSuccess])
+
+    useEffect(() => {
+        setMessage("Bill is added")
+
+        setInterval(() =>
+
+            setMessage(""),
+            2000
+        )
+    }, [addBillSuccess])
 
 
     const [billPayed, setBillPayed] = useState(0)
@@ -34,30 +50,28 @@ function BillForm() {
 
     const handleSubmit = (e: any) => {
         e.preventDefault()
-        dispatch(getMessBill(date.substring(5, 7)))
+        dispatch(getMessBill(year, month))
     }
 
-    const buttonClick = (e: any) => {
+    const saveHandler = (e: any) => {
 
         e.preventDefault()
 
-        // let billPayed = e.target.elements[`bill-payed-${id}`].value;
+        let billId = e.target[0].id.split("-").at(-1);
+        let billPayed = Number(e.target.elements[`bill-payed-${billId}`].value);
 
-        let month = date.substring(5, 7)
-        let id = e.target[0].id.split("-").at(-1)
-
-        let billPayed = {
-
+        let studentId = e.target[1].id.split("-").at(-1);
+        let payingBill = {
+            paying_bill: billPayed
         }
 
-
-
-        console.log(month, id, e)
+        dispatch(payBill(year, month, studentId, payingBill))
 
     }
     return (
 
         <div className="container">
+            {addBillSuccess && <Message variant="success">{message}</Message>}
 
             <div className="h1 text-center text-dark" id="mess-bill">
                 Bill Form
@@ -76,7 +90,7 @@ function BillForm() {
             <Downloader htmlInputId={`mess-bill`} name={"Expenses-sheet"} />
 
 
-            {loading ? (<Loader ></Loader>) :
+            {loading || addBillLoading ? (<Loader ></Loader>) :
 
 
 
@@ -100,33 +114,38 @@ function BillForm() {
                             <th scope="col">Total to be Paid</th>
 
                             <th scope="col">Paid Payed</th>
+
                         </tr>
                     </thead>
 
-                    {messBill?.map((item: any) => <tbody>
+                    {messBill?.bills.map((bill) => <tbody>
 
                         <tr>
 
-                            <th scope="row" key={item.id} >{item.id}</th>
+                            <th scope="row" key={bill.id} >{bill.id}</th>
 
-                            <td><IdToStudent id={(item.student)} /></td>
+                            <td>{bill.student}</td>
 
-                            <td>{item.room}</td>
+                            <td>{bill.room}</td>
 
-                            <td>{item.bill.toFixed(2)}</td>
+                            <td>{bill.bill}</td>
 
-                            <td>{item.dues.toFixed(2)}</td>
+                            <td>{bill.dues}</td>
 
-                            <td>{item.total.toFixed(2)}</td>
+                            <td>{bill.total}</td>
+
 
                             <td>
 
 
-                                <form className="form" onSubmit={buttonClick}>
+                                <form className="form" onSubmit={saveHandler}>
 
-                                    <input className="form-control" id={`bill-payed-${item.id}`} type="number" onChange={(e) => (e.target.value)}></input>
+                                    <input className="form-control" id={`bill-payed-${bill.id}`} type="number" onChange={(e) => (e.target.value)}></input>
 
-                                    <button className='btn btn-primary' type="submit" name={`id-input-${item.student}`} > Add Bill</button>
+                                    <button className='btn btn-primary'
+                                        disabled={Number(bill.total) === 0}
+
+                                        type="submit" id={`student-input-id-${bill.student_id}`} name={`id-input-${bill.student}`} >Pay Bill</button>
                                 </form>
                             </td>
                         </tr>

@@ -91,7 +91,7 @@ function ViewMess() {
 
                       <tbody>
 
-                        {messMenu?.map((menu: any) => <tr key={menu.id}>
+                        {messMenu?.map((menu) => <tr key={menu.id}>
 
                           <td>
 

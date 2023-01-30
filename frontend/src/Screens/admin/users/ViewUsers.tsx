@@ -69,7 +69,7 @@ function ViewUsers() {
 
         <tbody>
 
-          {users.map((user: any) => <tr key={user.id}>
+          {users.map((user) => <tr key={user.id}>
 
             <th scope="row">1</th>
 
