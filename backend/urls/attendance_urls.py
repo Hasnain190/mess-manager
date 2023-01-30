@@ -8,6 +8,7 @@ from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
 # from backend.views import EmailTokenObtainPairView
 
 urlpatterns = [
+    # api/attendance/
 
     path('post/<int:id>/', views.post_attendance, name='post attendance'),
     path('get/', view=views.get_attendance, name="get all attendance"),
