@@ -69,10 +69,10 @@ function BillForm() {
     }
     return (
 
-        <div className="container">
+        <div id="mess-bill" className="container">
             {addBillSuccess && <Message variant="success">{message}</Message>}
 
-            <div className="h1 text-center text-dark" id="mess-bill">
+            <div className="h1 text-center text-dark" >
                 Bill Form
 
                 <form className="form form-control" onSubmit={handleSubmit} >

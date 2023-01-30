@@ -1,5 +1,5 @@
 from ..models import *
-from rest_framework.decorators import api_view , permission_classes
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from ..serializers import *
 
@@ -15,7 +15,7 @@ def get_mess_menu(request):
 
 
 @api_view(['PUT'])
-def udate_mess_menu(request,day):
+def update_mess_menu(request, day):
     """
     Update mess menu for the whole week
     """
@@ -25,6 +25,3 @@ def udate_mess_menu(request,day):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors)
-
-    
-    

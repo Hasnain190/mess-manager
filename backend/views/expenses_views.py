@@ -12,14 +12,6 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
-from rest_framework import status
-
-from django.contrib.auth import get_user_model
-
-from functools import reduce
-
-from decimal import Decimal
-
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
@@ -28,33 +20,15 @@ def add_expenses_per_capita_per_day(request):
 
     # try:
 
-    if Expense.objects.filter(date=data['date']).exists():
-        obj = Expense.objects.get(date=data["date"])
-        obj.delete()
-
-        Expenses_per_day = Expense.objects.create(
-            date=data['date'],
-            attendance_first_time=data['attendance_first_time'],
-            attendance_second_time=data['attendance_second_time'],
-            total_attendances=data['total_attendances'],
-            expenses_first_time=data['expenses_first_time'],
-            expenses_second_time=data['expenses_second_time'],
-            # expenses_per_attendance=data['expenses_per_attendance'],
-        )
-
-        serializer = ExpenseSerializer(Expenses_per_day, many=False)
-        return Response(serializer.data)
-    else:
-
-        Expenses_per_day = Expense.objects.create(
-            date=data['date'],
-            attendance_first_time=data['attendance_first_time'],
-            attendance_second_time=data['attendance_second_time'],
-            total_attendances=data['total_attendances'],
-            expenses_first_time=data['expenses_first_time'],
-            expenses_second_time=data['expenses_second_time'],
-            expenses_total=data['expenses_total'],
-        )
+    Expenses_per_day, created = Expense.objects.update_or_create(
+        date=data['date'],
+        attendance_first_time=data['attendance_first_time'],
+        attendance_second_time=data['attendance_second_time'],
+        total_attendances=data['total_attendances'],
+        expenses_first_time=data['expenses_first_time'],
+        expenses_second_time=data['expenses_second_time'],
+        expenses_total=data['expenses_total'],
+    )
 
     serializer = ExpenseSerializer(Expenses_per_day, many=False)
     return Response(serializer.data)

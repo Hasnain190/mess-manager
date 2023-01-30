@@ -21,17 +21,17 @@ export default function EditUser() {
     const { id } = useParams()
     const navigate = useNavigate()
 
-    const [username, setUsername] = useState('')
-    const [email, setEmail] = useState('')
-    const [room, setRoom] = useState(0)
-    const [phone, setPhone] = useState('')
-    const [hostel, setHostel] = useState('')
-    const [isAdmin, setIsAdmin] = useState(false)
+    const userDetails = useAppSelector(state => state.userDetails)
+    const { error, loading, user, success } = userDetails
+
+    const [username, setUsername] = useState(user.username)
+    const [email, setEmail] = useState(user.email)
+    const [room, setRoom] = useState(user.room)
+    const [phone, setPhone] = useState(user.phone)
+    const [hostel, setHostel] = useState(user.hostel)
+    const [isAdmin, setIsAdmin] = useState(user.isAdmin)
 
     const dispatch = useAppDispatch()
-
-    const userDetails = useAppSelector(state => state.userDetails)
-    const { error, loading, user } = userDetails
 
 
     const userUpdate = useAppSelector(state => state.userUpdate)
@@ -39,29 +39,29 @@ export default function EditUser() {
 
     useEffect(() => {
 
+
+
+
+        if (!user?.username || user?.id !== Number(id)) {
+            dispatch(getUserDetails(id))
+        } else {
+            setUsername(user?.username)
+            setEmail(user?.email)
+            setIsAdmin(user?.isAdmin)
+            setRoom(user?.room)
+            setPhone(user?.phone)
+            setHostel(user?.hostel)
+
+
+        }
+
+
         if (successUpdate) {
             dispatch(detailsReset())
             navigate(-1)
         }
 
-        else {
-            if (!user?.username || user?.id !== Number(id)) {
-                dispatch(getUserDetails(id))
-            } else {
-                setUsername(user?.username)
-                setEmail(user?.email)
-                setIsAdmin(user?.isAdmin)
-                setRoom(user?.room)
-                setPhone(user?.phone)
-                setHostel(user?.hostel)
-
-
-            }
-        }
-
-
-
-    }, [successUpdate, dispatch, navigate])
+    }, [successUpdate, success, id])
 
     const submitHandler = (e: any) => {
         e.preventDefault()
@@ -99,7 +99,7 @@ export default function EditUser() {
 
                                 <form onSubmit={submitHandler}>
 
-
+                                    {/* for name */}
                                     < div className='form-group' >
 
                                         <label htmlFor='username'>Name</label>
@@ -110,13 +110,13 @@ export default function EditUser() {
 
                                             type='name'
                                             placeholder='Enter name'
-                                            value={username}
+                                            value={user.username}
                                             onChange={(e) => setUsername(e.target.value)}
                                         >
                                         </input>
                                     </div>
 
-
+                                    {/* for email */}
                                     <div className='form-group'>
 
                                         <label htmlFor='email'>Email Address</label>
@@ -125,12 +125,12 @@ export default function EditUser() {
                                             className='form-control'
                                             type='email'
                                             placeholder='Enter Email'
-                                            value={email}
+                                            value={user.email}
                                             onChange={(e) => setEmail(e.target.value)}
                                         >
                                         </input>
                                     </div>
-
+                                    {/* isAdmin */}
 
                                     <div className='form-group'>
 
@@ -140,7 +140,7 @@ export default function EditUser() {
 
                                             type='checkbox'
 
-                                            checked={isAdmin}
+                                            checked={user.isAdmin}
                                             onChange={(e) => setIsAdmin(e.target.checked)}
                                         >
 
@@ -160,7 +160,7 @@ export default function EditUser() {
                                             className='form-control'
                                             type='phone'
                                             placeholder='Enter phone'
-                                            value={phone}
+                                            value={user.phone}
                                             onChange={(e) => setPhone(e.target.value)}
                                         >
                                         </input>
@@ -175,7 +175,7 @@ export default function EditUser() {
                                             className='form-control'
                                             type='text'
                                             placeholder='Enter hostel'
-                                            value={hostel}
+                                            value={user.hostel}
                                             onChange={(e) => setHostel(e.target.value)}
                                         >
                                         </input>
@@ -190,7 +190,7 @@ export default function EditUser() {
                                             className='form-control'
                                             type='text'
                                             placeholder='Enter room'
-                                            value={room}
+                                            value={user.room}
                                             onChange={(e) => setRoom(Number(e.target.value))}
                                         >
                                         </input>

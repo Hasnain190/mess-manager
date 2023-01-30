@@ -1,25 +1,19 @@
 // for this month bill
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { counter } from "../../../components/counter"
 
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { getMessBill } from '../../../features/expenses/expenses_actions_creators'
 import Message from "../../../components/Message";
 import Loader from "../../../components/Loader";
 import Downloader from '../../../components/Downloader';
-import { listUsers } from "../../../features/user/user_actions_creators";
-import IdToStudent from "../../../components/IdToStudent";
 
 function ThisMonthBill() {
   const dispatch = useAppDispatch();
+  const { messBill, loading, error } = useAppSelector(state => state.getMessBill)
   const today = new Date().toISOString().slice(0, 7);
   const [date, setDate] = useState(today)
   const month = Number(date.slice(5, 7)) //1
-  const year = Number(today.slice(0, 4)) //2023
-
-
-  const { messBill, loading, error } = useAppSelector(state => state.getMessBill)
+  const year = Number(today.slice(0, 4)) //2023 
 
   const handleSubmit = (e: any) => {
     e.preventDefault()

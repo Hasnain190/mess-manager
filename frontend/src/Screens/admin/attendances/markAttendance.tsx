@@ -1,13 +1,12 @@
 
-import Button from "../../../components/Button";
-import { listUsers, deleteUser } from "../../../features/user/user_actions_creators";
-import React, { useState, useEffect, useRef } from "react";
+import { listUsers } from "../../../features/user/user_actions_creators";
+import React, { useState, useEffect } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import Loader from "../../../components/Loader";
 import Message from "../../../components/Message";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { postAttendance, getAttendance, getDailyAttendance } from "../../../features/attendance/attendance_actions_creators";
+import { Link, useNavigate } from "react-router-dom";
+import { postAttendance, getDailyAttendance } from "../../../features/attendance/attendance_actions_creators";
 import { counter } from "../../../components/counter";
 
 
@@ -31,23 +30,12 @@ export default function MarkAttendance() {
 
 
 
-
-  // const [firstTime, setFirstTime] = useState<'present' | 'absent' | 'double'>('present')
-  // const [secondTime, setSecondTime] = useState<'present' | 'absent' | 'double'>('present')
-
-
   const userIds = users?.map((user: any) => user.id)
 
   // Prs = Present
   const [totalFirstTimePrs, setTotalFirstTimePrs] = useState(0)
   const [totalSecondTimePrs, setTotalSecondTimePrs] = useState(0)
   const [totalGrandPrs, setTotalGrandPrs] = useState(0)
-  // Abs = Absent
-  const [totalFirstTimeAbs, setTotalFirstTimeAbs] = useState(0)
-  const [totalSecondTimeAbs, setTotalSecondTimeAbs] = useState(0)
-  const [totalGrandAbs, setTotalGrandAbs] = useState(0)
-
-
 
 
   function attendanceExtractor(e, id: number): string[] {
@@ -71,40 +59,21 @@ export default function MarkAttendance() {
         }
 
         dispatch(postAttendance(attendance, id))
+        let { countFirstTimePrs, countSecondTimePrs, } = counter(getAttendanceLi, date);
+        setTotalFirstTimePrs(countFirstTimePrs)
+        setTotalSecondTimePrs(countSecondTimePrs)
 
-        // attendanceLoading ? setStatus('pending') : attendanceSuccess ? setStatus('success') : attendanceError ? setStatus('error') : 
-
-        // if(firstTime==='present') {setTotalFirstTimePrs(totalFirstTimePrs++)}
-        // setTotalFirstTimePrs(countFirstTimePrs)
-        // setTotalSecondTimePrs(countSecondTimePrs)
-        // setTotalGrandPrs(countFirstTimePrs + countSecondTimePrs)
-
-        // setTotalFirstTimeAbs(countFirstTimeAbs)
-        // setTotalSecondTimeAbs(countSecondTimeAbs)
-        // setTotalGrandAbs(countSecondTimeAbs + countSecondTimeAbs)
       }
 
-      // dispatch(getAttendance());
 
 
     } catch (error) {
-      // setStatus('error')
       console.error(error)
 
     }
   }
 
 
-  function getAttendancePerUsr(user: any) {
-    const f_t = (getAttendanceLi && getAttendanceLi.find(att => att.student === user.id))?.first_time;
-    const s_t = (getAttendanceLi && getAttendanceLi.find(att => att.student === user.id))?.second_time;
-
-
-    return { f_t, s_t }
-  }
-
-
-  const [status, setStatus] = useState<'not-yet-submitted' | 'pending' | 'success' | 'error'>('not-yet-submitted')
 
   const [date, setDate] = useState(today)
   useEffect(() => {
@@ -113,23 +82,19 @@ export default function MarkAttendance() {
       if (attendanceSuccess) {
         dispatch(getDailyAttendance(today))
 
-        let { countFirstTimePrs, countSecondTimePrs, } = counter(getAttendanceLi, date);
-        setTotalFirstTimePrs(countFirstTimePrs)
-        setTotalSecondTimePrs(countSecondTimePrs)
       }
 
     } else {
       navigate("/login");
     }
 
-  }, [attendanceSuccess, dispatch, userInfo, navigate]);
-
+  }, [attendanceSuccess, userInfo]);
 
   function handleSelectChange(value: string, id: number): void {
-
+    throw new Error("Function not implemented.");
   }
 
-  return <>
+  return (<>
 
     <section>
 
@@ -235,7 +200,7 @@ export default function MarkAttendance() {
 
                   <td>
 
-                    <i className="bi bi-check" >{status} {attendanceError && attendanceError}</i>
+                    <i className="bi bi-check" >{attendanceError && attendanceError}</i>
                   </td>
                 </tr>
 
@@ -305,8 +270,8 @@ export default function MarkAttendance() {
 
 
     </section>
-  </>;
-
+  </>
+  )
 
 }
 

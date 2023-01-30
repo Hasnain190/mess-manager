@@ -123,7 +123,7 @@ function UpdateMess() {
                                                         <input type="text" name="secondTime" className="form-control" placeholder={menu?.second_time} value={menuSecond} onChange={(e) => handleChange(e)} />
 
                                                     </td>
-                                                </tr>)
+                                                </tr>
 
 
                                             </tbody>

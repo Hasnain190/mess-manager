@@ -2,18 +2,25 @@
 import { useSelector } from "react-redux";
 import React, { useEffect } from "react";
 import "./navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 
 
 import { logout } from "../features/user/user_actions_creators";
 function Navbar() {
-  const { userInfo } = useAppSelector((state) => state.userLogin);
-  const dispatch = useAppDispatch();
 
+  const { userInfo } = useAppSelector((state) => state.userLogin);
+  const navigate = useNavigate()
+  const location = useLocation()
+  const dispatch = useAppDispatch();
   const logoutHandler = () => {
-    dispatch(logout())
+    dispatch(logout());
+    navigate('/')
+    window.location.reload()
+    // navigate()
+
   }
+
 
   return (
 

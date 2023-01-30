@@ -1,0 +1,14 @@
+{% extends "admin/base.html" %}
+{% block title %}{% endblock %}
+{% if subtitle %}{{ subtitle }}
+| {% endif %}
+
+{{ title }} | {{ site_title|default:_('Django site admin') }}{%
+endblock %}
+{% block branding %}
+<h1 id="site-name">
+	<a href="{% url 'admin:index' %}">Mess System Admin Penal</a>
+</h1>
+{% endblock %}
+{% block nav-global %}
+{% endblock %}

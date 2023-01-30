@@ -1,11 +1,11 @@
 // this screen displays the list of users
 import { listUsers, deleteUser } from "../../../features/user/user_actions_creators";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import Loader from "../../../components/Loader";
 import Message from "../../../components/Message";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 function ViewUsers() {

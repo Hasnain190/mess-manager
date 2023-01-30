@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { saveAs } from "file-saver";
 import { getMessMenu } from "../../../features/mess/mess_actions_creators";
 
 import Message from "../../../components/Message";
 import { useAppSelector, useAppDispatch } from "../../../app/hooks";
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import "./ViewMess.css";
 import Loader from "../../../components/Loader";
 import { Link } from "react-router-dom";
@@ -25,20 +22,7 @@ function ViewMess() {
   const { messMenu, loading, error } = useAppSelector((state) => state.messMenu);
 
 
-  const [editMenu, setEditMenu] = useState(false)
 
-  // function printDocument() {
-  //   const input = document.getElementById('divToPrint');
-  //   html2canvas(input)
-  //     .then((canvas) => {
-  //       const imgData = canvas.toDataURL('image/png');
-  //       const pdf = new jsPDF();
-  //       pdf.addImage(imgData, 'JPEG', 0, 0);
-  //       // pdf.output('dataurlnewwindow');
-  //       pdf.save("Mess.pdf");
-  //     })
-  //     ;
-  // }
 
   return (
 
@@ -52,7 +36,7 @@ function ViewMess() {
 
 
             <Downloader htmlInputId={'divToPrint'} name={"Mess-Menu"} />
-            {/* <button onClick={printDocument} >Download</button> */}
+
 
 
           </div>

@@ -76,6 +76,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         # DIRS is a list of filesystem directories to check when loading Django templates; it’s a search path.
         'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
             os.path.join(BASE_DIR, 'frontend/build')
         ],
         'APP_DIRS': True,

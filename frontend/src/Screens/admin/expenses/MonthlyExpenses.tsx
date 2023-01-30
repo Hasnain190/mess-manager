@@ -2,20 +2,18 @@ import React from 'react'
 import { getExpensesPerMonth } from '../../../features/expenses/expenses_actions_creators'
 import Loader from "../../../components/Loader";
 import Message from "../../../components/Message";
-import ConvertToMonth from '../../../components/ConvertToMonth';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { useEffect, useState } from 'react';
 import Downloader from '../../../components/Downloader';
 
 export default function MonthlyExpenses() {
     const dispatch = useAppDispatch();
+
+
     const today = new Date().toISOString().slice(0, 7);
     const [date, setDate] = useState(today)
-
-
     const month = Number(date.slice(5, 7)) //1
-    const year = Number(today.slice(0, 4)) //2023
-
+    const year = Number(today.slice(0, 4)) //2023 
     const [totalExpensesFirst, setTotalExpensesFirst] = useState(0);
     const [totalExpensesSecond, setTotalExpensesSecond] = useState(0);
     const [totalExpenses, setTotalExpenses] = useState(0);

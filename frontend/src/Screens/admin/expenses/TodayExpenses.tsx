@@ -1,10 +1,9 @@
 // for this month bill
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { counter } from "../../../components/counter"
 
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { getAttendance, getDailyAttendance } from '../../../features/attendance/attendance_actions_creators'
+import { getDailyAttendance } from '../../../features/attendance/attendance_actions_creators'
 import { addExpenses } from '../../../features/expenses/expenses_actions_creators'
 import Message from "../../../components/Message";
 import Loader from "../../../components/Loader";

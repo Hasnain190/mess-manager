@@ -1,13 +1,7 @@
 // for this month bill
-import React, { useState, useEffect, useRef } from "react";
-import { useAppSelector, useAppDispatch } from "../../../app/hooks";
+import React from "react";
 
-import { getAttendance } from "../../../features/attendance/attendance_actions_creators"
-import { useNavigate } from "react-router-dom"
-import { listUsers } from "../../../features/user/user_actions_creators";
 import Downloader from "../../../components/Downloader";
-import ConvertToMonth from "../../../components/ConvertToMonth";
-import IdToStudent from "../../../components/IdToStudent";
 
 
 function AttendanceSheet({
@@ -58,7 +52,7 @@ function AttendanceSheet({
 
                             <th key={item.id} scope="row">{item.id}</th>
 
-                            <td><IdToStudent id={item?.student} /></td>
+                            <td>{item?.student}</td>
 
                             <td>{item.first_time}</td>
 

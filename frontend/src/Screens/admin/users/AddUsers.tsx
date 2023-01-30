@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import Loader from "../../../components/Loader";
 import Message from "../../../components/Message";
@@ -7,9 +7,7 @@ import { register } from "../../../features/user/user_actions_creators";
 
 
 
-function AddUsers({
-    history
-}: any) {
+function AddUsers() {
 
     const [message, setMessage] = useState("");
     const dispatch = useAppDispatch();

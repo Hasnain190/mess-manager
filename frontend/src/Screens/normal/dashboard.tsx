@@ -1,7 +1,4 @@
-// a react component for the dashboard screen of the mess manager app
-//  - this is the screen that is displayed when the user is logged in
-//  - this screen displays the current user's name, the current date, and the current time
-//  - this screen also displays the current user's current meal plan's meals' items ingredients
+
 import React, { useState, useEffect } from "react";
 import "./dashboard-cards.css";
 
@@ -14,25 +11,28 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
 function Dashboard() {
   const dispatch = useAppDispatch();
-  const today = new Date().getDay();
+  const today = new Date().toISOString().slice(0, 7); //2023-01-23
+
+
+  const [dateState, setDateState] = useState(new Date());
+
+
+
   const { messMenu, loading: loadingMessMenu, error: errorMessMenu } = useAppSelector((state) => state.messMenu);
-
-  const [date, setDate] = useState(today)
-
-
   const userLogin = useAppSelector((state) => state.userLogin);
   const { error, loading, userInfo } = userLogin;
 
-  const [dateState, setDateState] = useState(new Date());
+
+
+
+
+
   const [todaysMess] = messMenu.filter((item: any) => item.day === Intl.DateTimeFormat('en', { weekday: 'long' }).format(new Date(`${today}`)))
   // e.g. it item.day === "sunday" 
 
   useEffect(() => {
     setInterval(() => setDateState(new Date()), 1000);
-  }, []);
 
-
-  useEffect(() => {
     dispatch(getMessMenu())
 
   }, [])
@@ -42,7 +42,7 @@ function Dashboard() {
       <h2>Welcome</h2>
       <h3>{userInfo?.username}</h3>
       <div>
-        Today's Date : <code> {dateState.toLocaleDateString()}</code>
+        Today's Date : <code> {today}</code>
       </div>
       <div>
         Today's time :{" "}
@@ -56,7 +56,7 @@ function Dashboard() {
 
       {loadingMessMenu ? <Loader></Loader> : errorMessMenu ? <Message >{error}</Message> :
 
-        // { messMenu?.map(item =>
+
         <section className="light">
           <div className="container py-2">
             <div className="h1 text-center text-dark" id="pageHeaderTitle">
@@ -73,13 +73,7 @@ function Dashboard() {
               </a>
               <div className="postcard__text t-dark">
                 <h1 className="postcard__title blue">Lunch</h1>
-                <div className="postcard__subtitle small">
-                  <time dateTime={new Date().toLocaleDateString()}>
-                    <i className="fas fa-calendar-alt mr-2"></i>
-                    {new Date().toLocaleDateString()}
-                  </time>
-                </div>
-                <div className="postcard__bar"></div>
+
                 <div className="postcard__preview-txt">
                   <ul className="list-group">
                     <li className="list-group-item">{todaysMess?.first_time}</li>
@@ -98,13 +92,7 @@ function Dashboard() {
               </a>
               <div className="postcard__text t-dark">
                 <h1 className="postcard__title blue">Dinner</h1>
-                <div className="postcard__subtitle small">
-                  <time dateTime={new Date().toLocaleDateString()}>
-                    <i className="fas fa-calendar-alt mr-2"></i>
-                    {new Date().toLocaleDateString()}
-                  </time>
-                </div>
-                <div className="postcard__bar"></div>
+
                 <div className="postcard__preview-txt">
                   <ul className="list-group">
                     <li className="list-group-item">{todaysMess?.second_time}</li>
@@ -119,6 +107,8 @@ function Dashboard() {
 
         // )}
       }
+
+
       {/* table for this month's bill */}
       <section className="light">
         <div className="container py-2">
@@ -161,82 +151,14 @@ function Dashboard() {
                 <td>4000</td>
               </tr>
 
-              <tr>
 
-                <th scope="row">1</th>
 
-                <td>February</td>
-
-                <td>4000</td>
-
-                <td>0</td>
-
-                <td>4000</td>
-              </tr>
-
-              <tr>
-
-                <th scope="row">2</th>
-
-                <td>May</td>
-
-                <td>3600</td>
-
-                <td>400</td>
-
-                <td>3400</td>
-              </tr>
-
-              <tr>
-
-                <th scope="row">3</th>
-
-                <td>June</td>
-
-                <td>4400</td>
-
-                <td>0</td>
-
-                <td>4400</td>
-              </tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      {/* section for feedback to the admin */}
 
-      <section className="light">
-
-        <div className="container py-2">
-
-          <div className="h1 text-center text-dark" id="pageHeaderTitle">
-            Give Feedback
-          </div>
-
-          <form>
-
-            <div className="form-group">
-
-              <label htmlFor="feedBackForm">Feedback</label>
-
-              <textarea
-                className="form-control"
-                id="feedBackForm"
-                rows={3}
-              ></textarea>
-
-
-              <div className="text-center">
-
-                <button className="btn btn-primary" type="submit">
-                  Submit
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </section>
 
 
 

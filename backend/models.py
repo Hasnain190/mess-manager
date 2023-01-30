@@ -6,6 +6,8 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib import admin
 import decimal
 
+import datetime
+
 
 class User(AbstractUser):
     """add some more field to user model"""
@@ -14,6 +16,9 @@ class User(AbstractUser):
 
     hostel = models.CharField(max_length=20, blank=True, null=True)
     room = models.CharField(max_length=20, default=0)
+
+    def __str__(self) -> str:
+        return self.username
 
 
 class Attendance(models.Model):
@@ -111,6 +116,10 @@ class MessBill(models.Model):
     # january , february , march etc
     dateMonth = models.DateField(unique=True)
 
+    def __str__(self) -> str:
+        month = datetime.date.month.__str__()
+        return f"Mess bill for the month {month}"
+
 
 class PayingBill(models.Model):
     """To calculate dues and add paying bills (yeh woh khana hai jisme bill ada kerne wale logon ka record rkha jata hai )"""
@@ -119,3 +128,6 @@ class PayingBill(models.Model):
     student = models.ForeignKey(
         "User", on_delete=models.CASCADE)
     paying_date = models.DateField()
+
+    def __str__(self) -> str:
+        return f'Receipt for user  {self.student.username} for date {self.paying_date} '
