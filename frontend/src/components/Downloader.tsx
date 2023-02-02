@@ -9,6 +9,10 @@ function Downloader({
 
     function printDocument() {
         const input = document.getElementById(htmlInputId);
+        const height = input?.offsetHeight as number + 100
+        const width = input?.offsetWidth as number + 100
+
+        console.log({ width, height })
         if (!input) {
             console.log("error in the downloader printDocument function .Fix it now!")
             return;
@@ -18,7 +22,8 @@ function Downloader({
                 const imgData = canvas.toDataURL('image/png');
                 const pdf = new jsPDF();
                 // FIXME: the hieght and width arguments needs according to length of given and should not be hard coded like this
-                pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+                // @ts-ignore
+                pdf.addImage(imgData, 'JPEG', 10, 10, 210, 210);
                 // pdf.output('dataurlnewwindow');
                 pdf.save(`${name}.pdf`);
             })
