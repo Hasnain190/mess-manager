@@ -6,7 +6,7 @@ from rest_framework import status
 from decimal import Decimal
 from django.contrib.auth.models import User
 
-from backend.views.expenses_views import add_bill_payed
+from backend.views.expenses_views import add_bill_payed, get_bill_per_student
 from .models import *
 
 from django.test import RequestFactory, TestCase
@@ -94,4 +94,31 @@ class BillPaymentTestCase(APITestCase):
         self.assertEqual(
             response.data,
             PayingBillSerializer(PayingBill.objects.first()).data
+        )
+
+
+class GetBillPerUserTest(APITestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user = User.objects.create_user(
+            username='testuser', password='password'
+        )
+        self.bill = Bill.objects.create(
+            bill=2000, student=self.user, dateMonth='2023-02-02', dues=0
+        )
+
+    def test_get_bill_per_user(self):
+        request = self.factory.post(
+            'api/expenses/get/<int:user_id>'.format(self.user.id),
+
+        )
+        request.user = self.user
+
+        response = get_bill_per_student(request, self.user.id)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Bill.objects.count(), 1)
+        self.assertEqual(
+            response.data,
+            Bill(Bill.objects.first()).data
         )

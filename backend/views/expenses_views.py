@@ -206,3 +206,12 @@ def add_bill_payed(request, year, month, user_id):
     serializers = PayingBillSerializer(last_payed)
 
     return Response(serializers.data)
+
+
+def get_bill_per_student(request, user_id):
+    user = User.objects.get(id=user_id)
+    bill_per_user = Bill.objects.get(
+        student=user, dateMonth=datetime.date.today())
+    serializers = BillSerializer(bill_per_user)
+
+    return Response(serializers.data)

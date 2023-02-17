@@ -31,7 +31,7 @@ export const postAttendance = (attendance: any, id: any) => async (dispatch: any
         const config = {
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `JWT ${userInfo.token}`
+                'Authorization': `JWT${userInfo.token}`
             }
         }
 

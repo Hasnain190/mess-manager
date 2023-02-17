@@ -2,7 +2,7 @@ import Navbar from "./components/Navbar";
 import Home from "./Screens/Home";
 import Login from "./Screens/login";
 
-import Dashboard from "./Screens/normal/dashboard";
+import Dashboard from "./Screens/normal/Dashboard";
 
 import EditUser from "./Screens/admin/users/EditUser";
 import AddUsers from "./Screens/admin/users/AddUsers";
