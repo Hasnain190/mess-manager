@@ -15,7 +15,7 @@ function AttendanceSheet({
         <div  >
 
 
-            <Downloader htmlInputId={`attendance-${day}`} name={"Attendance-Sheet"} />
+            <Downloader tableData={attendance} htmlInputId={`attendance-${day}`} name={"Attendance-Sheet"} />
 
             <div id={`attendance-${day}`}>
 

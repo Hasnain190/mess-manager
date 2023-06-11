@@ -50,6 +50,7 @@ export default function MonthlyExpenses() {
         () => {
             dispatch(getExpensesPerMonth(year, month))
 
+
             console.log(today)
         }, [date])
 
@@ -76,7 +77,7 @@ export default function MonthlyExpenses() {
 
             </div >
 
-            <Downloader htmlInputId={`expensesPageHeaderTitle`} name={"Expenses-sheet"} />
+            <Downloader tableData={expensesPerMonth} htmlInputId={`expensesPageHeaderTitle`} name={"Expenses-sheet"} />
 
             < div id="expensesPageHeaderTitle" >
 
@@ -141,7 +142,7 @@ export default function MonthlyExpenses() {
                             <tr>
 
 
-                                <td scope="row" >{totalExpensesFirst}</td>
+                                <td scope="row" >{`Please Select Month and then click Get` || { totalExpensesFirst }}</td>
                                 <td scope="row" >{totalExpensesSecond}</td>
                                 <td scope="row" >{totalExpenses}</td>
                             </tr>

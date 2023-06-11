@@ -115,7 +115,7 @@ export const listUsers = () => async (dispatch: any, getState: any) => {
         const config = {
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `JWT${userInfo.token}`
+                'Authorization': `JWT ${userInfo.token}`
             }
         }
 

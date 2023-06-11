@@ -92,7 +92,7 @@ class Bill(models.Model):
         "User", on_delete=models.CASCADE, related_name="student")
     room = models.CharField(max_length=20, blank=True, default=0)
 
-    dateMonth = models.DateField(unique=True)
+    dateMonth = models.DateField()
     bill = models.DecimalField(
         decimal_places=2, max_digits=20, default=0)
     dues = models.DecimalField(max_digits=20,
@@ -110,15 +110,15 @@ class Bill(models.Model):
 class MessBill(models.Model):
 
     """ A model that keeps all bills of students per month"""
-    # to have many to many relationship with mess bill (total bill) . One mess bill can have many user's bill
+    # to have many to many relationship with mess bill (total bill) . One mess bill can have many users' bills
 
     bills = models.ManyToManyField(Bill)
     # january , february , march etc
-    dateMonth = models.DateField(unique=True)
+    # dateMonth = models.DateField(unique=True)
 
     def __str__(self) -> str:
-        month = datetime.date.month.__str__()
-        return f"Mess bill for the month {month}"
+        # month = datetime.date.month.__str__()
+        return f"Mess bill is created with in the given dates "
 
 
 class PayingBill(models.Model):

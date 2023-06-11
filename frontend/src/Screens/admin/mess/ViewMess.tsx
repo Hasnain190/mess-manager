@@ -35,7 +35,7 @@ function ViewMess() {
           <div className="col-md-12">
 
 
-            <Downloader htmlInputId={'divToPrint'} name={"Mess-Menu"} />
+            <Downloader tableData={messMenu} htmlInputId={'divToPrint'} name={"Mess-Menu"} />
 
 
 

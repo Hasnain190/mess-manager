@@ -1,2 +1,6 @@
 /* css for navbar */
 
+.dropdown-item.active {
+	background-color: #707070;
+	/* Add more styles to highlight the active dropdown item */
+}

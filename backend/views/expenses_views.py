@@ -22,12 +22,15 @@ def add_expenses_per_capita_per_day(request):
 
     Expenses_per_day, created = Expense.objects.update_or_create(
         date=data['date'],
-        attendance_first_time=data['attendance_first_time'],
-        attendance_second_time=data['attendance_second_time'],
-        total_attendances=data['total_attendances'],
-        expenses_first_time=data['expenses_first_time'],
-        expenses_second_time=data['expenses_second_time'],
-        expenses_total=data['expenses_total'],
+
+        defaults={
+            "attendance_first_time": data['attendance_first_time'],
+            "attendance_second_time": data['attendance_second_time'],
+            "total_attendances": data['total_attendances'],
+            "expenses_first_time": data['expenses_first_time'],
+            "expenses_second_time": data['expenses_second_time'],
+            "expenses_total": data['expenses_total'],
+        }
     )
 
     serializer = ExpenseSerializer(Expenses_per_day, many=False)
@@ -48,35 +51,36 @@ def get_expenses_per_month(request, month, year):
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
-def get_bill(request, year, month):
-    date = datetime.date(year, month, 28)
+def get_bill(request, start_date, end_date):
 
-    # since the user can click every day which should update the messBill and create new messBill for that month , i am gonna get all the previous instance of messBill and delete them to save memory but it increases computing power :(
+    # calculating all the dates which come in between start date and the end date
+    date_range = []
+    current_date = start_date
+    while current_date <= end_date:
+        date_range.append(current_date)
+        current_date += datetime.timedelta(days=1)
 
-    # mess_bill = MessBill.objects.filter(dateMonth__month=month)
-    # mess_bill.delete()
+ # the bill will be calculated on demand
 
-    mess_bill, created = MessBill.objects.get_or_create(dateMonth__month=month,
-                                                        defaults={"dateMonth": date})
-    if created:
+    mess_bill = MessBill.objects.create()
 
-        total_expenses_first_time_all_user, total_expenses_second_time_all_user = expenses_all_users(
-            month)
+    total_expenses_first_time_all_user, total_expenses_second_time_all_user = expenses_all_users(
+        start_date, end_date)
 
-        # for the whole total attendances of all the users
-        bill_first_time_all_users, bill_second_time_all_users = bill_all_users(
-            year, month, total_expenses_first_time_all_user, total_expenses_second_time_all_user)
+    # for the  total attendances of all the users
+    bill_first_time_all_users, bill_second_time_all_users = bill_all_users(
+        start_date, end_date, total_expenses_first_time_all_user, total_expenses_second_time_all_user)
 
-        print("bill_first_time_all_users: ->", bill_first_time_all_users)
-        # print(User.objects.all())
-        calculate_bill(year, month, date, mess_bill,
-                       bill_first_time_all_users, bill_second_time_all_users)
+    print("bill_first_time_all_users: ->", bill_first_time_all_users)
+    # print(User.objects.all())
+    calculate_bill(start_date, end_date, mess_bill,
+                   bill_first_time_all_users, bill_second_time_all_users)
 
     serializers = MessBillSerializer(mess_bill, many=False)
     return Response(serializers.data)
 
 
-def calculate_bill(year, month, date, mess_bill, bill_first_time_all_users, bill_second_time_all_users):
+def calculate_bill(start_date, end_date, mess_bill, bill_first_time_all_users, bill_second_time_all_users):
     for i in User.objects.all():
         user = User.objects.get(username=i.username)
 
@@ -86,7 +90,7 @@ def calculate_bill(year, month, date, mess_bill, bill_first_time_all_users, bill
 
         total_attendances_first_time_per_user = 0
         total_attendances_second_time_per_user = 0
-        for i in Attendance.objects.filter(date__month=month, date__year=year, student=user):
+        for i in Attendance.objects.filter(date__range=(start_date, end_date), student=user):
             if i.first_time == "present":
                 total_attendances_first_time_per_user += 1
             elif i.first_time == "double":
@@ -115,7 +119,7 @@ def calculate_bill(year, month, date, mess_bill, bill_first_time_all_users, bill
             bill_second_time = 0
 
         total_bill_per_user = bill_first_time + bill_second_time
-
+# FIXME
         bill, created = Bill.objects.get_or_create(
             student=user,
             room=room,
@@ -129,13 +133,14 @@ def calculate_bill(year, month, date, mess_bill, bill_first_time_all_users, bill
         mess_bill.bills.add(bill)
 
 
-def expenses_all_users(month):
-    expenses_per_month = Expense.objects.filter(
-        date__month=month).order_by("-date")
+def expenses_all_users(start_date, end_date):
+
+    expenses_per_given_range = Expense.objects.filter(
+        date__range=(start_date, end_date))
 
     total_expenses_first_time_all_user = 0
     total_expenses_second_time_all_user = 0
-    for i in expenses_per_month:
+    for i in expenses_per_given_range:
         expenses_first_time_all_user = i.expenses_first_time
         expenses_second_time_all_user = i.expenses_second_time
         total_expenses_first_time_all_user += expenses_first_time_all_user
@@ -146,10 +151,10 @@ def expenses_all_users(month):
     return total_expenses_first_time_all_user, total_expenses_second_time_all_user
 
 
-def bill_all_users(year, month, total_expenses_first_time_all_user, total_expenses_second_time_all_user):
+def bill_all_users(start_date, end_date, total_expenses_first_time_all_user, total_expenses_second_time_all_user):
     total_attendances_first_time_all_users = 0
     total_attendances_second_time_all_users = 0
-    for i in Attendance.objects.filter(date__month=month, date__year=year):
+    for i in Attendance.objects.filter(date__range=(start_date, end_date)):
         if i.first_time == "present":
             total_attendances_first_time_all_users += 1
         elif i.first_time == "double":

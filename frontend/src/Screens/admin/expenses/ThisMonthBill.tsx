@@ -10,34 +10,83 @@ import Downloader from '../../../components/Downloader';
 function ThisMonthBill() {
   const dispatch = useAppDispatch();
   const { messBill, loading, error } = useAppSelector(state => state.getMessBill)
-  const today = new Date().toISOString().slice(0, 7);
-  const [date, setDate] = useState(today)
-  const month = Number(date.slice(5, 7)) //1
-  const year = Number(today.slice(0, 4)) //2023 
+  const today = new Date().toISOString().slice(0, 10);
 
+  const [startDate, setStartDate] = useState("")
+  const [endDate, setEndDate] = useState(today)
+
+  let year = new Date().getFullYear()
+  let month = new Date().getMonth()
+  const handleSelectRange = (e: any) => {
+
+    const selectedRange = e.target.value;
+
+    if (selectedRange === "this_month") {
+
+      let firstDay = new Date(Date.UTC(year, month, 1)).toISOString().slice(0, 10)
+
+      setStartDate(firstDay)
+      setEndDate(today)
+
+      if (selectedRange === "prev_30_days") {
+
+        //    new Date().getDate() is today
+        let back30Days = new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().slice(0, 7)
+        setStartDate(back30Days)
+        setEndDate(today)
+
+
+
+      }
+    }
+  }
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    dispatch(getMessBill(year, month))
+    dispatch(getMessBill(startDate, endDate))
   }
 
   useEffect(() => {
-    dispatch(getMessBill(year, month))
-  }, [date])
+    dispatch(getMessBill(startDate, endDate))
+  }, [startDate, endDate])
   return (
     <div className="container">
       <div className="h1 text-center text-dark" id="mess-bill">
-        This Month's Bill
+        Calculate Bill for Mess
+        <form onChange={handleSelectRange}>
+
+          <fieldset>
+            <legend>Select a range:</legend>
+
+            <div>
+              <input type="radio" id="this_month" name="range"
+                checked />
+              <label htmlFor="this_month">This Month</label>
+            </div>
+
+            <div>
+              <input type="radio" id="prev_30_days" name="range" />
+              <label htmlFor="prev_30_days">Previous 30 days</label>
+            </div>
+
+
+          </fieldset>
+        </form>
+
 
         <form className="form form-control" onSubmit={handleSubmit} >
+          <input type="date" id="start-date" value={startDate} onChange={(e) => setStartDate(String(e.target.value))} max={today} />
+          <label htmlFor="start-date">Start Date</label>
 
-          <input type="month" id="date" value={date} onChange={(e) => setDate(e.target.value)} max={today} />
+
+          <input type="date" id="end-date" value={endDate} onChange={(e) => setEndDate(String(e.target.value))} max={today} />
+          <label htmlFor="end-date">End Date</label>
 
 
           <button className="btn btn-primary" type="submit">Get</button>
         </form>
       </div>
 
-      <Downloader htmlInputId={`mess-bill`} name={"Expenses-sheet"} />
+      <Downloader tableData={messBill.bills} htmlInputId={`mess-bill`} name={"Expenses-sheet"} />
 
       {loading ? (<Loader ></Loader>) :
         error ? (<Message variant={"danger"}>There is some error</Message>)

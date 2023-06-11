@@ -1,37 +1,45 @@
 import React from 'react'
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+
+import { utils, writeFileXLSX, write } from 'xlsx';
+
+
 function Downloader({
+    tableData,
     htmlInputId,
-    name
+    name,
 }: any) {
 
 
     function printDocument() {
-        const input = document.getElementById(htmlInputId);
-        const height = input?.offsetHeight as number + 100
-        const width = input?.offsetWidth as number + 100
+        // const input = document.getElementById(htmlInputId);
 
-        console.log({ width, height })
-        if (!input) {
-            console.log("error in the downloader printDocument function .Fix it now!")
-            return;
-        }
-        html2canvas(input)
-            .then((canvas) => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF();
-                // FIXME: the hieght and width arguments needs according to length of given and should not be hard coded like this
-                // @ts-ignore
-                pdf.addImage(imgData, 'JPEG', 10, 10, 210, 210);
-                // pdf.output('dataurlnewwindow');
-                pdf.save(`${name}.pdf`);
-            })
-            ;
+        const workbook = utils.book_new();
+
+        const worksheet = utils.json_to_sheet(tableData)
+
+        utils.book_append_sheet(workbook, worksheet, name)
+
+        // Generate an XLSX file buffer
+        const buffer = write(workbook, { type: 'buffer', bookType: 'xlsx' });
+
+        // Create a Blob from the buffer
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+        // Create a download link
+        const url = URL.createObjectURL(blob);
+
+        // Trigger a click on the download link
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'table.xlsx';
+        link.click();
+
+        // Release the object URL
+        URL.revokeObjectURL(url);
     }
 
     return (
-        <button className="btn btn-primary" data-html2canvas-ignore onClick={printDocument}>Download as PDF  <i className="fas fa-download" /></button>
+        <button className="btn btn-primary" data-html2canvas-ignore onClick={printDocument}>Download as Excel Sheet  <i className="fas fa-download" /></button>
 
     )
 }

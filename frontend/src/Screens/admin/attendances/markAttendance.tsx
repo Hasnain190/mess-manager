@@ -38,6 +38,9 @@ export default function MarkAttendance() {
   const [totalGrandPrs, setTotalGrandPrs] = useState(0)
 
 
+
+
+
   function attendanceExtractor(e, id: number): string[] {
     let first_time = e.target.elements[`first-attendance-${id}`].value;
     let second_time = e.target.elements[`second-attendance-${id}`].value;
@@ -90,9 +93,7 @@ export default function MarkAttendance() {
 
   }, [attendanceSuccess, userInfo]);
 
-  function handleSelectChange(value: string, id: number): void {
-    throw new Error("Function not implemented.");
-  }
+
 
   return (<>
 
@@ -174,33 +175,43 @@ export default function MarkAttendance() {
 
                   <td>
 
-                    <select id={`first-attendance-${user.id}`} onChange={(e) => handleSelectChange(e.target.value, user.id)} className="form-control"  >
+                    <select id={`first-attendance-${user.id}`} onChange={(e) => (e.target.value)} className="form-control"  >
 
-                      <option value="present">Present ✓</option>
+                      <option value="present">✓ Present </option>
 
-                      <option value="absent">Absent X</option>
+                      <option value="absent">X Absent </option>
 
-                      <option value="double">Double 2</option>
+                      <option value="double">2 Double </option>
                     </select>
 
                   </td>
+
 
                   <td>
 
                     <select id={`second-attendance-${user.id}`} onChange={(e) => (e.target.value)} className="form-control"  >
 
-                      <option value="present">Present ✓</option>
+                      <option value="present">✓ Present </option>
 
-                      <option value="absent">Absent X</option>
+                      <option value="absent" >X Absent </option>
 
-                      <option value="double">Double 2</option>
+                      <option value="double">2 Double </option>
                     </select>
 
                   </td>
 
                   <td>
 
-                    <i className="bi bi-check" >{attendanceError && attendanceError}</i>
+                    {/* <i className="bi bi-check2" >{attendanceError && attendanceError}</i> */}
+
+                    {attendanceLoading ? (
+                      <Loader />
+                    ) : attendanceError ? (
+                      <Message variant="danger">{attendanceError}</Message>
+                    ) : attendanceSuccess ? (
+                      <Message variant="success">Attendance Marked</Message>
+                    ) : null}
+
                   </td>
                 </tr>
 

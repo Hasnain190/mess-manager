@@ -21,7 +21,7 @@ import {
 
 } from './attendance_slice'
 
-export const postAttendance = (attendance: any, id: any) => async (dispatch: any, getState: any) => {
+export const postAttendance = (attendance: any, id: number) => async (dispatch: any, getState: any) => {
     try {
         dispatch(postAttendanceRequest())
 
@@ -31,7 +31,7 @@ export const postAttendance = (attendance: any, id: any) => async (dispatch: any
         const config = {
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `JWT${userInfo.token}`
+                'Authorization': `JWT ${userInfo.token}`
             }
         }
 

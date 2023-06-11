@@ -94,7 +94,7 @@ export const getExpensesPerMonth = (year: number, month: number) => async (dispa
 }
 
 
-export const getMessBill = (year: number, month: number) => async (dispatch: any, getState: any) => {
+export const getMessBill = (startDate: string, endDate: string) => async (dispatch: any, getState: any) => {
     try {
         dispatch(getMessBillRequest())
 
@@ -110,8 +110,8 @@ export const getMessBill = (year: number, month: number) => async (dispatch: any
                 'Authorization': `JWT ${userInfo.token}`
             }
         }
-        //    FIXME:
-        const { data } = await axios.get(`/api/expenses/bill/${year}/${month}/`,
+
+        const { data } = await axios.get(`/api/expenses/bill/${startDate}/${endDate}/`,
             config
         )
 

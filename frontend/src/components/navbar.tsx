@@ -12,6 +12,8 @@ function Navbar() {
   const { userInfo } = useAppSelector((state) => state.userLogin);
   const navigate = useNavigate()
   const location = useLocation()
+  const currentPath = location.pathname;
+
   const dispatch = useAppDispatch();
   const logoutHandler = () => {
     dispatch(logout());
@@ -102,13 +104,17 @@ function Navbar() {
                   Admin
                 </button>
 
-                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <div className="dropdown-menu " aria-labelledby="dropdownMenuButton">
 
-                  <Link className="dropdown-item" to="/admin/add-user">
+                  <Link
+                    className={`dropdown-item ${currentPath === '/admin/add-user' ? 'active' : ''}`}
+                    to="/admin/add-user"
+                  >
                     Add User
                   </Link>
 
-                  <Link className="dropdown-item" to="/admin/view-users">
+
+                  <Link className={`dropdown-item ${currentPath === '/admin/view-users' ? 'active' : ''}`} to="/admin/view-users">
                     View Users
                   </Link>
 
@@ -116,12 +122,12 @@ function Navbar() {
                   <div className="dropdown-divider"></div>
 
 
-                  <Link className="dropdown-item" to="/admin/view-mess">
+                  <Link className={`dropdown-item ${currentPath === '/admin/view-mess' ? 'active' : ''}`} to="/admin/view-mess">
                     View Mess
                   </Link>
 
 
-                  <Link className="dropdown-item" to="/admin/mark-attendance">
+                  <Link className={`dropdown-item ${currentPath === '/admin/mark-attendance' ? 'active' : ''}`} to="/admin/mark-attendance">
                     Mark Attendance
                   </Link>
 
@@ -129,7 +135,7 @@ function Navbar() {
 
 
                   <Link
-                    className="dropdown-item"
+                    className={`dropdown-item ${currentPath === '/admin/monthly-attendance' ? 'active' : ''}`}
                     to="/admin/monthly-attendance"
                   >
                     See Monthly Attendances
@@ -137,24 +143,31 @@ function Navbar() {
 
                   <div className="dropdown-divider"></div>
 
-
-                  <Link className="dropdown-item" to="/admin/expenses/today">
+                  <Link
+                    className={`dropdown-item ${currentPath === '/admin/expenses/today' ? 'active' : ''}`}
+                    to="/admin/expenses/today"
+                  >
                     Today's Expenses
                   </Link>
-
-
-                  <Link className="dropdown-item" to="/admin/expenses/monthly">
+                  <Link
+                    className={`dropdown-item ${currentPath === '/admin/expenses/monthly' ? 'active' : ''}`}
+                    to="/admin/expenses/monthly"
+                  >
                     Expenses By Month
                   </Link>
-
-                  <Link className="dropdown-item" to="/admin/bill-of-month">
+                  <Link
+                    className={`dropdown-item ${currentPath === '/admin/bill-of-month' ? 'active' : ''}`}
+                    to="/admin/bill-of-month"
+                  >
                     This Month's Bill
                   </Link>
 
                   <div className="dropdown-divider"></div>
 
-
-                  <Link className="dropdown-item" to="/admin/expenses/bill-form/">
+                  <Link
+                    className={`dropdown-item ${currentPath === '/admin/expenses/bill-form/' ? 'active' : ''}`}
+                    to="/admin/expenses/bill-form/"
+                  >
                     Bill Form
                   </Link>
                 </div>

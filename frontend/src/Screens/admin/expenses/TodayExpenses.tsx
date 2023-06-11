@@ -1,4 +1,4 @@
-// for this month bill
+
 import React, { useEffect, useState } from "react";
 import { counter } from "../../../components/counter"
 
@@ -15,7 +15,7 @@ function TodayExpenses() {
     const [todayExpensesFirst, setTodayExpensesFirst] = useState(0)
     const [todayExpensesSecond, setTodayExpensesSecond] = useState(0)
 
-    const [todayExpenses, setTodayExpenses] = useState(todayExpensesFirst + todayExpensesSecond)
+    const [todayExpenses, setTodayExpenses] = useState(0)
 
     const { attendance: getAttendanceLi, error: getAttendanceError, loading: getAttendanceLoading } = useAppSelector(state => state.getDailyAttendance)
 
@@ -47,18 +47,20 @@ function TodayExpenses() {
         countSecondTimePrs,
 
     } = counter(getAttendanceLi, date)
-    console.log({ getAttendanceLi, date })
-    console.log(counter(getAttendanceLi, date))
+
 
     const [message, setMessage] = useState('')
-
+    // factor
+    const [factor, setFactor] = useState(0.6)
 
     // const expensePerAttendance = (todayExpenses / count).toFixed(2);
-    useEffect(() => { setTodayExpenses(todayExpensesFirst + todayExpensesSecond) }, [todayExpensesFirst, todayExpensesSecond])
+    useEffect(() => {
+        setTodayExpensesFirst(parseFloat((todayExpenses * factor).toFixed(2))); setTodayExpensesSecond(parseFloat((todayExpenses * (1 - factor)).toFixed(2)))
+    }, [todayExpenses, factor])
 
 
     useEffect(() => {
-        dispatch(getDailyAttendance(today));
+        dispatch(getDailyAttendance(date));
 
         if (successExpenses) {
             setMessage("The expense is added successfully")
@@ -82,46 +84,20 @@ function TodayExpenses() {
                 <Loader />
             ) : errorExpenses ? (
 
-                <Message variant="danger">{errorExpenses}</Message>
+                <Message variant="danger">{message || errorExpenses}</Message>
             ) : (
                 <>
                     <div className="h1 text-center text-dark" id="pageHeaderTitle">
 
-                        Enter <input type="date" id="date" value={date} onChange={(e) => setDate(e.target.value)} max={today} />'s Expenses
+                        <input type="date" id="date" value={date} onChange={(e) => setDate(e.target.value)} max={today} /> Expenses
                     </div><div className="row">
                         {successExpenses && <Message variant="success">{Message}</Message>}
                         <div className="col-md-6 mx-auto">
 
                             <div className="card card-body">
 
-                                <h1>Today's Expenses</h1>
+                                <h1>Set Expenses</h1>
                                 <form onSubmit={submitHandler}>
-
-
-                                    <div className="form-group">
-
-                                        <label htmlFor="name">First Time:</label>
-
-                                        <input
-                                            type="number"
-                                            className="form-group"
-                                            id="first_time"
-                                            placeholder="Enter value"
-                                            value={todayExpensesFirst}
-                                            onChange={(e) => setTodayExpensesFirst(Number(e.target.value))} />
-                                    </div>
-                                    <div className="form-group">
-
-                                        <label htmlFor="name">Second Time Expenses:</label>
-
-                                        <input
-                                            type="number"
-                                            className="form-group"
-                                            id="second_time"
-                                            placeholder="Enter value"
-                                            value={todayExpensesSecond}
-                                            onChange={(e) => setTodayExpensesSecond(Number(e.target.value))} />
-                                    </div>
 
                                     <div className="form-group">
 
@@ -132,13 +108,56 @@ function TodayExpenses() {
                                             className="form-group"
                                             id="total"
                                             value={todayExpenses}
+                                            onChange={(e) => setTodayExpenses(Number(e.target.value))}
                                         />
                                     </div>
 
+                                    <div className="form-group">
+
+                                        <label htmlFor="name">Set Factor For First Time</label>
+
+                                        <input
+                                            type="range"
+                                            min="0"
+                                            max="1"
+                                            step="any"
+
+                                            list="markers"
+                                            className="form-group"
+                                            id="total"
+                                            value={factor}
+
+                                            onChange={(e) => setFactor(parseFloat(Number(e.target.value).toFixed(2)))}
+                                        />
+                                        <span>{factor}</span>
+
+                                        <datalist id="markers">
+                                            <option value="0" label="0">0</option>
+                                            <option value="0.25" label="1/4">1/4</option>
+                                            <option value="0.33" label="1/3">1/3</option>
+                                            <option value="0.5" label="1/2">1/2</option>
+                                            <option value="0.6" label="2/3">2/3</option>
+                                            <option value="1" label="1">1</option>
+                                        </datalist>
+                                    </div>
 
 
                                     <ul className="list-group list-group-flush">
 
+                                        <label htmlFor="name">First Time:</label>
+
+                                        <li className="list-group-item card-header"
+                                            id="first_time"
+                                        >{todayExpensesFirst}</li>
+
+
+                                        <label htmlFor="name">Second Time Expenses:</label>
+
+                                        <li
+                                            className="list-group-item card-header"
+                                            id="second_time"
+
+                                        >{todayExpensesSecond}</li>
                                         <label className="list-group-item  card-header">Total Attendances For First Time</label>
 
                                         <li className="list-group-item">{countFirstTimePrs}</li>
