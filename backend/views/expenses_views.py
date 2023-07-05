@@ -169,8 +169,8 @@ def bill_all_users(start_date, end_date, total_expenses_first_time_all_user, tot
         elif i.second_time == "absent":
             total_attendances_second_time_all_users += 0
     try:
-        bill_first_time_all_users = total_expenses_first_time_all_user / \
-            total_attendances_first_time_all_users
+        bill_first_time_all_users = total_expenses_first_time_all_user /
+        total_attendances_first_time_all_users
         bill_second_time_all_users = total_expenses_second_time_all_user / \
             total_attendances_second_time_all_users
     except ZeroDivisionError:

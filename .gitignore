@@ -28,3 +28,7 @@ yarn-error.log*
 *.spec
 build/
 dist/
+
+*.cpython-310.*
+*.pyc
+
