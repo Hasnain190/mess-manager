@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import Loader from '../../../components/Loader'
 import Message from '../../../components/Message'
 import { getUserDetails, updateUser } from '../../../features/user/user_actions_creators'
-import { detailsReset } from '../../../features/user/user_slice'
+import { detailsReset, updateReset } from '../../../features/user/user_slice'
 
 
 export default function EditUser() {
@@ -49,23 +49,23 @@ export default function EditUser() {
         }
 
 
-
-
-    }, [id, user, success])
-
-
-    useEffect(() => {
-
         if (successUpdate) {
+            dispatch(updateReset())
             navigate("/admin/view-users/")
         }
 
-    }, [successUpdate])
+
+    }, [id, user, success, successUpdate])
+
+
+    // useEffect(() => {
+
+
+    // }, [successUpdate])
 
     const submitHandler = (e: any) => {
         e.preventDefault()
         dispatch(updateUser({ id: id, username, email, hostel, room, phone, isAdmin }))
-        dispatch(detailsReset())
 
 
 

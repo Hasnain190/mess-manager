@@ -135,7 +135,7 @@ export const userDetailsSlice = createSlice({
     },
     detailsFail(state, action) { state.loading = false; state.error = action.payload; },
 
-    detailsReset(state) { state = initialState }
+    detailsReset(state) { state.user = initialState.user; state.loading = false; state.success = false; state.error = null }
 
   }
 })
@@ -217,12 +217,17 @@ export const userUpdateSlice = createSlice({
     updateFail(state, action) {
       state.loading = false;
       state.error = action.payload
+    },
+    updateReset(state) {
+      // state.loading = false;
+      state.user = initialState.user;
+      state.success = false;
     }
 
   }
 })
 
-export const { updateRequest, updateSuccess, updateFail } = userUpdateSlice.actions
+export const { updateRequest, updateSuccess, updateFail, updateReset } = userUpdateSlice.actions
 
 
 // get the attendance of user
