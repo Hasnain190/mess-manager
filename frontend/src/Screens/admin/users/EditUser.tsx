@@ -9,14 +9,7 @@ import { detailsReset } from '../../../features/user/user_slice'
 
 
 export default function EditUser() {
-    interface IUser {
-        username: string;
-        email: string;
-        room: string;
-        phone: string;
-        hostel: string;
-        isAdmin: boolean;
-    }
+
 
     const { id } = useParams()
     const navigate = useNavigate()
@@ -44,7 +37,8 @@ export default function EditUser() {
 
         if (!user?.username || user?.id !== Number(id)) {
             dispatch(getUserDetails(id))
-        } else {
+        }
+        else {
             setUsername(user?.username)
             setEmail(user?.email)
             setIsAdmin(user?.isAdmin)
@@ -52,20 +46,30 @@ export default function EditUser() {
             setPhone(user?.phone)
             setHostel(user?.hostel)
 
-
         }
 
+
+
+
+    }, [id, user, success])
+
+
+    useEffect(() => {
 
         if (successUpdate) {
-            dispatch(detailsReset())
-            navigate(-1)
+            navigate("/admin/view-users/")
         }
 
-    }, [successUpdate, success, id])
+    }, [successUpdate])
 
     const submitHandler = (e: any) => {
         e.preventDefault()
         dispatch(updateUser({ id: id, username, email, hostel, room, phone, isAdmin }))
+        dispatch(detailsReset())
+
+
+
+
     }
 
 
@@ -89,119 +93,118 @@ export default function EditUser() {
 
                         <h1>Edit User</h1>
 
-                        {loadingUpdate && <Loader />}
+                        {loadingUpdate ? <Loader /> :
 
-                        {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
+                            errorUpdate ? <Message variant='danger'>{errorUpdate}</Message> :
+                                successUpdate ? <Message variant='success'>{'Updated'}</Message> :
+                                    loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message>
+                                        : (
 
+                                            <form onSubmit={submitHandler}>
 
-                        {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message>
-                            : (
+                                                {/* for name */}
+                                                < div className='form-group' >
 
-                                <form onSubmit={submitHandler}>
+                                                    <label htmlFor='username'>Name</label>
 
-                                    {/* for name */}
-                                    < div className='form-group' >
+                                                    <input
 
-                                        <label htmlFor='username'>Name</label>
+                                                        className='form-control'
 
-                                        <input
+                                                        type='name'
+                                                        placeholder='Enter name'
+                                                        value={username}
+                                                        onChange={(e) => setUsername(e.target.value)}
+                                                    >
+                                                    </input>
+                                                </div>
 
-                                            className='form-control'
+                                                {/* for email */}
+                                                <div className='form-group'>
 
-                                            type='name'
-                                            placeholder='Enter name'
-                                            value={user.username}
-                                            onChange={(e) => setUsername(e.target.value)}
-                                        >
-                                        </input>
-                                    </div>
+                                                    <label htmlFor='email'>Email Address</label>
 
-                                    {/* for email */}
-                                    <div className='form-group'>
+                                                    <input
+                                                        className='form-control'
+                                                        type='email'
+                                                        placeholder='Enter Email'
+                                                        value={email}
+                                                        onChange={(e) => setEmail(e.target.value)}
+                                                    >
+                                                    </input>
+                                                </div>
+                                                {/* isAdmin */}
 
-                                        <label htmlFor='email'>Email Address</label>
+                                                <div className='form-group'>
 
-                                        <input
-                                            className='form-control'
-                                            type='email'
-                                            placeholder='Enter Email'
-                                            value={user.email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                        >
-                                        </input>
-                                    </div>
-                                    {/* isAdmin */}
+                                                    <label htmlFor='isAdmin'>Is Admin</label>
 
-                                    <div className='form-group'>
+                                                    <input
 
-                                        <label htmlFor='isAdmin'>Is Admin</label>
+                                                        type='checkbox'
 
-                                        <input
+                                                        checked={isAdmin}
+                                                        onChange={(e) => setIsAdmin(e.target.checked)}
+                                                    >
 
-                                            type='checkbox'
-
-                                            checked={user.isAdmin}
-                                            onChange={(e) => setIsAdmin(e.target.checked)}
-                                        >
-
-                                        </input>
-
-
-                                    </div>
-
-                                    {/* for phone */}
-
-                                    <div className='form-group' >
-
-                                        <label htmlFor='phone'>Phone</label>
-
-                                        <input
-
-                                            className='form-control'
-                                            type='phone'
-                                            placeholder='Enter phone'
-                                            value={user.phone}
-                                            onChange={(e) => setPhone(e.target.value)}
-                                        >
-                                        </input>
-                                    </div>
-                                    {/* for hostel */}
-
-                                    <div className='form-group'>
-
-                                        <label htmlFor='hostel'>Hostel</label>
-
-                                        <input
-                                            className='form-control'
-                                            type='text'
-                                            placeholder='Enter hostel'
-                                            value={user.hostel}
-                                            onChange={(e) => setHostel(e.target.value)}
-                                        >
-                                        </input>
-                                    </div>
-                                    {/* for room */}
-
-                                    <div className='form-group' >
-
-                                        <label htmlFor='room'>Room</label>
-
-                                        <input
-                                            className='form-control'
-                                            type='text'
-                                            placeholder='Enter room'
-                                            value={user.room}
-                                            onChange={(e) => setRoom(Number(e.target.value))}
-                                        >
-                                        </input>
-                                    </div>
+                                                    </input>
 
 
-                                    <button type='submit' >
-                                        Update
-                                    </button>
+                                                </div>
 
-                                </form>)
+                                                {/* for phone */}
+
+                                                <div className='form-group' >
+
+                                                    <label htmlFor='phone'>Phone</label>
+
+                                                    <input
+
+                                                        className='form-control'
+                                                        type='phone'
+                                                        placeholder='Enter phone'
+                                                        value={phone}
+                                                        onChange={(e) => setPhone(e.target.value)}
+                                                    >
+                                                    </input>
+                                                </div>
+                                                {/* for hostel */}
+
+                                                <div className='form-group'>
+
+                                                    <label htmlFor='hostel'>Hostel</label>
+
+                                                    <input
+                                                        className='form-control'
+                                                        type='text'
+                                                        placeholder='Enter hostel'
+                                                        value={hostel}
+                                                        onChange={(e) => setHostel(e.target.value)}
+                                                    >
+                                                    </input>
+                                                </div>
+                                                {/* for room */}
+
+                                                <div className='form-group' >
+
+                                                    <label htmlFor='room'>Room</label>
+
+                                                    <input
+                                                        className='form-control'
+                                                        type='text'
+                                                        placeholder='Enter room'
+                                                        value={room}
+                                                        onChange={(e) => setRoom(Number(e.target.value))}
+                                                    >
+                                                    </input>
+                                                </div>
+
+
+                                                <button type='submit' >
+                                                    Update
+                                                </button>
+
+                                            </form>)
                         }
                     </div>
                 </div>

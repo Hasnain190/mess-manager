@@ -73,7 +73,7 @@ function AddUsers() {
 
                         <h3 className="text-center mb-4">
 
-                            <i className="fas fa-user-plus"></i> Register
+                            <i className="fas fa-user-plus"></i> Register a New User
                         </h3>
 
                         <form onSubmit={submitHandler}>

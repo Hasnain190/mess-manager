@@ -135,7 +135,7 @@ export const userDetailsSlice = createSlice({
     },
     detailsFail(state, action) { state.loading = false; state.error = action.payload; },
 
-    detailsReset(state) { state.user = initialState.user }
+    detailsReset(state) { state = initialState }
 
   }
 })

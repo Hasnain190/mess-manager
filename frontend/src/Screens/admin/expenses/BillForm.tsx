@@ -61,7 +61,7 @@ function BillForm() {
         let payingBill = {
             paying_bill: billPayed
         }
-        // FIXME:
+
         dispatch(payBill(year, month, studentId, payingBill))
 
     }
@@ -84,7 +84,7 @@ function BillForm() {
 
 
 
-            <Downloader htmlInputId={`mess-bill`} name={"Expenses-sheet"} />
+
 
 
             {loading || addBillLoading ? (<Loader ></Loader>) :

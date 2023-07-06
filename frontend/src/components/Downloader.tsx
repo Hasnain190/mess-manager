@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { utils, writeFileXLSX, write } from 'xlsx';
+import { utils, write } from 'xlsx';
 
 
 function Downloader({
@@ -25,16 +25,16 @@ function Downloader({
         // Create a Blob from the buffer
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 
-        // Create a download link
+
         const url = URL.createObjectURL(blob);
 
-        // Trigger a click on the download link
+
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'table.xlsx';
+        link.download = `${htmlInputId}.xlsx`;
         link.click();
 
-        // Release the object URL
+
         URL.revokeObjectURL(url);
     }
 

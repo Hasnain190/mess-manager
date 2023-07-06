@@ -61,7 +61,7 @@ function UpdateMess() {
         }))
 
         navigate(-1)
-        alert("Menu Updated")
+
     }
 
     return (
