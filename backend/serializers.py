@@ -110,12 +110,12 @@ class BillSerializer(serializers.ModelSerializer):
 
 
 class MessBillSerializer(serializers.ModelSerializer):
-    dateMonth = serializers.DateField(input_formats=['%Y-%m-%d'])
+    # dateMonth = serializers.DateField(input_formats=['%Y-%m-%d'])
     bills = BillSerializer(many=True)
 
     class Meta:
         model = MessBill
-        fields = ["id", "dateMonth", "bills"]
+        fields = ["id", "month", "bills"]
 
     def to_representation(self, instance):
         data = super().to_representation(instance)

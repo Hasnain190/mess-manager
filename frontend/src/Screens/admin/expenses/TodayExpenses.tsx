@@ -20,23 +20,36 @@ function TodayExpenses() {
     const { attendance: getAttendanceLi, error: getAttendanceError, loading: getAttendanceLoading } = useAppSelector(state => state.getDailyAttendance)
 
     const { success: successExpenses, error: errorExpenses } = useAppSelector(state => state.addExpenses)
+
+
+
     const submitHandler = (e: any) => {
         e.preventDefault();
 
-        let expenses = {
-            date: date,
-            attendance_first_time: countFirstTimePrs ? countFirstTimePrs : 1,
-            attendance_second_time: countSecondTimePrs ? countSecondTimePrs : 1,
-            total_attendances: (countFirstTimePrs + countSecondTimePrs),
-            expenses_first_time: todayExpensesFirst,
-            expenses_second_time: todayExpensesSecond,
-            expenses_total: (todayExpensesFirst + todayExpensesSecond)
 
+        if ((countFirstTimePrs !== 0 && countSecondTimePrs !== 0) && todayExpensesFirst !== 0) {
+            let expenses = {
+                date: date,
+                attendance_first_time: countFirstTimePrs ? countFirstTimePrs : 1,
+                attendance_second_time: countSecondTimePrs ? countSecondTimePrs : 1,
+                total_attendances: (countFirstTimePrs + countSecondTimePrs),
+                expenses_first_time: todayExpensesFirst,
+                expenses_second_time: todayExpensesSecond,
+                expenses_total: (todayExpensesFirst + todayExpensesSecond)
+
+
+            }
+
+            dispatch(addExpenses(expenses))
+            console.log(todayExpenses)
+        } else {
+
+            setMessage("No attendance today or some other error")
 
         }
-        dispatch(addExpenses(expenses))
-        console.log(todayExpenses)
+
     }
+
 
 
 
@@ -74,7 +87,7 @@ function TodayExpenses() {
             setMessage(String(errorExpenses))
         }
 
-    }, [date, errorExpenses, successExpenses])
+    }, [date, errorExpenses, successExpenses, message])
     return (
 
         <div className="container">
@@ -84,14 +97,15 @@ function TodayExpenses() {
                 <Loader />
             ) : errorExpenses ? (
 
-                <Message variant="danger">{message || errorExpenses}</Message>
+                <Message variant="danger">{errorExpenses}</Message>
             ) : (
                 <>
                     <div className="h1 text-center text-dark" id="pageHeaderTitle">
 
                         <input type="date" id="date" value={date} onChange={(e) => setDate(e.target.value)} max={today} /> Expenses
                     </div><div className="row">
-                        {successExpenses && <Message variant="success">{Message}</Message>}
+                        {message && <Message variant="success">{message}</Message>}
+                        {/* {successExpenses && <Message variant="success">{message}</Message>} */}
                         <div className="col-md-6 mx-auto">
 
                             <div className="card card-body">
@@ -109,6 +123,8 @@ function TodayExpenses() {
                                             id="total"
                                             value={todayExpenses}
                                             onChange={(e) => setTodayExpenses(Number(e.target.value))}
+                                            required
+                                            min={1}
                                         />
                                     </div>
 

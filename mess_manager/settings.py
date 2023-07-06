@@ -123,7 +123,7 @@ SIMPLE_JWT = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'new_database',
+        'NAME': 'messdb',
         'USER': 'postgres',
         'PASSWORD': "Asd890ml",
         'HOST': "localhost",

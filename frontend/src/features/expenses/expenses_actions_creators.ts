@@ -61,7 +61,7 @@ export const addExpenses = (expenses: any) => async (dispatch: any, getState: an
 
 
 
-export const getExpensesPerMonth = (year: number, month: number) => async (dispatch: any, getState: any) => {
+export const getExpensesPerMonth = (year: string, month: string) => async (dispatch: any, getState: any) => {
     try {
         dispatch(getExpensesPerMonthRequest())
 
@@ -94,7 +94,7 @@ export const getExpensesPerMonth = (year: number, month: number) => async (dispa
 }
 
 
-export const getMessBill = (startDate: string, endDate: string) => async (dispatch: any, getState: any) => {
+export const getMessBill = (year: string, month: string) => async (dispatch: any, getState: any) => {
     try {
         dispatch(getMessBillRequest())
 
@@ -111,9 +111,10 @@ export const getMessBill = (startDate: string, endDate: string) => async (dispat
             }
         }
 
-        const { data } = await axios.get(`/api/expenses/bill/${startDate}/${endDate}/`,
+        const { data } = await axios.get(`/api/expenses/bill/${year}/${month}/`,
             config
         )
+
 
         dispatch(getMessBillSuccess(data))
 
@@ -127,7 +128,7 @@ export const getMessBill = (startDate: string, endDate: string) => async (dispat
 }
 
 
-export const payBill = (year: number, month: number, userId: number, payingBill: {
+export const payBill = (year: string, month: string, userId: number, payingBill: {
     paying_bill: number;
 }) => async (dispatch: any, getState: any) => {
     try {

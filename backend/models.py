@@ -1,5 +1,7 @@
 from distutils.command.build_scripts import first_line_re
+from django.core.validators import MinValueValidator, MaxValueValidator
 
+from django.contrib.postgres.fields import DateRangeField
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -7,6 +9,7 @@ from django.contrib import admin
 import decimal
 
 import datetime
+import calendar
 
 
 class User(AbstractUser):
@@ -91,8 +94,12 @@ class Bill(models.Model):
     student = models.ForeignKey(
         "User", on_delete=models.CASCADE, related_name="student")
     room = models.CharField(max_length=20, blank=True, default=0)
+    month = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(12)], default=datetime.date.today().month)
 
-    dateMonth = models.DateField()
+    year = models.IntegerField(default=datetime.date.today().year)
+    # prepayment = models.DecimalField(
+    #     decimal_places=2, max_digits=20, default=0)
     bill = models.DecimalField(
         decimal_places=2, max_digits=20, default=0)
     dues = models.DecimalField(max_digits=20,
@@ -104,21 +111,23 @@ class Bill(models.Model):
         ordering = ["student"]
 
     def __str__(self) -> str:
-        return f"bill of {self.student.username}  for month  {self.dateMonth} "
+        return f"bill of {self.student.username}  for month  {calendar.month_name[self.month]} "
 
 
 class MessBill(models.Model):
 
     """ A model that keeps all bills of students per month"""
-    # to have many to many relationship with mess bill (total bill) . One mess bill can have many users' bills
+    #  One mess bill can have many users' bills
 
     bills = models.ManyToManyField(Bill)
-    # january , february , march etc
-    # dateMonth = models.DateField(unique=True)
+    # # january , february , march etc
+    month = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(12)], default=datetime.date.today().month)
+    year = models.IntegerField(default=datetime.date.today().year)
 
     def __str__(self) -> str:
         # month = datetime.date.month.__str__()
-        return f"Mess bill is created with in the given dates "
+        return f"Mess bill is for {calendar.month_name[self.month]} "
 
 
 class PayingBill(models.Model):

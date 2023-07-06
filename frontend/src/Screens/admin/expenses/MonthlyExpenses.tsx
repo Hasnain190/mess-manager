@@ -12,8 +12,9 @@ export default function MonthlyExpenses() {
 
     const today = new Date().toISOString().slice(0, 7);
     const [date, setDate] = useState(today)
-    const month = Number(date.slice(5, 7)) //1
-    const year = Number(today.slice(0, 4)) //2023 
+    const month = (date.slice(5, 7)) //1
+    const year = (today.slice(0, 4)) //2023 
+
     const [totalExpensesFirst, setTotalExpensesFirst] = useState(0);
     const [totalExpensesSecond, setTotalExpensesSecond] = useState(0);
     const [totalExpenses, setTotalExpenses] = useState(0);
@@ -25,6 +26,20 @@ export default function MonthlyExpenses() {
         e.preventDefault()
         dispatch(getExpensesPerMonth(year, month))
 
+        calculateTotalExpenses()
+
+    }
+
+
+    useEffect(
+        () => {
+            dispatch(getExpensesPerMonth(year, month))
+            success && calculateTotalExpenses()
+
+
+        }, [date])
+
+    const calculateTotalExpenses = () => {
         let TotalExpensesFirst = expensesPerMonth?.reduce(function (acc: any, cur: any) {
             return acc + Number(cur.expenses_first_time)
         }, 0)
@@ -44,16 +59,9 @@ export default function MonthlyExpenses() {
         setTotalExpenses(TotalExpenses)
 
         console.log(TotalExpenses)
+
+
     }
-
-    useEffect(
-        () => {
-            dispatch(getExpensesPerMonth(year, month))
-
-
-            console.log(today)
-        }, [date])
-
     return (
 
         <div className='container'>
@@ -142,9 +150,9 @@ export default function MonthlyExpenses() {
                             <tr>
 
 
-                                <td scope="row" >{`Please Select Month and then click Get` || { totalExpensesFirst }}</td>
-                                <td scope="row" >{totalExpensesSecond}</td>
-                                <td scope="row" >{totalExpenses}</td>
+                                <td scope="row" > {totalExpensesFirst && totalExpensesFirst}</td>
+                                <td scope="row" >{totalExpensesSecond && totalExpensesSecond}</td>
+                                <td scope="row" >{totalExpenses && totalExpenses}</td>
                             </tr>
 
                         </tbody>

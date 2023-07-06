@@ -11,15 +11,15 @@ urlpatterns = [
     path('get/<int:user_id>/', view=views.get_bill_per_student,
          name="get bill per user "),
 
-    path('get/<int:year>/<int:month>/', view=views.get_expenses_per_month,
+    path('get/<str:year>/<str:month>/', view=views.get_expenses_per_month,
          name="get expenses per month"),
 
-    path("bill/<str:start_date>/<str:end_date>/",
+    path("bill/<str:year>/<str:month>/",
          view=views.get_bill, name="get monthly bill"),
 
 
 
     # FIXME
-    path("pay/bill/<int:year>/<int:month>/<int:user_id>/",
+    path("pay/bill/<str:year>/<str:month>/<int:user_id>/",
          view=views.add_bill_payed, name="add paying bill"),
 ]

@@ -16,14 +16,13 @@ function BillForm() {
 
     const today = new Date().toISOString().slice(0, 7);
     const [date, setDate] = useState(today)
-    const month = Number(date.slice(5, 7)) //1
-    const year = Number(today.slice(0, 4)) //2023 
+    const month = (date.slice(5, 7)) //1
+    const year = (today.slice(0, 4)) //2023 
 
     const { messBill, loading } = useAppSelector(state => state.getMessBill)
     const { loading: addBillLoading, success: addBillSuccess } = useAppSelector(state => state.addBill)
 
     const [message, setMessage] = useState<string>('')
-
 
     useEffect(() => {
         dispatch(listUsers())
@@ -43,7 +42,6 @@ function BillForm() {
     }, [addBillSuccess])
 
 
-    const [billPayed, setBillPayed] = useState(0)
 
 
 
@@ -63,7 +61,7 @@ function BillForm() {
         let payingBill = {
             paying_bill: billPayed
         }
-
+        // FIXME:
         dispatch(payBill(year, month, studentId, payingBill))
 
     }

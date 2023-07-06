@@ -38,7 +38,7 @@ function MonthlyAttendance() {
         <div className='container'>
             <div className="h1 text-center text-dark" id="pageHeaderTitle">
                 Attendance of <code>
-                    <input type="month" id="month" value={yearMonth} onChange={(e) => { setYearMonth(e.target.value) }} max={yearMonth} />
+                    <input type="month" id="month" value={yearMonth} onChange={(e) => { setYearMonth(e.target.value) }} max={thisYearMonth} />
                 </code>
             </div>
             {loading ? <Loader ></Loader> : error ? <Message>{error}</Message> :

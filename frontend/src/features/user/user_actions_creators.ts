@@ -94,7 +94,8 @@ export const register = (username: string, room: number, password: string, hoste
         dispatch(registerRequest())
 
         dispatch(registerSuccess(data))
-
+        dispatch(loginSuccess(data))
+        localStorage.setItem('userInfo', JSON.stringify(data))
 
     } catch (error: any) {
         dispatch(registerFail((error.response && error.response.data.detail
