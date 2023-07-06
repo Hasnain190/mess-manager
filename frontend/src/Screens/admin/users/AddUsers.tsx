@@ -40,7 +40,13 @@ function AddUsers() {
 
         if (password !== confirmPassword) {
             setMessage("Your passwords do not match");
-        } else {
+        } if (name.includes(" ")) {
+            setName(name.split(" ").join("_"))
+
+        }
+
+
+        else {
             dispatch(register(name, room, password, hostel, phone));
 
 
@@ -80,13 +86,13 @@ function AddUsers() {
 
                             <div className="form-group">
 
-                                <label htmlFor="name">Name</label>
+                                <label htmlFor="name">Username</label>
 
                                 <input
                                     type="text"
                                     className="form-control"
                                     id="name"
-                                    placeholder="Enter Name"
+                                    placeholder="Enter Username"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
 
@@ -96,7 +102,7 @@ function AddUsers() {
 
                             <div className="form-group">
 
-                                <label htmlFor="room">Your Room no.</label>
+                                <label htmlFor="room">Your Room No.</label>
 
                                 <input
                                     type="text"

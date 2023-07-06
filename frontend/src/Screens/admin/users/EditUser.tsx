@@ -58,10 +58,7 @@ export default function EditUser() {
     }, [id, user, success, successUpdate])
 
 
-    // useEffect(() => {
 
-
-    // }, [successUpdate])
 
     const submitHandler = (e: any) => {
         e.preventDefault()
