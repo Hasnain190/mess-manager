@@ -125,23 +125,23 @@ SIMPLE_JWT = {
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'messdb',
-#         'USER': 'postgres',
-#         'PASSWORD': "Asd890ml",
-#         'HOST': "localhost",
-#         'PORT': '5432'
-#     }
-# }
 DATABASES = {
-    'default': dj_database_url.config(
-        # Feel free to alter this value to suit your needs.
-        default='postgresql://postgres:postgres@localhost:5432/mess-manager',        conn_max_age=600)
-
-
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'messdb',
+        'USER': 'postgres',
+        'PASSWORD': "Asd890ml",
+        'HOST': "localhost",
+        'PORT': '5432'
+    }
 }
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         # Feel free to alter this value to suit your needs.
+#         default='postgresql://postgres:postgres@localhost:5432/mess-manager',        conn_max_age=600)
+
+
+# }
 
 # DATABASES = {
 #     'default': {
