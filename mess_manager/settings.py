@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-import dj_database_url
+
 
 from pathlib import Path
 import os
@@ -132,23 +132,10 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': "Asd890ml",
         'HOST': "localhost",
-        'PORT': '5432'
+        'PORT': ''
     }
 }
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         # Feel free to alter this value to suit your needs.
-#         default='postgresql://postgres:postgres@localhost:5432/mess-manager',        conn_max_age=600)
 
-
-# }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': 'mydatabase',
-#     }
-# }
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
