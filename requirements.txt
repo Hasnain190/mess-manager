@@ -28,7 +28,6 @@ incremental==21.3.0
 itypes==1.2.0
 Jinja2==3.1.2
 MarkupSafe==2.1.1
-mysqlclient==2.1.1
 oauthlib==3.2.0
 pefile==2022.5.30
 Pillow==9.1.1
@@ -52,8 +51,6 @@ social-auth-app-django==4.0.0
 social-auth-core==4.3.0
 sqlparse==0.4.2
 tomli==2.0.1
-Twisted==22.10.0
-twisted-iocpsupport==1.0.2
 txaio==23.1.1
 typing_extensions==4.3.0
 tzdata==2022.1
