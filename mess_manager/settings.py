@@ -28,9 +28,9 @@ SECRET_KEY = 'Ve(14KzaIi>`_T_6|(n(dRkB_#0?]YP}9^sq=[omJ/&2t&4ayt=FK=|GjuU0Z4'
 # SECURITY WARNING: don't run with debug turned on in production!
 # Production Mode Settings
 DEBUG = False
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = True
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
+# SECURE_SSL_REDIRECT = True
 
 ALLOWED_HOSTS = ["13.127.120.227","localhost"]
 
