@@ -12,7 +12,7 @@ node_modules/
 
 # production
 # /build
-/staticfiles
+/static
 # misc
 *.pyc
 /__pycache__
