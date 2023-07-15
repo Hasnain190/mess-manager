@@ -32,7 +32,7 @@ DEBUG = True
 # SESSION_COOKIE_SECURE = True
 # SECURE_SSL_REDIRECT = True
 
-ALLOWED_HOSTS = ["13.127.120.227","localhost"]
+ALLOWED_HOSTS = ["127.0.0.1","13.127.120.227","localhost"]
 
 # Application definition
 
