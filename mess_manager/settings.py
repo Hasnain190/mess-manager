@@ -189,7 +189,7 @@ MEDIA_ROOT = BASE_DIR / 'static/images'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
-# when `python manage.py collectstatics` is run , it will look through all static directories in the INSTALLED_APPS and also through directories provided in STATICFILES_DIRS then it will collect them in STATIC_ROOT ,which we can use through STATIC_URL in the html file `static` tag
+# when `python manage.py collectstatic` is run , it will look through all static directories in the INSTALLED_APPS and also through directories provided in STATICFILES_DIRS then it will collect them in STATIC_ROOT ,which we can use through STATIC_URL in the html file `static` tag
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
