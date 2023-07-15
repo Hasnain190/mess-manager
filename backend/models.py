@@ -124,11 +124,14 @@ class MessBill(models.Model):
     month = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(12)], default=datetime.date.today().month)
     year = models.IntegerField(default=datetime.date.today().year)
-
+    
+    class Meta:
+        unique_together = ['year', 'month']
+    
     def __str__(self) -> str:
         # month = datetime.date.month.__str__()
         return f"Mess bill is for {calendar.month_name[self.month]} "
-
+    
 
 class PayingBill(models.Model):
     """To calculate dues and add paying bills (yeh woh khana hai jisme bill ada kerne wale logon ka record rkha jata hai )"""

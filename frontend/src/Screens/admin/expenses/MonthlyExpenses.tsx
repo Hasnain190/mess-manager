@@ -37,7 +37,7 @@ export default function MonthlyExpenses() {
             success && calculateTotalExpenses()
 
 
-        }, [date])
+        }, [date, year, month, success, dispatch])
 
     const calculateTotalExpenses = () => {
         let TotalExpensesFirst = expensesPerMonth?.reduce(function (acc: any, cur: any) {
@@ -70,9 +70,6 @@ export default function MonthlyExpenses() {
 
                 <div className="h1 text-center text-dark" id="expensesPageHeaderTitle">
                     Get Expenses of
-
-
-
 
                     <form className="form form-control" onSubmit={handleSubmit} >
 

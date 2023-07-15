@@ -57,23 +57,22 @@ def get_bill(request, year, month):
         mess_bill, created = MessBill.objects.get_or_create(
             year=year, month=month)
         print(created)
-        if created:
-            total_expenses_first_time_all_user, total_expenses_second_time_all_user = expenses_all_users(
+        
+        total_expenses_first_time_all_user, total_expenses_second_time_all_user = expenses_all_users(
                 year, month)
 
             # for the  total attendances of all the users
-            bill_first_time_all_users, bill_second_time_all_users = bill_all_users(
+        bill_first_time_all_users, bill_second_time_all_users = bill_all_users(
                 year, month, total_expenses_first_time_all_user, total_expenses_second_time_all_user)
 
-            print("bill_first_time_all_users: ->", bill_first_time_all_users)
+        print("bill_first_time_all_users: ->", bill_first_time_all_users)
 
-            calculate_bill(year, month, mess_bill,
+        calculate_bill(year, month, mess_bill,
                            bill_first_time_all_users, bill_second_time_all_users)
-
-            serializers = MessBillSerializer(mess_bill, many=False)
-            return Response(serializers.data)
+        mess_bill.save()
         serializers = MessBillSerializer(mess_bill, many=False)
         return Response(serializers.data)
+       
 
     except Exception as e:
         # replace 'YourAppName' with your actual app name
@@ -89,6 +88,7 @@ def get_bill(request, year, month):
 def calculate_bill(year, month, mess_bill, bill_first_time_all_users, bill_second_time_all_users):
     year = str(year)
     month = str(month)
+    mess_bill.bills.clear()
     for i in User.objects.all():
         user = User.objects.get(username=i.username)
 

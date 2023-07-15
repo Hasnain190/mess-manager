@@ -69,7 +69,8 @@ function TodayExpenses() {
     // const expensePerAttendance = (todayExpenses / count).toFixed(2);
     useEffect(() => {
         setTodayExpensesFirst(parseFloat((todayExpenses * factor).toFixed(2))); setTodayExpensesSecond(parseFloat((todayExpenses * (1 - factor)).toFixed(2)))
-    }, [todayExpenses, factor])
+        setMessage("")
+    }, [todayExpenses, factor, message])
 
 
     useEffect(() => {
