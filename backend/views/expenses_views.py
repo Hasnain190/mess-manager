@@ -46,36 +46,28 @@ def get_expenses_per_month(request, year, month):
 
     return Response(serializers.data)
 
-
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def get_bill(request, year, month):
     year = int(year)
     month = int(month)
     try:
-        # FIXME: creating the messbill object every time is computationally and storage wise , very unwise,so you need to fix this
         mess_bill, created = MessBill.objects.get_or_create(
             year=year, month=month)
-        print(created)
-        
+
         total_expenses_first_time_all_user, total_expenses_second_time_all_user = expenses_all_users(
                 year, month)
 
-            # for the  total attendances of all the users
         bill_first_time_all_users, bill_second_time_all_users = bill_all_users(
                 year, month, total_expenses_first_time_all_user, total_expenses_second_time_all_user)
-
-        print("bill_first_time_all_users: ->", bill_first_time_all_users)
 
         calculate_bill(year, month, mess_bill,
                            bill_first_time_all_users, bill_second_time_all_users)
         mess_bill.save()
         serializers = MessBillSerializer(mess_bill, many=False)
         return Response(serializers.data)
-       
 
     except Exception as e:
-        # replace 'YourAppName' with your actual app name
         logger = logging.getLogger('backend.views')
         logger.error(e)
 

@@ -34,6 +34,7 @@ def post_attendance(request, id):
             'second_time': data['second_time']
         }
     )
+    attendance.save()
     serializer = AttendanceSerializer(attendance)
     return Response(serializer.data)
 
