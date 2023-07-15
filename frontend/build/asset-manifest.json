@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/static/css/main.a14e2554.css",
-    "main.js": "/static/js/main.bcd26ada.js",
+    "main.js": "/static/js/main.a17cfc98.js",
     "static/media/bg-hostel.jpg": "/static/media/bg-hostel.9be41497a1ab40ae4803.jpg",
     "index.html": "/index.html",
     "main.a14e2554.css.map": "/static/css/main.a14e2554.css.map",
-    "main.bcd26ada.js.map": "/static/js/main.bcd26ada.js.map"
+    "main.a17cfc98.js.map": "/static/js/main.a17cfc98.js.map"
   },
   "entrypoints": [
     "static/css/main.a14e2554.css",
-    "static/js/main.bcd26ada.js"
+    "static/js/main.a17cfc98.js"
   ]
 }

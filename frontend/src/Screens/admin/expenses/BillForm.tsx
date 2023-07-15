@@ -59,7 +59,8 @@ function BillForm() {
 
         let studentId = e.target[1].id.split("-").at(-1);
         let payingBill = {
-            paying_bill: billPayed
+            paying_bill: billPayed,
+            for_month: month
         }
 
         dispatch(payBill(year, month, studentId, payingBill))

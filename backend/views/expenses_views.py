@@ -80,6 +80,9 @@ def get_bill(request, year, month):
 def calculate_bill(year, month, mess_bill, bill_first_time_all_users, bill_second_time_all_users):
     year = str(year)
     month = str(month)
+    # removing previous bills
+    
+   
     mess_bill.bills.clear()
     for i in User.objects.all():
         user = User.objects.get(username=i.username)
@@ -124,21 +127,36 @@ def calculate_bill(year, month, mess_bill, bill_first_time_all_users, bill_secon
             prev_year = int(year) - 1
         else:
             prev_month = int(month) - 1
-            prev_year = year
-
+            prev_year = int(year)
+       
         # Get the bill for the previous month
         pre_month_bill, _ = Bill.objects.get_or_create(
             month=prev_month, year=prev_year, student=user)
         print(pre_month_bill.dues)
-        bill, _ = Bill.objects.update_or_create(
+        bill, update = Bill.objects.update_or_create(
             student=user,
-            room=room,
-            bill=total_bill_per_user,
-            month=month
-        )
+            room = room,
+            month=month,
+            year =int( year),
+            
+            defaults={
 
+            'bill': total_bill_per_user
+            
+            }
+            
+        )
+        
+        # add payed bills if any  to calculate final bill
+        
+        payments = PayingBill.objects.filter(student=user,for_month = month)
+        total_payments = 0
+        for payment in payments:
+            total_payments +=Decimal( payment.paying_bill)
+        
+        
         bill.dues = pre_month_bill.dues
-        bill.total = bill.dues + bill.bill
+        bill.total = bill.dues + bill.bill - total_payments
         bill.save()
 
         mess_bill.bills.add(bill)
@@ -204,30 +222,26 @@ def add_bill_payed(request, year, month, user_id):
                             year=year, student=user)
 
     bill_payed = data["paying_bill"]
+    for_month = data["for_month"]
     print(bill_payed)
     bill_payed_date = datetime.date.today()
 
-    last_payed, created = PayingBill.objects.update_or_create(
+    last_payed = PayingBill.objects.create(
         student=user,
-        paying_date__year=year,
-        paying_date__month=month,
-        defaults={
-            "current_bill": bill,
-            "paying_bill": bill_payed,
-            "paying_date": bill_payed_date
-        }
-    )
-    print(created)
-    if not created:
-        print(bill.dues)
-        bill.dues = bill.total - Decimal(bill_payed)
+        paying_date = bill_payed_date,
+        current_bill = bill,
+        paying_bill = bill_payed,
+        for_month = for_month
+       )
+   
+   
+    bill.dues = bill.total - Decimal(bill_payed)
         # bill.prepayment = -dues if dues < 0 else 0
-        bill.total = bill.dues
-        bill.save()
-        serializers = PayingBillSerializer(last_payed)
-        return Response(serializers.data)
+    bill.total = bill.dues
+    bill.save()
     serializers = PayingBillSerializer(last_payed)
     return Response(serializers.data)
+    
 
 
 def get_bill_per_student(request, user_id):

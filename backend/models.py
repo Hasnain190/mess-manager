@@ -109,6 +109,7 @@ class Bill(models.Model):
 
     class Meta:
         ordering = ["student"]
+        unique_together = ["year","month","student"]
 
     def __str__(self) -> str:
         return f"bill of {self.student.username}  for month  {calendar.month_name[self.month]} "
@@ -135,7 +136,9 @@ class MessBill(models.Model):
 
 class PayingBill(models.Model):
     """To calculate dues and add paying bills (yeh woh khana hai jisme bill ada kerne wale logon ka record rkha jata hai )"""
-    current_bill = models.OneToOneField(Bill, on_delete=models.CASCADE)
+    for_month = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(12)], default=datetime.date.today().month)
+    current_bill = models.ForeignKey(Bill, on_delete=models.CASCADE)
     paying_bill = models.CharField(max_length=20, blank=True, null=True)
     student = models.ForeignKey(
         "User", on_delete=models.CASCADE)
