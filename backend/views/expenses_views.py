@@ -133,19 +133,20 @@ def calculate_bill(year, month, mess_bill, bill_first_time_all_users, bill_secon
         pre_month_bill, _ = Bill.objects.get_or_create(
             month=prev_month, year=prev_year, student=user)
         print(pre_month_bill.dues)
-        bill, update = Bill.objects.update_or_create(
+        try:
+            bill = Bill.objects.get(student=user, room=room, month=month, year=int(year))
+            bill.bill = total_bill_per_user
+            bill.save()
+        except Bill.DoesNotExist:
+            bill = Bill.objects.create(
             student=user,
-            room = room,
+            room=room,
             month=month,
-            year =int( year),
-            
-            defaults={
+            year=int(year),
+            bill=total_bill_per_user
+            )
 
-            'bill': total_bill_per_user
-            
-            }
-            
-        )
+
         
         # add payed bills if any  to calculate final bill
         
@@ -222,7 +223,8 @@ def add_bill_payed(request, year, month, user_id):
                             year=year, student=user)
 
     bill_payed = data["paying_bill"]
-    for_month = data["for_month"]
+    for_month = int(data["for_month"])
+    
     print(bill_payed)
     bill_payed_date = datetime.date.today()
 
@@ -231,7 +233,7 @@ def add_bill_payed(request, year, month, user_id):
         paying_date = bill_payed_date,
         current_bill = bill,
         paying_bill = bill_payed,
-        for_month = for_month
+        for_month = month
        )
    
    
