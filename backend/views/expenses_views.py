@@ -167,8 +167,8 @@ def calculate_bill(year, month, mess_bill, bill_first_time_all_users, bill_secon
             total_payments +=Decimal( payment.paying_bill)
         
         
-        bill.dues = pre_month_bill.dues
-        bill.total = bill.dues + bill.bill - total_payments
+        bill.dues = pre_month_bill.dues +bill.bill - total_payments
+        bill.total = bill.dues 
         bill.save()
 
         mess_bill.bills.add(bill)
@@ -246,12 +246,13 @@ def add_bill_payed(request, year, month, user_id):
         paying_bill = bill_payed,
         for_month = month
        )
-   
+    
    
     bill.dues = bill.total - Decimal(bill_payed)
         # bill.prepayment = -dues if dues < 0 else 0
     bill.total = bill.dues
     bill.save()
+    # print(f"total: {bill.total} \n dues:{bill.dues} \n payment: {bill_payed} \n month: {month} ")
     serializers = PayingBillSerializer(last_payed)
     return Response(serializers.data)
     
