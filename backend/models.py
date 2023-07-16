@@ -109,7 +109,7 @@ class Bill(models.Model):
 
     class Meta:
         ordering = ["student"]
-        # unique_together = ["year","month","student"]
+        unique_together = ["year","month","student"]
 
     def __str__(self) -> str:
         return f"bill of {self.student.username}  for month  {calendar.month_name[self.month]} "
