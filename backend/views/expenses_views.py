@@ -130,8 +130,19 @@ def calculate_bill(year, month, mess_bill, bill_first_time_all_users, bill_secon
             prev_year = int(year)
        
         # Get the bill for the previous month
-        pre_month_bill, _ = Bill.objects.get_or_create(
-            month=prev_month, year=prev_year, student=user)
+        try:
+            pre_month_bill = Bill.objects.get(student=user, month=prev_month, year=prev_year)
+           
+        except Bill.DoesNotExist:
+            pre_month_bill = Bill.objects.create(
+            student=user,
+            room=room,
+            month=prev_month,
+            year=int(prev_year),
+           
+            )
+
+        
         print(pre_month_bill.dues)
         try:
             bill = Bill.objects.get(student=user, room=room, month=month, year=int(year))
