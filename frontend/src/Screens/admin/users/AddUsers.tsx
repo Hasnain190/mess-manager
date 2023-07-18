@@ -24,8 +24,8 @@ function AddUsers() {
     const [room, setRoom] = useState(Number);
     const [hostel, setHostel] = useState('');
     const [phone, setPhone] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
 
+    const [securityFee, setSecurityFee] = useState(0)
 
 
 
@@ -38,16 +38,17 @@ function AddUsers() {
     const submitHandler = (e: any) => {
         e.preventDefault();
 
-        if (password !== confirmPassword) {
-            setMessage("Your passwords do not match");
-        } if (name.includes(" ")) {
+        if (name.includes(" ")) {
             setName(name.split(" ").join("_"))
 
         }
 
 
+
+
         else {
-            dispatch(register(name, room, password, hostel, phone));
+            setPassword(name)
+            dispatch(register(name, room, password, hostel, phone, securityFee));
 
 
         }
@@ -145,37 +146,24 @@ function AddUsers() {
                                     onChange={(e) => setPhone(e.target.value)}
                                 />
                             </div>
-
-
                             <div className="form-group">
 
-                                <label htmlFor="password">Password</label>
+                                <label htmlFor="room"> Security Deposit</label>
 
                                 <input
-                                    type="password"
+                                    type="number"
                                     className="form-control"
-                                    id="password"
-                                    placeholder="Enter Password"
+                                    id="security-fee"
+                                    placeholder="Initial Security Deposits"
                                     required
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    value={securityFee}
+                                    onChange={(e) => setSecurityFee(Number(e.target.value))}
                                 />
                             </div>
 
-                            <div className="form-group">
 
-                                <label htmlFor="password2">Confirm Password</label>
 
-                                <input
-                                    type="password"
-                                    className="form-control"
-                                    id="password2"
-                                    required
-                                    placeholder="Confirm Password"
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                />
-                            </div>
+
 
                             <button type="submit" className="btn btn-primary btn-block">
                                 Register

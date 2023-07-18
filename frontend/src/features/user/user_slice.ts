@@ -13,7 +13,8 @@ interface userInfo {
   phone: string,
   room: number,
   hostel: string,
-  token: string
+  token: string,
+  security_fee: number
 }
 interface userLogin {
   error?: string | null | unknown,
@@ -52,8 +53,7 @@ export const userLoginSlice = createSlice({
       state.success = true;
     },
 
-    // user login failed
-    // FIXME: determine the type of error and give its type of action
+
     loginFail(state, action: PayloadAction<any>) {
       state.loading = false;
       state.error = action.payload
@@ -109,6 +109,7 @@ const initialState = {
     room: 0,
     hostel: '',
     phone: '',
+    security_fee: 0,
     isAdmin: false
   },
   loading: false,
@@ -285,6 +286,7 @@ export const userListSlice = createSlice({
         room: 0,
         hostel: '',
         phone: '',
+        security_fee: "0.00",
         isAdmin: false
       },
 

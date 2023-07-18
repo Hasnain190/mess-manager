@@ -19,6 +19,8 @@ class User(AbstractUser):
 
     hostel = models.CharField(max_length=20, blank=True, null=True)
     room = models.CharField(max_length=20, default=0)
+    
+    security_fee= models.DecimalField(decimal_places=2,default=0,max_digits=200)
 
     def __str__(self) -> str:
         return self.username

@@ -23,6 +23,7 @@ export default function EditUser() {
     const [phone, setPhone] = useState(user.phone)
     const [hostel, setHostel] = useState(user.hostel)
     const [isAdmin, setIsAdmin] = useState(user.isAdmin)
+    const [securityFee, setSecurityFee] = useState(user.security_fee || 0)
 
     const dispatch = useAppDispatch()
 
@@ -45,6 +46,7 @@ export default function EditUser() {
             setRoom(user?.room)
             setPhone(user?.phone)
             setHostel(user?.hostel)
+            setSecurityFee(user?.security_fee)
 
         }
 
@@ -62,7 +64,7 @@ export default function EditUser() {
 
     const submitHandler = (e: any) => {
         e.preventDefault()
-        dispatch(updateUser({ id: id, username, email, hostel, room, phone, isAdmin }))
+        dispatch(updateUser({ id: id, username, email, hostel, room, phone, isAdmin, securityFee }))
 
 
 
@@ -195,6 +197,21 @@ export default function EditUser() {
                                                     >
                                                     </input>
                                                 </div>
+
+                                                <div className='form-group' >
+
+                                                    <label htmlFor='room'>Security Fee</label>
+
+                                                    <input
+                                                        className='form-control'
+                                                        type='number'
+                                                        placeholder='Security'
+                                                        value={securityFee}
+                                                        onChange={(e) => setSecurityFee(Number(e.target.value))}
+                                                    >
+                                                    </input>
+                                                </div>
+
 
 
                                                 <button type='submit' >

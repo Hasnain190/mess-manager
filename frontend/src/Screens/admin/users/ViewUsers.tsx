@@ -56,6 +56,7 @@ function ViewUsers() {
             <th scope="col">Email</th>
 
             <th scope="col">Room No</th>
+            <th scope="col">Security Fee</th>
 
             <th scope="col">Phone</th>
 
@@ -78,6 +79,7 @@ function ViewUsers() {
             <td>{user.email}</td>
 
             <td>{user.room}</td>
+            <td>{user.security_fee}</td>
 
             <td>{user.phone}</td>
 

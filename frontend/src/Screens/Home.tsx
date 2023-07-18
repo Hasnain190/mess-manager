@@ -11,9 +11,9 @@ function Home() {
       <header className="bg-primary text-white text-center py-5">
         <div className="container">
           <h1 className="display-4">Welcome to Mess Manager</h1>
-          <p className="lead">Manage your mess for Eice Muhammad Hostel efficiently</p>
+          <p className="lead">Manage your mess for Al-Saeed Hostel efficiently</p>
           <Link to={'/login'} className="btn btn-light btn-lg">
-            Login Get Started
+            Login
           </Link>
         </div>
       </header>

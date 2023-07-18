@@ -74,7 +74,8 @@ def register_user(request):
             room=data['room'],
             password=make_password(data['password']),
             hostel = data['hostel'],
-            phone = data['phone']
+            phone = data['phone'],
+            security_fee = data['security_fee']
 
         )
 
@@ -149,6 +150,7 @@ def delete_user(request, user_id):
 
 
 # update a user
+# FIXME There is a flaw here
 @api_view(['PUT'])
 @permission_classes([IsAdminUser])
 def update_user(request, user_id):
