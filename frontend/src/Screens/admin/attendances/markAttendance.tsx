@@ -8,7 +8,7 @@ import Message from "../../../components/Message";
 import { Link, useNavigate } from "react-router-dom";
 import { postAttendance, getDailyAttendance } from "../../../features/attendance/attendance_actions_creators";
 import { counter } from "../../../components/counter";
-
+import { User } from '../../../types/userTypes'
 
 export default function MarkAttendance() {
 

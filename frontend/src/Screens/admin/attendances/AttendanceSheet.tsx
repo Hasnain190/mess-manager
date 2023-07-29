@@ -2,20 +2,54 @@
 import React from "react";
 
 import Downloader from "../../../components/Downloader";
+import { Attendance } from '../../../types/attendanceTypes'
+import convertToMonth from "../../../components/ConvertToMonth"
 
+import { headingRow, descriptionRow } from "../../../components/ExcelMeta/Attendance";
+
+interface propsTypes {
+    month: string;
+    day: number;
+    attendance: Attendance[]
+}
 
 function AttendanceSheet({
     month,
     day,
     attendance
-}: any) {
+}: propsTypes) {
 
+
+    const data = attendance.map((attendance: Attendance) => ({
+        Student: attendance.student,
+        first_time: attendance.first_time,
+        second_time: attendance.second_time
+
+
+    }))
+    const dataWithHeaders = [
+        // Add the heading row
+        headingRow,
+
+        descriptionRow,
+
+
+        [],
+        // Heading row
+        ['Student', 'First Time', "Second Time"],
+        // Original Data
+        ...data.map((attendance) => [
+            attendance.Student,
+            attendance.first_time,
+            attendance.second_time
+        ]),
+    ];
     return (
 
         <div  >
 
 
-            <Downloader tableData={attendance} htmlInputId={`attendance-${day}`} name={"Attendance-Sheet"} />
+            <Downloader tableData={dataWithHeaders} htmlInputId={`attendance-${day}`} name={"Attendance-Sheet"} />
 
             <div id={`attendance-${day}`}>
 
@@ -24,9 +58,8 @@ function AttendanceSheet({
 
 
                 <div className="h5 text-start">
-                    {`${month}-${day}`}
+                    {`${convertToMonth(month)}-${day}`}
 
-                    {/* <ConvertToMonth number={Number(month)} /> - {day} */}
                 </div>
 
 
@@ -46,11 +79,11 @@ function AttendanceSheet({
                         </tr>
                     </thead>
 
-                    {attendance?.map((item) => <tbody  >
+                    {attendance?.map((item: Attendance, index) => <tbody  >
 
                         <tr>
 
-                            <th key={item.id} scope="row">{item.id}</th>
+                            <th key={item.id} scope="row">{index}</th>
 
                             <td>{item?.student}</td>
 

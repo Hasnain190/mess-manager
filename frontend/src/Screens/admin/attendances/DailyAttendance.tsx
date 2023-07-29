@@ -1,17 +1,21 @@
 import AttendanceSheet from './AttendanceSheet'
 import React from "react";
+import { Attendance } from '../../../types/attendanceTypes';
+interface propsTypes {
+    month: string;
 
-
+    filteredMonthlyAttendance: Attendance[]
+}
 function DailyAttendance({
     month,
     filteredMonthlyAttendance
-}: any) {
+}: propsTypes) {
     const attendance = filteredMonthlyAttendance;
-    const dailyDateList = attendance?.map((item: any) => Number((item.date).split("-")[2])) //[06,06,06]
+    const dailyDateList = attendance?.map((item: Attendance) => Number((item.date).split("-")[2])) //[06,06,06]
     const dailyDateSet = [...new Set(dailyDateList)]
 
 
-    const filteredAttendance = (number: any) => attendance.filter((item: any) => Number((item.date).split("-")[2]) === number)
+    const filteredAttendance = (number: number) => attendance.filter((item: Attendance) => Number((item.date).split("-")[2]) === number)
 
 
     return (

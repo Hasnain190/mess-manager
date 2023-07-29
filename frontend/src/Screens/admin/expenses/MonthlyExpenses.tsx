@@ -5,7 +5,7 @@ import Message from "../../../components/Message";
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { useEffect, useState } from 'react';
 import Downloader from '../../../components/Downloader';
-
+import { headingRow, descriptionRow } from '../../../components/ExcelMeta/MonthlyExpenses';
 export default function MonthlyExpenses() {
     const dispatch = useAppDispatch();
 
@@ -30,7 +30,37 @@ export default function MonthlyExpenses() {
 
     }
 
+    const data = expensesPerMonth?.map((expense) => ({
+        date: expense.date,
+        attendance_first_time: expense.attendance_first_time,
+        attendance_second_time: expense.attendance_second_time,
+        total_attendances: expense.total_attendances,
 
+        expenses_total: expense.expenses_total,
+    }));
+    // Custom headings and description
+
+
+    const dataWithHeaders = [
+        // Add the heading row
+        headingRow,
+
+        descriptionRow,
+
+
+        [],
+        // Heading row
+        ['Date', 'First Time Attendances', "Second Time Attendances", "Total Attendances", 'Total Expenses'],
+        // Original Data
+        ...data.map((expense) => [
+            expense.date,
+            expense.attendance_first_time,
+            expense.attendance_second_time,
+            expense.total_attendances,
+
+            expense.expenses_total,
+        ]),
+    ];
     useEffect(
         () => {
             dispatch(getExpensesPerMonth(year, month))
@@ -82,7 +112,7 @@ export default function MonthlyExpenses() {
 
             </div >
 
-            <Downloader tableData={expensesPerMonth} htmlInputId={`expensesPageHeaderTitle`} name={"Expenses-sheet"} />
+            <Downloader tableData={dataWithHeaders} htmlInputId={`expensesPageHeaderTitle`} name={"Expenses-sheet"} />
 
             < div id="expensesPageHeaderTitle" >
 

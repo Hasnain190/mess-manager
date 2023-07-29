@@ -1,45 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { float } from "html2canvas/dist/types/css/property-descriptors/float";
+import { createSlice } from "@reduxjs/toolkit";
 
-
-//  GET EXpenses 
-// [
-// 	{
-// 		"date": "2023-01-20",
-// 		"total_attendances": 150,
-
-
-// 	    "expenses_per_first_time": number;
-//       "expenses_per_first_second": number;
-
-// 	},
-// 	{
-// 		"date": "2023-01-21",
-// 		"total_attendances": 120,
-// 	    "expenses_per_first_time": number;
-//       "expenses_per_first_second": number;
-
-// 	},
-// 	{
-// 		"date": "2023-01-22",
-// 		"total_attendances": 150,
-//      "expenses_per_first_time": number;
-//       "expenses_per_first_second": number;
-
-// 
-// 	}
-// ]
-
-interface expensesPerDay {
-    date: string;
-    total_attendances: number;
-    expenses_per_first_time: number;
-    expenses_per_first_second: number;
-
-
-}
-
-type TExpenses = expensesPerDay[]
 const ExpenseInitialState = {
     loading: false,
     success: false,

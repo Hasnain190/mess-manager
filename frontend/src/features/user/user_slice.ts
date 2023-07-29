@@ -2,29 +2,9 @@
 
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
-interface userInfo {
+import { UserInfo } from "../../types/userTypes";
 
-  refresh: string,
-  access: string,
-  id: number,
-  username: string,
-  isAdmin: boolean,
-  email: string,
-  phone: string,
-  room: number,
-  hostel: string,
-  token: string,
-  security_fee: number
-}
-interface userLogin {
-  error?: string | null | unknown,
-  loading?: boolean,
-  userInfo?: userInfo | null
-}
-
-
-
-const userInfoFromStorage: userInfo | null = localStorage.getItem("userInfo") !== null
+const userInfoFromStorage: UserInfo | null = localStorage.getItem("userInfo") !== null
   ? JSON.parse(localStorage.getItem("userInfo")!)
   : null;
 
@@ -47,7 +27,7 @@ export const userLoginSlice = createSlice({
 
     },
     // user login success
-    loginSuccess(state, action: PayloadAction<userInfo>) {
+    loginSuccess(state, action: PayloadAction<UserInfo>) {
       state.loading = false;
       state.userInfo = action.payload;
       state.success = true;
@@ -85,7 +65,7 @@ export const userRegisterSlice = createSlice({
       state.loading = true;
     },
     // user register success
-    registerSuccess(state, action: PayloadAction<userInfo>) {
+    registerSuccess(state, action: PayloadAction<UserInfo>) {
       state.loading = false;
       state.success = true;
       state.userInfo = action.payload
@@ -128,7 +108,7 @@ export const userDetailsSlice = createSlice({
       state.loading = true
     },
 
-    detailsSuccess(state, action: PayloadAction<userInfo>) {
+    detailsSuccess(state, action: PayloadAction<UserInfo>) {
 
       state.loading = false;
       state.user = action.payload;
@@ -157,7 +137,7 @@ export const userUpdateProfileSlice = createSlice({
     updateProfileRequest(state) {
       state.loading = true
     },
-    updateProfileSuccess(state, action: PayloadAction<userInfo>) {
+    updateProfileSuccess(state, action: PayloadAction<UserInfo>) {
       state.loading = false;
       state.userInfo = action.payload;
       state.success = true;
@@ -171,8 +151,6 @@ export const userUpdateProfileSlice = createSlice({
 })
 export const { updateProfileRequest, updateProfileFail, updateProfileSuccess } = userUpdateProfileSlice.actions
 
-// FIXME: i don't know how it works
-// delete user
 export const userDeleteSlice = createSlice({
   name: 'user-delete',
   initialState: {
@@ -188,8 +166,6 @@ export const userDeleteSlice = createSlice({
   }
 })
 export const { deleteRequest, deleteFail, deleteSuccess } = userDeleteSlice.actions
-
-// FIXME: I don't know what it does so i am just writing it as it is
 
 export const userUpdateSlice = createSlice({
 
@@ -208,7 +184,7 @@ export const userUpdateSlice = createSlice({
       state.loading = true;
     },
     // user update success
-    updateSuccess(state, action: PayloadAction<userInfo>) {
+    updateSuccess(state, action: PayloadAction<UserInfo>) {
       state.loading = false;
       state.success = true;
       state.user = action.payload

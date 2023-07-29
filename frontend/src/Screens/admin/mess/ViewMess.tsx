@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { getMessMenu } from "../../../features/mess/mess_actions_creators";
 
 import Message from "../../../components/Message";
@@ -7,7 +7,9 @@ import "./ViewMess.css";
 import Loader from "../../../components/Loader";
 import { Link } from "react-router-dom";
 import Downloader from "../../../components/Downloader";
+import { headingRow, descriptionRow } from '../../../components/ExcelMeta/Menu'
 
+import { messMenu, menuPerDay } from "../../../types/messTypes";
 function ViewMess() {
 
   const dispatch = useAppDispatch()
@@ -20,9 +22,34 @@ function ViewMess() {
   }, [dispatch, useAppSelector]);
 
   const { messMenu, loading, error } = useAppSelector((state) => state.messMenu);
+  const data = messMenu.map((menu: menuPerDay) => ({
+
+
+    day: menu.day,
+    first_time: menu.first_time,
+    second_time: menu.second_time
+
+  }))
 
 
 
+
+  const dataWithHeaders = [
+    // Add the heading row
+    headingRow,
+
+    descriptionRow,
+
+    [],
+    // Heading row
+    ['Day', 'First Time', 'Second Time'],
+    // Original Data
+    ...data.map((menu) => [
+      menu.day,
+      menu.first_time,
+      menu.second_time
+    ]),
+  ];
 
   return (
 
@@ -35,7 +62,7 @@ function ViewMess() {
           <div className="col-md-12">
 
 
-            <Downloader tableData={messMenu} htmlInputId={'divToPrint'} name={"Mess-Menu"} />
+            <Downloader tableData={dataWithHeaders} htmlInputId={'divToPrint'} name={"Mess-Menu"} />
 
 
 
@@ -75,7 +102,7 @@ function ViewMess() {
 
                       <tbody>
 
-                        {messMenu?.map((menu) => <tr key={menu.id}>
+                        {messMenu?.map((menu: menuPerDay) => <tr key={menu.id}>
 
                           <td>
 
