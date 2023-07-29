@@ -119,10 +119,12 @@ class MessBillSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        bills = data['bills']
-        for bill in bills:
+        data['bills'] = sorted(data['bills'], key=lambda x: int(x['room']))
+        
+        for bill in data['bills']:
             bill["student_id"] = User.objects.get(id=bill['student']).id
             bill['student'] = User.objects.get(id=bill['student']).username
+
         return data
 
 

@@ -93,4 +93,27 @@ export const postAttendanceSlice = createSlice({
 
 export const { postAttendanceRequest, postAttendanceSuccess, postAttendanceFail } = postAttendanceSlice.actions
 
+export const getFirstAndSecondSlice = createSlice({
+    name: 'get first and second ',
+    initialState: {
+        loading: false,
+        success: false,
+        error: null,
+        attendances: {
+            "attendances_first_all": "0.0",
+            "attendances_second_all": "0.0"
+        }
+
+    },
+    reducers: {
+
+        getFirstAndSecondRequest(state) { state.loading = true },
+        getFirstAndSecondSuccess(state, action) { state.loading = false; state.attendances = action.payload; state.success = true; },
+        getFirstAndSecondFail(state, action) { state.error = action.payload; state.loading = false },
+
+    }
+
+})
+
+export const { getFirstAndSecondRequest, getFirstAndSecondSuccess, getFirstAndSecondFail } = getFirstAndSecondSlice.actions
 

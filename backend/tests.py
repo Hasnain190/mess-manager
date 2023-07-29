@@ -54,8 +54,7 @@ class BillTestCase(TestCase):
             username='testuser', password='password')
 
     def test_bill_create(self):
-        bill = Bill.objects.create(student=self.user, room='32', dateMonth='2023-01-30',
-                                   bill=Decimal('1000.00'), dues=Decimal('500.00'))
+        bill = Bill.objects.create(student=self.user, room='32', dateMonth='2023-01-30', bill=Decimal('1000.00'), dues=Decimal('500.00'))
         self.assertEqual(bill.student, self.user)
         self.assertEqual(bill.room, '32')
         self.assertEqual(bill.dateMonth, '2023-01-30')

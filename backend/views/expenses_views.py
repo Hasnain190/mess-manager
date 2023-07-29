@@ -1,7 +1,7 @@
 
 import datetime
 import logging
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 
 from backend.models import *
 from backend.serializers import ExpenseSerializer
@@ -17,23 +17,69 @@ from rest_framework import status
 @permission_classes([IsAdminUser])
 def add_expenses_per_capita_per_day(request):
     data = request.data
-
-    Expenses_per_day, created = Expense.objects.update_or_create(
-        date=data['date'],
+    date=data.get("date")
+    
+    
+    attendance_first_time,attendance_second_time = calculate_attendances_local(date=date) 
+    
+    expenses_per_day, created = Expense.objects.update_or_create(
+    date = date,
 
         defaults={
-            "attendance_first_time": data['attendance_first_time'],
-            "attendance_second_time": data['attendance_second_time'],
-            "total_attendances": data['total_attendances'],
+            "attendance_first_time":attendance_first_time ,
+            "attendance_second_time": attendance_second_time,
+            "total_attendances": attendance_first_time+attendance_second_time,
+            "expenses_meat":data['expenses_meat'],
+            "expenses_vegetables":data['expenses_vegetables'],
+            "expenses_grocery_and_other":data["expenses_grocery_and_other"],
             "expenses_first_time": data['expenses_first_time'],
             "expenses_second_time": data['expenses_second_time'],
             "expenses_total": data['expenses_total'],
         }
     )
+    
+    expenses_per_day.save()
+    
+    print("first:",attendance_first_time,attendance_second_time)
 
-    serializer = ExpenseSerializer(Expenses_per_day, many=False)
+    serializer = ExpenseSerializer(expenses_per_day, many=False)
     return Response(serializer.data)
 
+
+
+
+def calculate_attendances_local(date):
+    total_attendances_first_time_all_users = 0
+    total_attendances_second_time_all_users = 0
+    for i in Attendance.objects.filter(date=date):
+        if i.first_time in ["present", "double", "absent"]:
+            total_attendances_first_time_all_users += get_numeric_attendance(i.first_time)
+        else:
+            try:
+                total_attendances_first_time_all_users += Decimal(i.first_time)  # convert to decimal
+            except InvalidOperation:
+                total_attendances_first_time_all_users += 0  # Handle the exception
+
+        if i.second_time in ["present", "double", "absent"]:
+            total_attendances_second_time_all_users += get_numeric_attendance(i.second_time)
+        else:
+            try:
+                total_attendances_second_time_all_users += Decimal(i.second_time)  # convert to decimal
+            except InvalidOperation:
+                total_attendances_second_time_all_users += 0  # Handle the exception
+
+    return total_attendances_first_time_all_users,total_attendances_second_time_all_users
+
+
+def get_numeric_attendance(value):
+    if value == "present":
+        return 1
+    elif value == "double":
+        return Decimal(2.50)
+    elif value == "absent":
+        return 0
+    else:
+        return 0
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
@@ -48,21 +94,40 @@ def get_expenses_per_month(request, year, month):
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
+def get_summed_expenses_for_date(request, date):
+
+    first_day_of_month = date.replace(date.split("-")[2],"01")
+
+    meat_sum = 0
+    vegetable_sum = 0
+    grocery_and_other_sum = 0
+    
+    all_expenses_in_that_month = Expense.objects.filter(date__range=[first_day_of_month,date])
+    for i in all_expenses_in_that_month:
+        meat_sum +=i.expenses_meat
+        vegetable_sum += i.expenses_vegetables
+        grocery_and_other_sum += i.expenses_grocery_and_other
+    return Response({"meat_sum":meat_sum,"vegetable_sum":vegetable_sum,"grocery_and_other_sum":grocery_and_other_sum})
+    
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
 def get_bill(request, year, month):
     year = int(year)
     month = int(month)
     try:
         mess_bill, created = MessBill.objects.get_or_create(
             year=year, month=month)
-
-        total_expenses_first_time_all_user, total_expenses_second_time_all_user = expenses_all_users(
+# 1. sum all the expenses throughout the month 
+# (separately in the first and second time)
+        total_expenses_first_time_all_user, total_expenses_second_time_all_user = expenses_all(
                 year, month)
 
-        bill_first_time_all_users, bill_second_time_all_users = bill_all_users(
+        rate_first, rate_second = calculate_rate(
                 year, month, total_expenses_first_time_all_user, total_expenses_second_time_all_user)
 
-        calculate_bill(year, month, mess_bill,
-                           bill_first_time_all_users, bill_second_time_all_users)
+        calculate_bill(year, month, mess_bill,rate_first, rate_second)
         mess_bill.save()
         serializers = MessBillSerializer(mess_bill, many=False)
         return Response(serializers.data)
@@ -77,50 +142,56 @@ def get_bill(request, year, month):
         )
 
 
-def calculate_bill(year, month, mess_bill, bill_first_time_all_users, bill_second_time_all_users):
+def calculate_bill(year, month, mess_bill, rate_first, rate_second):
     year = str(year)
     month = str(month)
     # removing previous bills
     
-   
+
     mess_bill.bills.clear()
     for i in User.objects.all():
         user = User.objects.get(username=i.username)
 
         room = user.room
 
-        # for the whole total attendances of one  user
-
-        total_attendances_first_time_per_user = 0
-        total_attendances_second_time_per_user = 0
+        
+# 4. Calculate total attendance of one user
+        attendances_first_per_user = 0
+        attendances_second_per_user = 0
         for i in Attendance.objects.filter(date__year=year, date__month=month, student=user):
             if i.first_time == "present":
-                total_attendances_first_time_per_user += 1
+                attendances_first_per_user += 1
             elif i.first_time == "double":
-                total_attendances_first_time_per_user += 2
+                attendances_first_per_user += Decimal(2.5)
             elif i.first_time == "absent":
-                total_attendances_first_time_per_user += 0
-
+                attendances_first_per_user += 0
+            else: 
+                print(i.first_time)
+                attendances_first_per_user += Decimal(i.first_time)
+        
             if i.second_time == "present":
-                total_attendances_second_time_per_user += 1
+                attendances_second_per_user += 1
             elif i.second_time == "double":
-                total_attendances_second_time_per_user += 2
+                attendances_second_per_user += Decimal(2.5)
             elif i.second_time == "absent":
-                total_attendances_second_time_per_user += 0
+                attendances_second_per_user += 0
+            else:
+                print(i.second_time)
+                attendances_second_per_user += Decimal(i.second_time)
 
-            # print(total_attendances_second_time_per_user, user)
-
+# 5. Multiply rate by total attendance eaten by user
         try:
-            bill_first_time = bill_first_time_all_users * \
-                total_attendances_first_time_per_user
-            bill_second_time = bill_second_time_all_users * \
-                total_attendances_second_time_per_user
-            print(bill_first_time, total_attendances_first_time_per_user, user)
+            total_attendances = attendances_first_per_user + attendances_second_per_user
+            bill_first = rate_first * \
+                attendances_first_per_user
+            bill_second = rate_second * \
+                attendances_second_per_user
+            # print(bill_first_time, attendances_first_per_user, user)
         except ZeroDivisionError:
-            bill_first_time = 0
-            bill_second_time = 0
+            bill_first = 0
+            bill_second = 0
 
-        total_bill_per_user = bill_first_time + bill_second_time
+        total_bill_per_user = bill_first + bill_second
 
         if month == 1:
             prev_month = 12
@@ -137,22 +208,26 @@ def calculate_bill(year, month, mess_bill, bill_first_time_all_users, bill_secon
             pre_month_bill = Bill.objects.create(
             student=user,
             room=room,
+          
             month=prev_month,
             year=int(prev_year),
            
             )
 
         
-        print(pre_month_bill.dues)
+       
         try:
             bill = Bill.objects.get(student=user, room=room, month=month, year=int(year))
             bill.bill = total_bill_per_user
+            bill.total_attendances = total_attendances
             bill.save()
+        
         except Bill.DoesNotExist:
             bill = Bill.objects.create(
             student=user,
             room=room,
             month=month,
+            total_attendances = total_attendances,
             year=int(year),
             bill=total_bill_per_user
             )
@@ -167,14 +242,14 @@ def calculate_bill(year, month, mess_bill, bill_first_time_all_users, bill_secon
             total_payments +=Decimal( payment.paying_bill)
         
         
-        bill.dues = pre_month_bill.dues +bill.bill - total_payments
+        bill.dues = pre_month_bill.dues + bill.bill - total_payments
         bill.total = bill.dues 
         bill.save()
 
         mess_bill.bills.add(bill)
 
 
-def expenses_all_users(year, month):
+def expenses_all(year, month):
     year = str(year)
     month = str(month)
 
@@ -188,13 +263,14 @@ def expenses_all_users(year, month):
         expenses_second_time_all_user = i.expenses_second_time
         total_expenses_first_time_all_user += expenses_first_time_all_user
         total_expenses_second_time_all_user += expenses_second_time_all_user
-    print("total_expenses_first_time_all_user: ->",
-          total_expenses_first_time_all_user)
+    print("total_expenses_second_time_all_user: ->",
+          total_expenses_second_time_all_user)
 
     return total_expenses_first_time_all_user, total_expenses_second_time_all_user
 
 
-def bill_all_users(year, month, total_expenses_first_time_all_user, total_expenses_second_time_all_user):
+def calculate_rate(year, month, total_expenses_first_time_all_user, total_expenses_second_time_all_user):
+# 2. Get to know all the attendances (separately for first and second time)
     year = str(year)
     month = str(month)
     total_attendances_first_time_all_users = 0
@@ -203,25 +279,33 @@ def bill_all_users(year, month, total_expenses_first_time_all_user, total_expens
         if i.first_time == "present":
             total_attendances_first_time_all_users += 1
         elif i.first_time == "double":
-            total_attendances_first_time_all_users += 2
+            total_attendances_first_time_all_users += Decimal( 2.5)
         elif i.first_time == "absent":
             total_attendances_first_time_all_users += 0
+        else:
+            print(f"here is ${i.first_time} lies the error")
+            total_attendances_first_time_all_users += Decimal( i.first_time)
 
         if i.second_time == "present":
             total_attendances_second_time_all_users += 1
         elif i.second_time == "double":
-            total_attendances_second_time_all_users += 2
+            total_attendances_second_time_all_users += Decimal( 2.5)
         elif i.second_time == "absent":
             total_attendances_second_time_all_users += 0
+        else:
+            total_attendances_second_time_all_users += Decimal(i.second_time)
     try:
-        bill_first_time_all_users = total_expenses_first_time_all_user / \
+    # 3. calculate kharcha per khana (rate ) like 129 pkr/ attendance jo bill k uper likha hota hai 
+        rate_first = total_expenses_first_time_all_user / \
             total_attendances_first_time_all_users
-        bill_second_time_all_users = total_expenses_second_time_all_user / \
+        rate_second= total_expenses_second_time_all_user / \
             total_attendances_second_time_all_users
+            
+        print({"rate_first:",rate_first,"\n rate_second:",rate_second})
     except ZeroDivisionError:
-        bill_first_time_all_users = 0
-        bill_second_time_all_users = 0
-    return bill_first_time_all_users, bill_second_time_all_users
+        rate_first = 0
+        rate_second = 0
+    return rate_first, rate_second
 
 
 @ api_view(['POST', 'PUT'])
@@ -262,6 +346,6 @@ def get_bill_per_student(request, user_id):
     user = User.objects.get(id=user_id)
     bill_per_user = Bill.objects.get(
         student=user, month=datetime.date.today().month)
-    serializers = BillSerializer(bill_per_user)
+    serializers = BillSerializer(bill_per_user,many=False)
 
     return Response(serializers.data)

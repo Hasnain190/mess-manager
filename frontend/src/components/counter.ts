@@ -8,6 +8,9 @@ type TAttendance = {
     student_id: number
 }
 export function counter(attendance: TAttendance[], date: string) {
+
+
+
     let countFirstTimePrs = 0;
     let countSecondTimePrs = 0;
     for (const i of attendance) {

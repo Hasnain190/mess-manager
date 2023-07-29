@@ -31,16 +31,12 @@ class Attendance(models.Model):
     Attendance model
     """
 
-    status_choices = (
-        ('present', 'present'),
-        ('absent', 'absent'),
-        ('double', 'double'),
-    )
+   
 
     student = models.ForeignKey('User', on_delete=models.CASCADE)
     date = models.DateField()
-    first_time = models.CharField(max_length=20, choices=status_choices)
-    second_time = models.CharField(max_length=20, choices=status_choices)
+    first_time = models.CharField(max_length=20 )
+    second_time = models.CharField(max_length=20)
 
     def __str__(self):
         return self.student.username + ' ' + self.date.strftime('%d/%m/%Y')
@@ -74,9 +70,14 @@ class Menu(models.Model):
 class Expense(models.Model):
     """For expenses for one day """
     date = models.DateField(unique=True)
-    attendance_first_time = models.IntegerField(default=0)
-    attendance_second_time = models.IntegerField(default=0)
-    total_attendances = models.IntegerField(default=0)
+    attendance_first_time = models.DecimalField(decimal_places=2,max_digits=20, default=0)
+    attendance_second_time = models.DecimalField(decimal_places=2,max_digits=20,default=0)
+    total_attendances = models.DecimalField(decimal_places=2,max_digits=20,default=0)
+    
+    
+    expenses_meat = models.DecimalField(decimal_places=2,max_digits=20,default=0)
+    expenses_vegetables = models.DecimalField(decimal_places=2,max_digits=20,default=0)
+    expenses_grocery_and_other = models.DecimalField(decimal_places=2,max_digits=20,default=0)
 
     expenses_first_time = models.DecimalField(
         decimal_places=2, max_digits=20, default=0)
@@ -86,8 +87,8 @@ class Expense(models.Model):
         decimal_places=2, max_digits=20, default=0)
 
 
-def __str__(self) -> str:
-    return 'expenses for the date: '+self.date.isoformat()
+    def __str__(self) -> str:
+        return 'expenses for the date: '+self.date.isoformat()
 
 
 class Bill(models.Model):
@@ -95,6 +96,7 @@ class Bill(models.Model):
 
     student = models.ForeignKey(
         "User", on_delete=models.CASCADE, related_name="student")
+    total_attendances = models.DecimalField(decimal_places=2,max_digits=20,default=0)
     room = models.CharField(max_length=20, blank=True, default=0)
     month = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(12)], default=datetime.date.today().month)

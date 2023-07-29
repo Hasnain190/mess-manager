@@ -14,6 +14,10 @@ urlpatterns = [
     path('get/', view=views.get_attendance, name="get all attendance"),
     path('get/<int:month>/', view=views.get_monthly_attendance,
          name="get attendance by month"),
+   
     path('get/<str:date>/', view=views.get_daily_attendance,
          name="get attendance by date"),
+         
+     path("get/calculate/<str:date>/",
+         view=views.calculate_attendances, name="get first and second time attendance in given date"),
 ]

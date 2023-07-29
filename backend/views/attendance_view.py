@@ -1,5 +1,6 @@
 
 
+from decimal import Decimal, InvalidOperation
 import json
 from requests import request
 from backend.serializers import *
@@ -18,7 +19,7 @@ def post_attendance(request, id):
     byte_data = request.body
     data = json.loads(byte_data)
 
-    print(data['date'])
+    
     user = User.objects.get(id=id)
 
     # converting date to a python date object
@@ -28,6 +29,7 @@ def post_attendance(request, id):
         student=user,
         date=date_obj,
         defaults={
+        # FIXME: TR y commenting below 2 lines
             'student': user,
             'date': date_obj,
             'first_time': data['first_time'],
@@ -44,9 +46,9 @@ def post_attendance(request, id):
 def get_attendance(request):
     """Get all the attendance of all the students"""
 # -date lets us most recent one comes first
-    Attendances = Attendance.objects.all().order_by("-date")
+    attendances = Attendance.objects.all().order_by("-date")
 
-    serializer = AttendanceSerializer(Attendances, many=True)
+    serializer = AttendanceSerializer(attendances, many=True)
 
     return Response(serializer.data)
 
@@ -75,3 +77,41 @@ def get_daily_attendance(request, date):
     serializer = AttendanceSerializer(filtered_attendances, many=True)
 
     return Response(serializer.data)
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def calculate_attendances(request,date):
+    total_attendances_first_time_all_users = 0
+    total_attendances_second_time_all_users = 0
+    for i in Attendance.objects.filter(date=date):
+        if i.first_time in ["present", "double", "absent"]:
+            total_attendances_first_time_all_users += get_numeric_attendance(i.first_time)
+        else:
+            try:
+                total_attendances_first_time_all_users += Decimal(i.first_time)  # convert to decimal
+            except InvalidOperation:
+                total_attendances_first_time_all_users += 0  # Handle the exception
+
+        if i.second_time in ["present", "double", "absent"]:
+            total_attendances_second_time_all_users += get_numeric_attendance(i.second_time)
+        else:
+            try:
+                total_attendances_second_time_all_users += Decimal(i.second_time)  # convert to decimal
+            except InvalidOperation:
+                total_attendances_second_time_all_users += 0  # Handle the exception
+
+    return Response({"attendances_first_all":total_attendances_first_time_all_users,"attendances_second_all":total_attendances_second_time_all_users})
+    
+
+def get_numeric_attendance(value):
+    if value == "present":
+        return 1
+    elif value == "double":
+        return Decimal(2.50)
+    elif value == "absent":
+        return 0
+    else:
+        return 0
+

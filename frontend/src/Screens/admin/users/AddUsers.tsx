@@ -9,6 +9,7 @@ import { register } from "../../../features/user/user_actions_creators";
 
 function AddUsers() {
 
+    const hostelName = "Eice Muhammad"
     const [message, setMessage] = useState("");
     const dispatch = useAppDispatch();
     const location = useLocation();
@@ -22,12 +23,12 @@ function AddUsers() {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [room, setRoom] = useState(Number);
-    const [hostel, setHostel] = useState('');
+    const [hostel, setHostel] = useState(hostelName);
     const [phone, setPhone] = useState("");
 
     const [securityFee, setSecurityFee] = useState(0)
 
-
+    const [isRegistered, setIsRegistered] = useState(false);
 
     const redirect = location.search ? location.search.split("=")[1] : "/";
 
@@ -38,28 +39,34 @@ function AddUsers() {
     const submitHandler = (e: any) => {
         e.preventDefault();
 
-        if (name.includes(" ")) {
-            setName(name.split(" ").join("_"))
-
-        }
+        name.includes(" ") && setName(name.split(" ").join("_"))
 
 
 
 
-        else {
+
+
+
+        try {
             setPassword(name)
+
             dispatch(register(name, room, password, hostel, phone, securityFee));
+            setMessage("The user added successfully")
+            setIsRegistered(true)
+        } catch (error) {
+            setMessage(`There is some error: ${error}`)
 
 
         }
+
+
     };
 
     useEffect(() => {
-        if (success) {
-            setMessage("The user added successfully")
-            navigate(-1)
+        if (isRegistered) {
+            navigate("/admin/view-users");
         }
-    }, [error, success])
+    }, [isRegistered])
 
     return (
         // sign up form
@@ -116,7 +123,7 @@ function AddUsers() {
                                 />
                             </div>
 
-
+                            {/* 
                             <div className="form-group">
 
                                 <label htmlFor="room"> Hostel.</label>
@@ -130,7 +137,7 @@ function AddUsers() {
                                     value={hostel}
                                     onChange={(e) => setHostel(e.target.value)}
                                 />
-                            </div>
+                            </div> */}
 
                             <div className="form-group">
 

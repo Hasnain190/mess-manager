@@ -20,7 +20,7 @@ function BillForm() {
     const year = (today.slice(0, 4)) //2023 
 
     const { messBill, loading } = useAppSelector(state => state.getMessBill)
-    const { loading: addBillLoading, success: addBillSuccess } = useAppSelector(state => state.addBill)
+    const { error: addBillError, loading: addBillLoading, success: addBillSuccess } = useAppSelector(state => state.addBill)
 
     const [message, setMessage] = useState<string>('')
 
@@ -33,37 +33,42 @@ function BillForm() {
 
     useEffect(() => {
         setMessage("Bill is added")
-
-        setInterval(() =>
-
-            setMessage(""),
-            2000
-        )
     }, [addBillSuccess])
 
 
 
 
 
-    const handleSubmit = (e: any) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         dispatch(getMessBill(year, month))
     }
 
-    const saveHandler = (e: any) => {
+    const payHandler = (e: React.FormEvent<HTMLFormElement>) => {
 
         e.preventDefault()
 
-        let billId = e.target[0].id.split("-").at(-1);
-        let billPayed = Number(e.target.elements[`bill-payed-${billId}`].value);
+        for (let i = 0; i < messBill.bills.length; i++) {
+            const bill = messBill.bills[i];
 
-        let studentId = e.target[1].id.split("-").at(-1);
-        let payingBill = {
-            paying_bill: billPayed,
-            for_month: month
+            try {
+                let billId = bill.id;
+                // @ts-ignore
+                let billPayed = Number(e.target.elements[`bill-payed-${billId}`].value);
+
+                let studentId = bill.student_id;
+                let payingBill = {
+                    paying_bill: billPayed,
+                    for_month: month
+                }
+
+                if (billPayed !== 0 || billPayed !== null)
+                    dispatch(payBill(year, month, studentId, payingBill))
+
+            } catch (error) {
+                console.error(error)
+            }
         }
-
-        dispatch(payBill(year, month, studentId, payingBill))
 
     }
     return (
@@ -93,65 +98,70 @@ function BillForm() {
 
 
 
-                <table className="table table-striped">
+                <form className="form" onSubmit={payHandler}>
+                    <table className="table table-striped">
 
-                    <thead>
+                        <thead>
 
-                        <tr>
+                            <tr>
 
-                            <th scope="col">#</th>
+                                <th scope="col">#</th>
 
-                            <th scope="col">Name</th>
+                                <th scope="col">Name</th>
 
-                            <th scope="col">Room No</th>
+                                <th scope="col">Room No</th>
 
-                            <th scope="col">This Month's Bill</th>
+                                <th scope="col">This Month's Bill</th>
 
-                            <th scope="col">Due Bill</th>
+                                <th scope="col">Due Bill</th>
 
-                            <th scope="col">Total to be Paid</th>
+                                <th scope="col">Total to be Paid</th>
 
-                            <th scope="col">Paid Payed</th>
+                                <th scope="col">Paid Payed</th>
+                                <th scope="col">Status</th>
 
-                        </tr>
-                    </thead>
+                            </tr>
+                        </thead>
 
-                    {messBill?.bills.map((bill) => <tbody>
+                        {messBill?.bills.map((bill) => <tbody>
 
-                        <tr>
+                            <tr>
 
-                            <th scope="row" key={bill.id} >{bill.id}</th>
+                                <th scope="row" key={bill.id} >{bill.id}</th>
 
-                            <td>{bill.student}</td>
+                                <td>{bill.student}</td>
 
-                            <td>{bill.room}</td>
+                                <td>{bill.room}</td>
 
-                            <td>{bill.bill}</td>
+                                <td>{bill.bill}</td>
 
-                            <td>{bill.dues}</td>
+                                <td>{bill.dues}</td>
 
-                            <td>{bill.total}</td>
-
-
-                            <td>
+                                <td>{bill.total}</td>
 
 
-                                <form className="form" onSubmit={saveHandler}>
+                                <td>
+
+
 
                                     <input className="form-control" id={`bill-payed-${bill.id}`} type="number" onChange={(e) => (e.target.value)}></input>
 
-                                    <button className='btn btn-primary'
-                                        disabled={Number(bill.total) === 0}
 
-                                        type="submit" id={`student-input-id-${bill.student_id}`} name={`id-input-${bill.student}`} >Pay Bill</button>
-                                </form>
-                            </td>
-                        </tr>
+                                </td>
+                                <td>{addBillLoading ? <Loader /> :
+                                    addBillError ? <Message>{addBillError}</Message> : addBillSuccess ? <Message>Added</Message> : null}</td>
+                            </tr>
 
 
-                    </tbody>
-                    )}
-                </table>
+                        </tbody>
+                        )}
+                        <button
+                            className='btn btn-primary'
+                            type="submit"
+                            id='button-submit'
+                            name="submit-button-pay-bill">Submit</button>
+                    </table>
+                </form>
             }
         </div>
     );

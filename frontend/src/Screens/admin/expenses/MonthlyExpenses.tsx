@@ -110,11 +110,11 @@ export default function MonthlyExpenses() {
                         </thead>
 
 
-                        {expensesPerMonth?.map((item) => <tbody>
+                        {expensesPerMonth?.map((item, index) => <tbody>
 
                             <tr key={item.id}>
 
-                                <th scope="row">{item.id}</th>
+                                <th scope="row">{index}</th>
 
                                 <td>{item.date}</td>
 

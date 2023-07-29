@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { float } from "html2canvas/dist/types/css/property-descriptors/float";
 
 
 //  GET EXpenses 
@@ -48,9 +49,9 @@ const ExpenseInitialState = {
         {
             id: 0,
             date: "0000-00-00",
-            attendance_first_time: 0,
-            attendance_second_time: 0,
-            total_attendances: 0,
+            attendance_first_time: "0",
+            attendance_second_time: "0",
+            total_attendances: "0",
             expenses_first_time: "0",
             expenses_second_time: "0",
             expenses_total: "0"
@@ -114,14 +115,15 @@ export const getMessBillSlice = createSlice({
             bills: [
 
                 {
-                    id: 9,
+                    id: 0,
+                    student_id: 0,
+                    student: "student",
                     room: "0",
+                    total_attendances: "0",
                     dateMonth: "0000-00-00",
                     bill: "0.00",
                     dues: "0.00",
                     total: "0.00",
-                    student: "student",
-                    student_id: 0
                 }
 
             ]
@@ -163,5 +165,39 @@ export const postPayingBillSlice = createSlice({
 })
 
 export const { postPayingBillRequest, postPayingBillSuccess, postPayingBillFail } = postPayingBillSlice.actions
+
+
+export const getSumSlice = createSlice({
+    name: 'get-sum',
+    initialState: {
+        loading: false,
+        success: false,
+        error: null,
+        getSum:
+        {
+
+            "meat_sum": 0,
+            "vegetable_sum": 0,
+            "grocery_and_other_sum": 0
+
+        }
+
+
+
+
+
+
+    },
+    reducers: {
+
+        getSumRequest(state) { state.loading = true },
+        getSumSuccess(state, action) { state.loading = false; state.getSum = action.payload; state.success = true; },
+        getSumFail(state, action) { state.error = action.payload; state.loading = false },
+
+    }
+
+})
+
+export const { getSumRequest, getSumSuccess, getSumFail } = getSumSlice.actions
 
 

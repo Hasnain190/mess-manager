@@ -9,7 +9,7 @@ function AttendanceSheet({
     day,
     attendance
 }: any) {
-    console.log(attendance)
+
     return (
 
         <div  >

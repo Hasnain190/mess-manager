@@ -16,6 +16,8 @@ import {
     postAttendanceRequest,
     postAttendanceSuccess,
     postAttendanceFail,
+    getFirstAndSecondRequest, getFirstAndSecondSuccess, getFirstAndSecondFail,
+
 
 
 
@@ -128,6 +130,33 @@ export const getDailyAttendance = (date: string) => async (dispatch: any, getSta
         localStorage.setItem("getAttendance", JSON.stringify(data))
     } catch (error: any) {
         dispatch(getDailyAttendanceFail(error.response && error.response.data.detail
+            ? error.response.data.detail
+            : error.message,
+        ))
+    }
+}
+
+export const getFirstAndSecond = (date: string) => async (dispatch: any, getState: any) => {
+    try {
+        dispatch(getFirstAndSecondRequest())
+
+        const {
+            userLogin: { userInfo },
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `JWT ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.get(`/api/attendance/get/calculate/${date}/`,
+            config)
+        dispatch(getFirstAndSecondSuccess(data))
+
+    } catch (error: any) {
+        dispatch(getFirstAndSecondFail(error.response && error.response.data.detail
             ? error.response.data.detail
             : error.message,
         ))

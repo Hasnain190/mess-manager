@@ -5,8 +5,8 @@ import { userLoginSlice, userRegisterSlice, userDetailsSlice, userListSlice, use
 import { messMenuSlice, messMenuUpdateSlice } from "../features/mess/mess_slice";
 
 
-import { postAttendanceSlice, getAttendanceSlice, getMonthlyAttendanceSlice, getDailyAttendanceSlice } from "../features/attendance/attendance_slice";
-import { addExpensesSlice, getExpensesPerMonthSlice, getMessBillSlice, postPayingBillSlice } from "../features/expenses/expenses_slice";
+import { postAttendanceSlice, getAttendanceSlice, getMonthlyAttendanceSlice, getDailyAttendanceSlice, getFirstAndSecondSlice } from "../features/attendance/attendance_slice";
+import { addExpensesSlice, getExpensesPerMonthSlice, getMessBillSlice, getSumSlice, postPayingBillSlice } from "../features/expenses/expenses_slice";
 
 
 
@@ -36,8 +36,11 @@ export const store = configureStore({
         getAttendance: getAttendanceSlice.reducer,
         getMonthlyAttendance: getMonthlyAttendanceSlice.reducer,
         getDailyAttendance: getDailyAttendanceSlice.reducer,
+        getFirstAndSecond: getFirstAndSecondSlice.reducer,
 
+        // expense
 
+        getSum: getSumSlice.reducer,
         addExpenses: addExpensesSlice.reducer,
         getExpensesPerMonth: getExpensesPerMonthSlice.reducer,
 

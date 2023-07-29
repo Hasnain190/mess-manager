@@ -15,6 +15,7 @@ import {
     postPayingBillSuccess,
     postPayingBillFail,
 
+    getSumRequest, getSumSuccess, getSumFail
 
 } from './expenses_slice'
 
@@ -162,3 +163,39 @@ export const payBill = (year: string, month: string, userId: number, payingBill:
         ))
     }
 }
+
+
+
+export const getSum = (date: string) => async (dispatch: any, getState: any) => {
+    try {
+        dispatch(getSumRequest())
+
+        const {
+            userLogin: { userInfo },
+        } = getState()
+
+
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `JWT ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.get(`/api/expenses/get/${date}/`,
+            config
+        )
+
+
+        dispatch(getSumSuccess(data))
+
+
+    } catch (error: any) {
+        dispatch(getSumFail(error.response && error.response.data.detail
+            ? error.response.data.detail
+            : error.message,
+        ))
+    }
+}
+

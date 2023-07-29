@@ -18,8 +18,10 @@ urlpatterns = [
          view=views.get_bill, name="get monthly bill"),
 
 
+  path("get/<str:date>/",view=views.get_summed_expenses_for_date,name="get sum of previous expenses"),
 
-    # FIXME
+
+ 
     path("pay/bill/<str:year>/<str:month>/<int:user_id>/",
          view=views.add_bill_payed, name="add paying bill"),
 ]
