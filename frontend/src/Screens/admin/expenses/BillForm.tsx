@@ -47,11 +47,11 @@ function BillForm() {
     const payHandler = (e: React.FormEvent<HTMLFormElement>) => {
 
         e.preventDefault()
+        try {
 
-        for (let i = 0; i < messBill.bills.length; i++) {
-            const bill = messBill.bills[i];
 
-            try {
+            Promise.all(messBill.bills.map((bill) => {
+
                 let billId = bill.id;
                 // @ts-ignore
                 let billPayed = Number(e.target.elements[`bill-payed-${billId}`].value);
@@ -61,15 +61,16 @@ function BillForm() {
                     paying_bill: billPayed,
                     for_month: month
                 }
+                if (billPayed !== 0) {
+                    return Promise.all([
+                        dispatch(payBill(year, month, studentId, payingBill))
+                    ])
+                }
 
-                if (billPayed !== 0 || billPayed !== null)
-                    dispatch(payBill(year, month, studentId, payingBill))
-
-            } catch (error) {
-                console.error(error)
-            }
+            }))
+        } catch (error) {
+            console.error(error)
         }
-
     }
     return (
 
@@ -123,11 +124,11 @@ function BillForm() {
                             </tr>
                         </thead>
 
-                        {messBill?.bills.map((bill) => <tbody>
+                        {messBill?.bills.map((bill, index) => <tbody>
 
                             <tr>
 
-                                <th scope="row" key={bill.id} >{bill.id}</th>
+                                <th scope="row" key={bill.id} >{index}</th>
 
                                 <td>{bill.student}</td>
 
