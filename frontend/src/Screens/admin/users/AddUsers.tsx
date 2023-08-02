@@ -22,11 +22,11 @@ function AddUsers() {
     // credentials
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
-    const [room, setRoom] = useState(Number);
+    const [room, setRoom] = useState<string>("");
     const [hostel, setHostel] = useState(hostelName);
     const [phone, setPhone] = useState("");
 
-    const [securityFee, setSecurityFee] = useState(0)
+    const [securityFee, setSecurityFee] = useState(7000)
 
     const [isRegistered, setIsRegistered] = useState(false);
 
@@ -87,14 +87,14 @@ function AddUsers() {
 
                         <h3 className="text-center mb-4">
 
-                            <i className="fas fa-user-plus"></i> Register a New User
+                            <i className="fas fa-user-plus"></i> Add a New Student
                         </h3>
 
                         <form onSubmit={submitHandler}>
 
                             <div className="form-group">
 
-                                <label htmlFor="name">Username</label>
+                                <label htmlFor="name">Username(must be unique)</label>
 
                                 <input
                                     type="text"
@@ -110,7 +110,7 @@ function AddUsers() {
 
                             <div className="form-group">
 
-                                <label htmlFor="room">Your Room No.</label>
+                                <label htmlFor="room">Room No.</label>
 
                                 <input
                                     type="text"
@@ -119,43 +119,16 @@ function AddUsers() {
                                     placeholder="Enter room"
                                     required
                                     value={room}
-                                    onChange={(e) => setRoom(Number(e.target.value))}
+                                    onChange={(e) => setRoom((e.target.value))}
                                 />
                             </div>
 
-                            {/* 
-                            <div className="form-group">
 
-                                <label htmlFor="room"> Hostel.</label>
 
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="hostel"
-                                    placeholder="Enter Hostel"
-                                    required
-                                    value={hostel}
-                                    onChange={(e) => setHostel(e.target.value)}
-                                />
-                            </div> */}
 
                             <div className="form-group">
 
-                                <label htmlFor="room"> Phone Number</label>
-
-                                <input
-                                    type="number"
-                                    className="form-control"
-                                    id="phone"
-                                    placeholder="Enter Your Phone"
-                                    required
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
-                                />
-                            </div>
-                            <div className="form-group">
-
-                                <label htmlFor="room"> Security Deposit</label>
+                                <label htmlFor="room">Security Deposit</label>
 
                                 <input
                                     type="number"

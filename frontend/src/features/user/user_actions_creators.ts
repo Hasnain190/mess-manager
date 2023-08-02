@@ -77,7 +77,7 @@ export const logout = () => (dispatch: any) => {
 }
 
 
-export const register = (username: string, room: number, password: string, hostel: string, phone: string, securityFee: number) => async (dispatch: any) => {
+export const register = (username: string, room: string, password: string, hostel: string, phone: string, securityFee: number) => async (dispatch: any) => {
 
 
     try {
